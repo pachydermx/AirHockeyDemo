@@ -41,6 +41,8 @@ public class Main : MonoBehaviour {
 
 		// test draw
 		if (Input.GetKeyDown(KeyCode.T)){
+			canvas.SendMessage("DrawRound", 100);
+			canvas.SendMessage("DrawRound", 120);
 			canvas.SendMessage("DrawRect");
 		}
 	}
