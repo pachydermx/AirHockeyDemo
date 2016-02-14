@@ -5,11 +5,15 @@ using UnityEngine.UI;
 public class Canvas : MonoBehaviour {
 	public RawImage image;
 	private Texture2D texture;
+	private Color paint_color;
+	private int x;
+	private int y;
 
 	int timer = 300;
 
 	// Use this for initialization
 	void Start () {
+		// init texture
 		texture = image.texture as Texture2D;
 
 		int width = 1024;
@@ -20,8 +24,11 @@ public class Canvas : MonoBehaviour {
 			colors[i] = Color.clear;
 
 		texture.SetPixels(0, 0, width, height, colors);
-		texture.Apply(false);
-	
+
+		// init properties
+		paint_color = Color.clear;
+		x = width / 2;
+		y = width / 2;
 	}
 	
 	// Update is called once per frame
@@ -32,14 +39,22 @@ public class Canvas : MonoBehaviour {
 		}
 	}
 
+	void SetColor (Color new_color){
+		Debug.Log("received");
+		paint_color = new_color;
+	}
+
+	void SetCoordinate(int[] xy) {
+		x = xy[0];
+		y = xy[1];
+	}
+
 	void DrawRound (int radius) {
 		int x0 = 200 + timer;
 		int y0 = 200 + timer;
 		int x = radius;
 		int y = 0;
 		int decisionOver2 = 1 - x;
-
-		Color paint_color = Color.red;
 
 		while (y <= x){
 			texture.SetPixel( x+x0, y+y0, paint_color );
@@ -60,15 +75,5 @@ public class Canvas : MonoBehaviour {
 		}
 
 		texture.Apply(false);
-	}
-
-	int GetIndex (int width, int height, int x, int y){
-		int index = width * y + x;
-		if (index < width * height && index >= 0){
-			return width * y + x;
-		} else {
-			Debug.Log(x + ", " + y);
-			return 0;
-		}
 	}
 }
