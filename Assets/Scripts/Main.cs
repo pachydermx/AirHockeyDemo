@@ -43,7 +43,6 @@ public class Main : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.T)){
 			canvas.SendMessage("DrawRound", 100);
 			canvas.SendMessage("DrawRound", 120);
-			canvas.SendMessage("DrawRect");
 		}
 	}
 	
