@@ -1,12 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/AutoDelete.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Main.cs">
     <Files>
-      <File FileName="Assets/Scripts/Main.cs" Line="31" Column="41" />
-      <File FileName="Assets/Ball.cs" Line="1" Column="1" />
-      <File FileName="Assets/Canvas.cs" Line="1" Column="1" />
-      <File FileName="../CanShooter/Assets/AutoDelete.cs" Line="14" Column="16" />
-      <File FileName="Assets/AutoDelete.cs" Line="17" Column="38" />
+      <File FileName="Assets/Scripts/Main.cs" Line="54" Column="38" />
+      <File FileName="Assets/Scripts/Accelerator.cs" Line="18" Column="46" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

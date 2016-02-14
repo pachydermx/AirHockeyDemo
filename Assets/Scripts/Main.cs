@@ -49,5 +49,9 @@ public class Main : MonoBehaviour {
 	void Player(int player_id){
 		ball.SendMessage("Player", player_id);
 	}
+
+	void Accelerate(Vector2 direction){
+		ball_rb.AddForce(direction * 10);
+	}
 	
 }
