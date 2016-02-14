@@ -1,9 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Main.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Accelerator.cs">
     <Files>
-      <File FileName="Assets/Scripts/Main.cs" Line="54" Column="38" />
-      <File FileName="Assets/Scripts/Accelerator.cs" Line="18" Column="46" />
+      <File FileName="Assets/Scripts/Main.cs" Line="54" Column="29" />
+      <File FileName="Assets/Scripts/Accelerator.cs" Line="18" Column="58" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
