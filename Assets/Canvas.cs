@@ -38,9 +38,9 @@ public class Canvas : MonoBehaviour {
 	}
 
 	void SetCoordinate(float[] xy) {
-		ball_x = (int)((xy[0]/10) * width + width / 2);
-		ball_y = (int)((xy[1]/8.5) * height + height / 2);
-		Debug.Log(ball_x + ", " + ball_y);
+		ball_x = (int)((xy[0]/10.5) * width + width / 2);
+		ball_y = (int)((xy[1]/7.8) * height + height / 2);
+		//Debug.Log(ball_x + ", " + ball_y);
 	}
 
 	void DrawRound (int radius) {
