@@ -40,7 +40,7 @@ public class Canvas : MonoBehaviour {
 		DrawRound(range);
 
 		if (range > default_range) {
-			range -= 10;
+			range -= 5;
 		}
 
 		// receive touch
@@ -96,7 +96,7 @@ public class Canvas : MonoBehaviour {
 	}
 
 	void DoExplode () {
-		range = 100;
+		range = 200;
 	}
 
 	void DeployWall (Vector2 mouse_position) {
