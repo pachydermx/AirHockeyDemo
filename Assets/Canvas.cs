@@ -51,14 +51,25 @@ public class Canvas : MonoBehaviour {
 		int decisionOver2 = 1 - x;
 
 		while (y <= x){
-			texture.SetPixel( x+x0, y+y0, paint_color );
-			texture.SetPixel( y+x0, x+y0, paint_color );
-			texture.SetPixel( -x+x0, y+y0, paint_color );
-			texture.SetPixel( -y+x0, x+y0, paint_color );
-			texture.SetPixel( -x+x0, -y+y0, paint_color );
-			texture.SetPixel( -y+x0, -x+y0, paint_color );
-			texture.SetPixel( x+x0, -y+y0, paint_color );
-			texture.SetPixel( y+x0, -x+y0, paint_color );
+			int i;
+			for (i = -x+x0; i < x+x0; ++i) {
+				texture.SetPixel( i, y+y0, paint_color );
+				texture.SetPixel( i, -y+y0, paint_color );
+			}
+
+			for (i = -y+x0; i < y+x0; ++i) {
+				texture.SetPixel( i, x+y0, paint_color );
+				texture.SetPixel( i, -x+y0, paint_color );
+			}
+
+			//texture.SetPixel( x+x0, y+y0, paint_color );
+			//texture.SetPixel( y+x0, x+y0, paint_color );
+			//texture.SetPixel( -x+x0, y+y0, paint_color );
+			//texture.SetPixel( -y+x0, x+y0, paint_color );
+			//texture.SetPixel( -x+x0, -y+y0, paint_color );
+			//texture.SetPixel( -y+x0, -x+y0, paint_color );
+			//texture.SetPixel( x+x0, -y+y0, paint_color );
+			//texture.SetPixel( y+x0, -x+y0, paint_color );
 			y++;
 			if (decisionOver2 <= 0){
 				decisionOver2 += 2 * y + 1;
