@@ -45,5 +45,9 @@ public class Main : MonoBehaviour {
 			canvas.SendMessage("DrawRound", 120);
 		}
 	}
+
+	void Player(int player_id){
+		ball.SendMessage("Player", player_id);
+	}
 	
 }
