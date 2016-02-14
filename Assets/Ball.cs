@@ -27,7 +27,11 @@ public class Ball : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// set coordinate
-
+		//Debug.Log(transform.position);
+		float[] xy = new float[2];
+		xy[0] = (transform.position.x);
+		xy[1] = (transform.position.y);
+		canvas.SendMessage("SetCoordinate", xy);
 	}
 
 	// switch player
