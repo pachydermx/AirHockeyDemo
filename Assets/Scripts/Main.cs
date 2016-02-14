@@ -5,6 +5,8 @@ public class Main : MonoBehaviour {
 	public GameObject ball;
 	private Rigidbody2D ball_rb;
 
+	public GameObject canvas;
+
 	// Use this for initialization
 	void Start () {
 		ball_rb = ball.GetComponent<Rigidbody2D>();
@@ -35,6 +37,11 @@ public class Main : MonoBehaviour {
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha2)){
 			ball.SendMessage("Player", 2);
+		}
+
+		// test draw
+		if (Input.GetKeyDown(KeyCode.T)){
+			canvas.SendMessage("DrawRect");
 		}
 	}
 	
