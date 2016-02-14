@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class Canvas : MonoBehaviour {
+	public GameObject p1_wall;
+	public GameObject p2_wall;
+
 	public RawImage image;
 	private Texture2D texture;
 	private Color paint_color;
@@ -31,6 +34,16 @@ public class Canvas : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		DrawRound(50);
+
+		// receive touch
+		if (Input.touchCount > 0){
+			Debug.Log(Input.GetTouch(0).position.x + ", "+ Input.GetTouch(0).position.y);
+		}
+
+		if (Input.GetMouseButton(0)){
+			// deploy wall
+			DeployWall(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+		}
 	}
 
 	void SetColor (Color new_color){
@@ -62,14 +75,6 @@ public class Canvas : MonoBehaviour {
 				texture.SetPixel( i, -x+y0, paint_color );
 			}
 
-			//texture.SetPixel( x+x0, y+y0, paint_color );
-			//texture.SetPixel( y+x0, x+y0, paint_color );
-			//texture.SetPixel( -x+x0, y+y0, paint_color );
-			//texture.SetPixel( -y+x0, x+y0, paint_color );
-			//texture.SetPixel( -x+x0, -y+y0, paint_color );
-			//texture.SetPixel( -y+x0, -x+y0, paint_color );
-			//texture.SetPixel( x+x0, -y+y0, paint_color );
-			//texture.SetPixel( y+x0, -x+y0, paint_color );
 			y++;
 			if (decisionOver2 <= 0){
 				decisionOver2 += 2 * y + 1;
@@ -80,5 +85,13 @@ public class Canvas : MonoBehaviour {
 		}
 
 		texture.Apply(false);
+	}
+
+	void DeployWall (Vector2 mouse_position) {
+		if (mouse_position.x < 0)
+			Instantiate(p1_wall, mouse_position, Quaternion.identity);
+
+		if (mouse_position.x > 0)
+			Instantiate(p2_wall, mouse_position, Quaternion.identity);
 	}
 }
