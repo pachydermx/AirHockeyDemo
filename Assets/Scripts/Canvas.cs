@@ -14,6 +14,9 @@ public class Canvas : MonoBehaviour {
 	private int width = 1024;
 	private int height = 768;
 
+	private int default_range = 50;
+	private int range;
+
 	// Use this for initialization
 	void Start () {
 		// init texture
@@ -29,11 +32,16 @@ public class Canvas : MonoBehaviour {
 		paint_color = Color.clear;
 		ball_x = width / 2;
 		ball_y = height / 2;
+		range = default_range;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		DrawRound(50);
+		DrawRound(range);
+
+		if (range > default_range) {
+			range -= 10;
+		}
 
 		// receive touch
 		if (Input.touchCount > 0){
@@ -85,6 +93,10 @@ public class Canvas : MonoBehaviour {
 		}
 
 		texture.Apply(false);
+	}
+
+	void DoExplode () {
+		range = 100;
 	}
 
 	void DeployWall (Vector2 mouse_position) {

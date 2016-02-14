@@ -16,6 +16,12 @@ public class ColliderMessenager : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
+		Debug.Log("COL");
+		manager.SendMessage("Player", player_id);
+	}
+
+	void OnCollisionStay2D(Collision2D collision) {
+		Debug.Log("COL");
 		manager.SendMessage("Player", player_id);
 	}
 }

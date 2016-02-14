@@ -44,6 +44,11 @@ public class Main : MonoBehaviour {
 			canvas.SendMessage("DrawRound", 100);
 			canvas.SendMessage("DrawRound", 120);
 		}
+
+		// explode
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			canvas.SendMessage("DoExplode");
+		}
 	}
 
 	void Player(int player_id){
