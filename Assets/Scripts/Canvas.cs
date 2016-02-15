@@ -5,10 +5,12 @@ using UnityEngine.UI;
 public class Canvas : MonoBehaviour {
 	public GameObject p1_wall;
 	public GameObject p2_wall;
+    public GameObject manager;
 
 	public RawImage image;
 	private Texture2D texture;
 	private Color paint_color;
+    private Color[] colors;
 	private int ball_x;
 	private int ball_y;
 	private int width = 1024;
@@ -106,4 +108,35 @@ public class Canvas : MonoBehaviour {
 		if (mouse_position.x > 0)
 			Instantiate(p2_wall, mouse_position, Quaternion.identity);
 	}
+
+    void SetColors(Color[] received_colors)
+    {
+        colors = received_colors;
+    }
+
+    void GetScore () {
+        int[] scores = new int[2];
+        scores[0] = 0;
+        scores[1] = 0;
+        Debug.Log(colors[1] + ", " + colors[1].Equals(colors[1]));
+        Color[] canvas_colors = texture.GetPixels(0, 0, width, height);
+        int counter = 10;
+        for (int i = 0; i < width * height; ++i) {
+            if (!canvas_colors[i].Equals(Color.clear))
+            {
+                if (counter > 0)
+                {
+                    Debug.Log(canvas_colors[i].r);
+                    counter--;
+                }
+                if (canvas_colors[i].r <= 0.5) {
+                    scores[0]++;
+                } else { 
+                    scores[1]++;
+                }
+
+            }
+        }
+        Debug.Log(scores[0] + ", " + scores[1]);
+    }
 }

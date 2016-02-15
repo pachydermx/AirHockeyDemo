@@ -7,6 +7,7 @@ public class Ball : MonoBehaviour {
 	private SpriteRenderer p2_ball;
 
 	public GameObject canvas;
+    public GameObject manager;
 
 	private Color[] player_color;
 
@@ -20,6 +21,9 @@ public class Ball : MonoBehaviour {
 		player_color[0] = Color.clear;
 		player_color[1] = new Color(.453125F, .796875F, 1.0F, 1.0F);
 		player_color[2] = new Color(1.0F, .5859375F, .89453125F, 1.0F);
+
+        // tell manager color
+        manager.SendMessage("SetColors", player_color);
 
 		Player(0);
 	}

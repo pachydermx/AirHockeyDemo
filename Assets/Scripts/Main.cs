@@ -4,6 +4,7 @@ using System.Collections;
 public class Main : MonoBehaviour {
 	public GameObject ball;
 	private Rigidbody2D ball_rb;
+    private Color[] colors;
 
 	public GameObject canvas;
 
@@ -45,6 +46,12 @@ public class Main : MonoBehaviour {
 			canvas.SendMessage("DrawRound", 120);
 		}
 
+        // get score
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            canvas.SendMessage("GetScore");
+        }
+
 		// explode
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			canvas.SendMessage("DoExplode");
@@ -58,5 +65,12 @@ public class Main : MonoBehaviour {
 	void Accelerate(Vector2 direction){
 		ball_rb.AddForce(direction * 10);
 	}
+
+    void SetColors(Color[] received_colors)
+    {
+        colors = received_colors;
+        // tell canvas
+        canvas.SendMessage("SetColors", colors);
+    }
 	
 }

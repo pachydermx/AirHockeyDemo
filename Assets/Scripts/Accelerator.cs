@@ -37,7 +37,7 @@ public class Accelerator : MonoBehaviour {
 
 	void OnTriggerStay2D(Collider2D collider) {
 		Vector2 direction = new Vector2(-transform.rotation.z, transform.rotation.w);
-		Debug.Log(direction);
+		//Debug.Log(direction);
 		manager.SendMessage("Accelerate", direction);
 	}
 }
