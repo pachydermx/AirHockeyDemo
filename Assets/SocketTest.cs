@@ -16,8 +16,8 @@ public class SocketTest : MonoBehaviour {
 
     void Update()
     {
-        c.GetInfo();
-
+        Thread tid = new Thread(new ThreadStart(c.GetInfo));
+        tid.Start();
     }
 }
 
@@ -25,6 +25,8 @@ public class Communicator
 {
     Socket host;
     Socket client;
+
+    bool connected = false;
 
 	// Use this for initialization
 	public void initServer () {
@@ -44,16 +46,18 @@ public class Communicator
             Debug.Log("connected 1");
             client.Send(System.Text.Encoding.UTF8.GetBytes("hello"));
 
-            byte[] buffer = new byte[1024];
-            int bytesRec = client.Receive(buffer);
-            Debug.Log(System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRec));
         }
+        byte[] buffer = new byte[1024];
+        int bytesRec = client.Receive(buffer);
+        Debug.Log(System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRec));
 
+        /*
         if (host.Connected)
         {
             Debug.Log("connected 2");
             host.Shutdown(SocketShutdown.Both);
         }
+        */
 	}
 
 }
