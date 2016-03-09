@@ -21,7 +21,7 @@ public class SocketTest : MonoBehaviour {
     // calibration
     protected Vector3[] calibrationPoints = new Vector3[4];
     protected int calibrationPointSet = 0;
-    protected Vector3[] calibrationDefaults = { new Vector3(4f, 3f, 0), new Vector3(-4f, 3f, 0), new Vector3(-4f, -3f, 0), new Vector3(4f, -3f, 0) };
+    protected Vector3[] calibrationDefaults = { new Vector3(-4f, -3f, 0), new Vector3(4f, 3f, 0), new Vector3(-4f, -3f, 0), new Vector3(4f, -3f, 0) };
     protected bool calibrationComplete = false;
 
     // debug info
@@ -53,7 +53,7 @@ public class SocketTest : MonoBehaviour {
 
         // get coordinate from dtext
         infoFromText = dtext.Split(',');
-        if (infoFromText.Length >= 4)
+        if (infoFromText.Length >= 2)
         {
             ctext = "(" + infoFromText[1] + ", " + infoFromText[2] + ", " + infoFromText[3] + ")";
             // get vector
@@ -86,13 +86,35 @@ public class SocketTest : MonoBehaviour {
 
     Vector3 getRealCoordinate(Vector3 rawCoordinate)
     {
-        Vector3 output = new Vector3();
+        float x_ori = calibrationDefaults[0].x;
+        float x_delta = calibrationDefaults[1].x;
+
+        float xs_ori = calibrationPoints[0].x;
+        float xs_delta = calibrationPoints[1].x;
+
+        float x_scur = rawCoordinate.x;
+
+        float x_rate = (x_scur - xs_ori) / (xs_delta - xs_ori);
+        float x_cur = x_ori + x_rate * (x_delta - x_ori);
+
+        float y_ori = calibrationDefaults[0].y;
+        float y_delta = calibrationDefaults[1].y;
+
+        float ys_ori = calibrationPoints[0].y;
+        float ys_delta = calibrationPoints[1].y;
+
+        float y_scur = rawCoordinate.y;
+
+        float y_rate = (y_scur - ys_ori) / (ys_delta - ys_ori);
+        float y_cur = y_ori + y_rate * (y_delta - y_ori);
+
+        Vector3 output = new Vector3(x_cur, y_cur, 0);
         return output;
     }
 
     void setCalibrationPoint()
     {
-        if (calibrationPointSet < 4)
+        if (calibrationPointSet < 2)
         {
             calibrationPoints[calibrationPointSet] = singlePointPointerForDebug;
             // prepare for next calibration
@@ -103,7 +125,7 @@ public class SocketTest : MonoBehaviour {
             // finish
             calibrationComplete = true;
         }
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 2; i++)
             Debug.Log(calibrationPoints[i]);
     }
 }
@@ -115,7 +137,7 @@ public class Communicator
 
     public SocketTest st;
 
-    bool connected = false;
+    //bool connected = false;
 
 	// Use this for initialization
 	public void initServer () {
