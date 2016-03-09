@@ -21,6 +21,8 @@ public class SocketTest : MonoBehaviour {
     // calibration
     protected Vector3[] calibrationPoints = new Vector3[4];
     protected int calibrationPointSet = 0;
+    protected Vector3[] calibrationDefaults = { new Vector3(4f, 3f, 0), new Vector3(-4f, 3f, 0), new Vector3(-4f, -3f, 0), new Vector3(4f, -3f, 0) };
+    protected bool calibrationComplete = false;
 
     // debug info
     public string dtext;
@@ -35,6 +37,9 @@ public class SocketTest : MonoBehaviour {
         // config communicator
         c.st = this;
         debugText = DebugText.GetComponent<UnityEngine.UI.Text>();
+
+        // start calibration
+        moveCursor(calibrationDefaults[calibrationPointSet]);
 
         // config debug
         singlePointPointerForDebug = new Vector3();
@@ -66,11 +71,23 @@ public class SocketTest : MonoBehaviour {
         {
             setCalibrationPoint();
         }
+
+        // move cursor for debug
+        if (calibrationComplete)
+        {
+            moveCursor(getRealCoordinate(singlePointPointerForDebug));
+        }
     }
 
-    void moveCursor(float x, float y)
+    void moveCursor(Vector3 newPosition)
     {
-        Cursor.transform.position = new Vector3(x, y, 0);
+        Cursor.transform.position = newPosition;
+    }
+
+    Vector3 getRealCoordinate(Vector3 rawCoordinate)
+    {
+        Vector3 output = new Vector3();
+        return output;
     }
 
     void setCalibrationPoint()
@@ -78,7 +95,13 @@ public class SocketTest : MonoBehaviour {
         if (calibrationPointSet < 4)
         {
             calibrationPoints[calibrationPointSet] = singlePointPointerForDebug;
+            // prepare for next calibration
             calibrationPointSet += 1;
+            moveCursor(calibrationDefaults[calibrationPointSet]);
+        } else
+        {
+            // finish
+            calibrationComplete = true;
         }
         for (int i = 0; i < 4; i++)
             Debug.Log(calibrationPoints[i]);
