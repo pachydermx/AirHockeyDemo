@@ -2,24 +2,30 @@
 using UnityEngine.UI;
 using System.Collections;
 
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
 using System.Collections.Generic;
 
+
 public class SocketTest : MonoBehaviour {
     Communicator c;
+    Thread tid;
 
     // text
     public GameObject DebugText;
     UnityEngine.UI.Text debugText;
+    protected string[] rawInputs;
     protected string[] infoFromText;
     protected string[] infoTester;
-    protected Vector3 singlePointPointerForDebug;
 
     // cursor
     public GameObject Cursor;
+    public GameObject TestCursor;
+    public GameObject Canvas;
+    protected Dictionary<string, GameObject> TestCursorList = new Dictionary<string, GameObject>();
 
     // calibration
     protected Vector3[] calibrationPoints = new Vector3[4];
@@ -31,57 +37,87 @@ public class SocketTest : MonoBehaviour {
     protected Dictionary<string, Vector3> points = new Dictionary<string, Vector3>();
 
     // debug info
-    public string dtext;
+    public string dtext = "";
     protected string ctext;
+    protected Dictionary<string, int> counter = new Dictionary<string, int>();
+    protected bool debug = true;
+
 
     void Start()
     {
         // config server
         c = new Communicator();
-        c.initServer();
 
         // config communicator
         c.st = this;
         debugText = DebugText.GetComponent<UnityEngine.UI.Text>();
 
+        c.initServer();
+
         // start calibration
         moveCursor(calibrationDefaults[calibrationPointSet]);
 
-        // config debug
-        singlePointPointerForDebug = new Vector3();
+        // request vicon info from socket
+        // raw message will be set to dtext variable
+        tid = new Thread(new ThreadStart(c.GetInfo));
+        tid.Start();
+    }
 
+    void OnApplicationPause()
+    {
+        Debug.Log("Pause");
+        tid.Abort();
+    }
+
+    void OnApplicationQuit()
+    {
+        Debug.Log("QUIT");
+        tid.Abort();
     }
 
     void Update()
     {
-        // request vicon info fro socket
-        // raw message will be set to dtext variable
-        Thread tid = new Thread(new ThreadStart(c.GetInfo));
-        tid.Start();
+        c.clock = 100;
 
-        // get coordinate from dtext
-        // parse dtext into dictionary
-        // split dtext for analyze
-        infoFromText = dtext.Split(',');
-        if (infoFromText.Length >= 4)
+        // split dtext
+        rawInputs = dtext.Split('&');
+        foreach(string rawInput in rawInputs)
         {
-            // test if valid
-            infoTester = infoFromText[0].Split(':');
-            if(infoTester.Length == 2)
+            // get coordinate from dtext
+            // parse dtext into dictionary
+            // split dtext for analyze
+            infoFromText = rawInput.Split(',');
+            if (infoFromText.Length >= 4)
             {
-                if (infoTester[0].Equals(infoTester[1])){
-                    ctext = infoFromText[0] + " - (" + infoFromText[1] + ", " + infoFromText[2] + ", " + infoFromText[3] + ")";
-                    // get vector (for debug)
-                    singlePointPointerForDebug = new Vector3(float.Parse(infoFromText[1]), float.Parse(infoFromText[2]), float.Parse(infoFromText[3]));
-                    // get vector (for dictionary)
-                    points[infoFromText[0]] = new Vector3(float.Parse(infoFromText[1]), float.Parse(infoFromText[2]), float.Parse(infoFromText[3]));
+                // test if valid
+                infoTester = infoFromText[0].Split(':');
+                if (infoTester.Length == 2)
+                {
+                    if (infoTester[0].Equals(infoTester[1]))
+                    {
+                        string name = infoFromText[0];
+                        Vector3 position = new Vector3(float.Parse(infoFromText[1]), float.Parse(infoFromText[2]), float.Parse(infoFromText[3]));
+                        // get vector (for dictionary)
+                        points[infoFromText[0]] = position;
+
+                        // create cursors
+                        if (!TestCursorList.ContainsKey(name))
+                        {
+                            // create 
+                            GameObject newCursor = (GameObject)Instantiate(TestCursor, Vector3.zero, Quaternion.identity);
+                            // set parent
+                            newCursor.transform.parent = Canvas.transform;
+                            TestCursorList.Add(name, newCursor);
+
+                            // create counter
+                            counter.Add(name, 0);
+                        }
+                        counter[name] += 1;
+                    }
                 }
             }
-
-        } else
-        {
-            ctext = "unable to get information from socket";
         }
+
 
         // generate debg text
         string dictext = "";
@@ -89,7 +125,12 @@ public class SocketTest : MonoBehaviour {
         {
             dictext += entry.Key + " - (" + entry.Value.x + ", " + entry.Value.y + ", " + entry.Value.z + ") \n";
         }
-
+        /*
+        foreach(KeyValuePair<string, int> entry in counter)
+        {
+            dictext += entry.Key + " - " + entry.Value + "\n";
+        }
+        */
         // display info
         debugText.text = dictext;
 
@@ -102,13 +143,28 @@ public class SocketTest : MonoBehaviour {
         // move cursor for debug
         if (calibrationComplete)
         {
-            moveCursor(getRealCoordinate(singlePointPointerForDebug));
+            foreach(KeyValuePair<string, Vector3> entry in points)
+            {
+                moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
+            }
         }
     }
 
     void moveCursor(Vector3 newPosition)
     {
         Cursor.transform.position = newPosition;
+    }
+
+    void moveTestCursor(string name, Vector3 newPositon)
+    {
+        if (TestCursorList.ContainsKey(name))
+        {
+            TestCursorList[name].transform.position = newPositon;
+        } else
+        {
+            Debug.Log("Cannot found " + name);
+        }
+
     }
 
     Vector3 getRealCoordinate(Vector3 rawCoordinate)
@@ -143,7 +199,7 @@ public class SocketTest : MonoBehaviour {
     {
         if (calibrationPointSet < 2)
         {
-            calibrationPoints[calibrationPointSet] = singlePointPointerForDebug;
+            calibrationPoints[calibrationPointSet] = points["spray:spray"];
             // prepare for next calibration
             calibrationPointSet += 1;
             moveCursor(calibrationDefaults[calibrationPointSet]);
@@ -151,6 +207,7 @@ public class SocketTest : MonoBehaviour {
         if (calibrationPointSet == 2){
             // finish
             calibrationComplete = true;
+            Cursor.SetActive(false);
         }
         for (int i = 0; i < 2; i++)
             Debug.Log(calibrationPoints[i]);
@@ -161,10 +218,11 @@ public class Communicator
 {
     Socket host;
     Socket client;
+    bool receiving = false;
+
+    public int clock = 100;
 
     public SocketTest st;
-
-    //bool connected = false;
 
 	// Use this for initialization
 	public void initServer () {
@@ -178,6 +236,45 @@ public class Communicator
 	
 	// Update is called once per frame
 	public void GetInfo () {
+        while (true)
+        {
+
+            if (!receiving)
+            {
+                receiving = true;
+                try
+                {
+                    if (host.Poll(0, SelectMode.SelectRead))
+                    {
+                        client = host.Accept();
+                        Debug.Log("connected");
+                        client.Send(System.Text.Encoding.UTF8.GetBytes("hello"));
+
+                    }
+                    byte[] buffer = new byte[1024];
+                    int bytesRec = client.Receive(buffer);
+                    string recvText = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRec);
+
+
+                    // debug
+                    Debug.Log(recvText);
+                    st.dtext = recvText;
+                } catch (Exception e)
+                {
+                    Debug.Log(e.ToString());
+                }
+
+                clock--;
+                if(clock < 0)
+                {
+                    break;
+                }
+
+                receiving = false;
+            }
+
+        }
+        /*
         if (host.Poll(0, SelectMode.SelectRead))
         {
             client = host.Accept();
@@ -192,6 +289,7 @@ public class Communicator
         // debug
         st.dtext = recvText;
 
+        */
         /*
         if (host.Connected)
         {
@@ -201,3 +299,4 @@ public class Communicator
         */
 	}
 }
+

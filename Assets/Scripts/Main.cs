@@ -11,6 +11,9 @@ public class Main : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		ball_rb = ball.GetComponent<Rigidbody2D>();
+
+        // set framerate
+        Application.targetFrameRate = 120;
 	}
 	
 	// Update is called once per frame
