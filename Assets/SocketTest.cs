@@ -25,6 +25,8 @@ public class SocketTest : MonoBehaviour {
     public GameObject Cursor;
     public GameObject TestCursor;
     public GameObject Canvas;
+    public GameObject p1_wall;
+    public GameObject p2_wall;
     protected Dictionary<string, GameObject> TestCursorList = new Dictionary<string, GameObject>();
 
     // calibration
@@ -42,6 +44,9 @@ public class SocketTest : MonoBehaviour {
     protected Dictionary<string, int> counter = new Dictionary<string, int>();
     protected bool debug = true;
 
+    // level
+    protected float touchLevel;
+    protected bool levelSet = false;
 
     void Start()
     {
@@ -139,6 +144,10 @@ public class SocketTest : MonoBehaviour {
         {
             setCalibrationPoint();
         }
+        if (Input.GetKeyDown(KeyCode.F15))
+        {
+            setlevel();
+        }
 
         // move cursor for debug
         if (calibrationComplete)
@@ -147,6 +156,33 @@ public class SocketTest : MonoBehaviour {
             {
                 moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
             }
+        }
+        if (levelSet)
+        {
+            if(points["Pen3:Pen3"].z < touchLevel)
+            {
+                deployWall(getRealCoordinate(points["Pen3:Pen3"]));
+            }
+            if(points["Pen4:Pen4"].z < touchLevel)
+            {
+                deployWall(getRealCoordinate(points["Pen4:Pen4"]));
+            }
+        }
+    }
+
+    void deployWall(Vector3 position)
+    {
+        if(position.x > 0)
+        {
+            GameObject nw = (GameObject)Instantiate(p1_wall, Vector3.zero, Quaternion.identity);
+            nw.transform.parent = Canvas.transform;
+            nw.transform.position = position;
+
+        } else
+        {
+            GameObject nw = (GameObject)Instantiate(p2_wall, Vector3.zero, Quaternion.identity);
+            nw.transform.parent = Canvas.transform;
+            nw.transform.position = position;
         }
     }
 
@@ -211,6 +247,12 @@ public class SocketTest : MonoBehaviour {
         }
         for (int i = 0; i < 2; i++)
             Debug.Log(calibrationPoints[i]);
+    }
+
+    void setlevel()
+    {
+        touchLevel = points["Pen3:Pen3"].z;
+        levelSet = true;
     }
 }
 
