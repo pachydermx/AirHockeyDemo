@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
+using System.Collections.Generic;
+
 public class SocketTest : MonoBehaviour {
     Communicator c;
 
@@ -13,6 +15,7 @@ public class SocketTest : MonoBehaviour {
     public GameObject DebugText;
     UnityEngine.UI.Text debugText;
     protected string[] infoFromText;
+    protected string[] infoTester;
     protected Vector3 singlePointPointerForDebug;
 
     // cursor
@@ -23,6 +26,9 @@ public class SocketTest : MonoBehaviour {
     protected int calibrationPointSet = 0;
     protected Vector3[] calibrationDefaults = { new Vector3(-4f, -3f, 0), new Vector3(4f, 3f, 0), new Vector3(-4f, -3f, 0), new Vector3(4f, -3f, 0) };
     protected bool calibrationComplete = false;
+
+    // points
+    protected Dictionary<string, Vector3> points = new Dictionary<string, Vector3>();
 
     // debug info
     public string dtext;
@@ -43,28 +49,49 @@ public class SocketTest : MonoBehaviour {
 
         // config debug
         singlePointPointerForDebug = new Vector3();
+
     }
 
     void Update()
     {
-        // request info
+        // request vicon info fro socket
+        // raw message will be set to dtext variable
         Thread tid = new Thread(new ThreadStart(c.GetInfo));
         tid.Start();
 
         // get coordinate from dtext
+        // parse dtext into dictionary
+        // split dtext for analyze
         infoFromText = dtext.Split(',');
-        if (infoFromText.Length >= 2)
+        if (infoFromText.Length >= 4)
         {
-            ctext = "(" + infoFromText[1] + ", " + infoFromText[2] + ", " + infoFromText[3] + ")";
-            // get vector
-            singlePointPointerForDebug = new Vector3(float.Parse(infoFromText[1]), float.Parse(infoFromText[2]), float.Parse(infoFromText[3]));
+            // test if valid
+            infoTester = infoFromText[0].Split(':');
+            if(infoTester.Length == 2)
+            {
+                if (infoTester[0].Equals(infoTester[1])){
+                    ctext = infoFromText[0] + " - (" + infoFromText[1] + ", " + infoFromText[2] + ", " + infoFromText[3] + ")";
+                    // get vector (for debug)
+                    singlePointPointerForDebug = new Vector3(float.Parse(infoFromText[1]), float.Parse(infoFromText[2]), float.Parse(infoFromText[3]));
+                    // get vector (for dictionary)
+                    points[infoFromText[0]] = new Vector3(float.Parse(infoFromText[1]), float.Parse(infoFromText[2]), float.Parse(infoFromText[3]));
+                }
+            }
+
         } else
         {
             ctext = "unable to get information from socket";
         }
 
+        // generate debg text
+        string dictext = "";
+        foreach(KeyValuePair<string, Vector3> entry in points)
+        {
+            dictext += entry.Key + " - (" + entry.Value.x + ", " + entry.Value.y + ", " + entry.Value.z + ") \n";
+        }
+
         // display info
-        debugText.text = ctext;
+        debugText.text = dictext;
 
         // do calibrate
         if (Input.GetKeyDown(KeyCode.F14))
@@ -120,8 +147,8 @@ public class SocketTest : MonoBehaviour {
             // prepare for next calibration
             calibrationPointSet += 1;
             moveCursor(calibrationDefaults[calibrationPointSet]);
-        } else
-        {
+        }
+        if (calibrationPointSet == 2){
             // finish
             calibrationComplete = true;
         }
