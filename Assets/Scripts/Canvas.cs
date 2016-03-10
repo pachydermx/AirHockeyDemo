@@ -19,6 +19,8 @@ public class Canvas : MonoBehaviour {
 	private int default_range = 50;
 	private int range;
 
+    public GameObject Cursor; // 0310 yamamoto
+
 	// Use this for initialization
 	void Start () {
 		// init texture
