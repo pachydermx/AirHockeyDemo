@@ -29,6 +29,9 @@ public class SocketTest : MonoBehaviour {
     public GameObject p2_wall;
     protected Dictionary<string, GameObject> TestCursorList = new Dictionary<string, GameObject>();
 
+    // real game object
+    public GameObject Smasher;
+
     // calibration
     protected Vector3[] calibrationPoints = new Vector3[4];
     protected int calibrationPointSet = 0;
@@ -140,6 +143,15 @@ public class SocketTest : MonoBehaviour {
             setlevel();
         }
 
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            loadSetting();
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            saveSetting();
+        }
+
         // move cursor for debug
         if (calibrationComplete)
         {
@@ -147,6 +159,7 @@ public class SocketTest : MonoBehaviour {
             {
                 moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
             }
+            Smasher.transform.position = getRealCoordinate(points["Smasher:Smasher"]);
         }
         if (levelSet)
         {
@@ -245,6 +258,51 @@ public class SocketTest : MonoBehaviour {
         touchLevel = points["Pen3:Pen3"].z;
         levelSet = true;
     }
+
+    void saveSetting()
+    {
+        Debug.Log("Saving Calibration");
+        if (calibrationComplete && levelSet)
+        {
+            PlayerPrefs.SetFloat("cp0x", calibrationPoints[0].x);
+            PlayerPrefs.SetFloat("cp0y", calibrationPoints[0].y);
+            PlayerPrefs.SetFloat("cp0z", calibrationPoints[0].z);
+
+            PlayerPrefs.SetFloat("cp1x", calibrationPoints[1].x);
+            PlayerPrefs.SetFloat("cp1y", calibrationPoints[1].y);
+            PlayerPrefs.SetFloat("cp1z", calibrationPoints[1].z);
+
+            PlayerPrefs.SetFloat("level", touchLevel);
+
+            PlayerPrefs.SetInt("set", 1);
+            PlayerPrefs.Save();
+            Debug.Log("Calibration Saved");
+        } else
+        {
+            Debug.LogError("Calibration is not complete");
+        }
+    }
+
+    void loadSetting()
+    {
+        Debug.Log("Loading Calibration");
+        if (PlayerPrefs.HasKey("set"))
+        {
+            calibrationPoints[0] = new Vector3(PlayerPrefs.GetFloat("cp0x"), PlayerPrefs.GetFloat("cp0y"), PlayerPrefs.GetFloat("cp0z"));
+            calibrationPoints[1] = new Vector3(PlayerPrefs.GetFloat("cp1x"), PlayerPrefs.GetFloat("cp1y"), PlayerPrefs.GetFloat("cp1z"));
+
+            touchLevel = PlayerPrefs.GetFloat("level");
+
+            Cursor.SetActive(false);
+            calibrationComplete = true;
+            levelSet = true;
+
+            Debug.Log("Calibration Loaded.");
+        } else
+        {
+            Debug.LogError("Save is not found");
+        }
+    }
 }
 
 public class Communicator
@@ -290,11 +348,11 @@ public class Communicator
 
 
                     // debug
-                    Debug.Log(recvText);
+                    //Debug.Log(recvText);
                     st.dtext = recvText;
                 } catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    Debug.LogWarning(e.ToString());
                 }
 
                 clock--;
@@ -307,29 +365,6 @@ public class Communicator
             }
 
         }
-        /*
-        if (host.Poll(0, SelectMode.SelectRead))
-        {
-            client = host.Accept();
-            Debug.Log("connected");
-            client.Send(System.Text.Encoding.UTF8.GetBytes("hello"));
-
-        }
-        byte[] buffer = new byte[1024];
-        int bytesRec = client.Receive(buffer);
-        string recvText = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRec);
-
-        // debug
-        st.dtext = recvText;
-
-        */
-        /*
-        if (host.Connected)
-        {
-            Debug.Log("connected 2");
-            host.Shutdown(SocketShutdown.Both);
-        }
-        */
 	}
 }
 
