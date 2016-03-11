@@ -66,18 +66,9 @@ public class SocketTest : MonoBehaviour {
         // raw message will be set to dtext variable
         tid = new Thread(new ThreadStart(c.GetInfo));
         tid.Start();
-    }
 
-    void OnApplicationPause()
-    {
-        Debug.Log("Pause");
-        tid.Abort();
-    }
-
-    void OnApplicationQuit()
-    {
-        Debug.Log("QUIT");
-        tid.Abort();
+        // execute vicon client
+        System.Diagnostics.Process.Start(Application.dataPath + "/ViconClient.exe");
     }
 
     void Update()
