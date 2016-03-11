@@ -248,6 +248,8 @@ public class SocketTest : MonoBehaviour {
             // finish
             calibrationComplete = true;
             Cursor.SetActive(false);
+
+            Smasher.SetActive(true);
         }
         for (int i = 0; i < 2; i++)
             Debug.Log(calibrationPoints[i]);
@@ -296,6 +298,9 @@ public class SocketTest : MonoBehaviour {
             Cursor.SetActive(false);
             calibrationComplete = true;
             levelSet = true;
+
+            // config objects
+            Smasher.SetActive(true);
 
             Debug.Log("Calibration Loaded.");
         } else

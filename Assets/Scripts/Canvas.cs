@@ -56,6 +56,12 @@ public class Canvas : MonoBehaviour {
 			// deploy wall
 			DeployWall(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 		}
+
+        // get score
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            GetScore();
+        }
 	}
 
 	void SetColor (Color new_color){
