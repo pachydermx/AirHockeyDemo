@@ -19,6 +19,16 @@ public class Canvas : MonoBehaviour {
 	private int default_range = 50;
 	private int range;
 
+    protected int[] scores;
+    public GameObject P1Display;
+    public GameObject P2Display;
+    public GameObject ball;
+    protected bool animationPlaying = false;
+    protected float animateCounter = 0;
+    protected float P1DisplayTargetScaleX;
+    protected float P2DisplayTargetScaleX;
+    protected float maximumBar = 192;
+
     public GameObject Cursor; // 0310 yamamoto
 
 	// Use this for initialization
@@ -60,7 +70,23 @@ public class Canvas : MonoBehaviour {
         // get score
         if (Input.GetKeyDown(KeyCode.F5))
         {
-            GetScore();
+            StartScoreShow();
+        }
+
+        // show animation
+        if (animationPlaying)
+        {
+            float scale_1 = P1DisplayTargetScaleX * animateCounter * animateCounter * animateCounter * animateCounter;
+            float scale_2 = P2DisplayTargetScaleX * animateCounter * animateCounter * animateCounter * animateCounter;
+
+            P1Display.transform.localScale = new Vector3(scale_1, 110, 1);
+            P2Display.transform.localScale = new Vector3(scale_2, 110, 1);
+
+            animateCounter += (float)0.02;
+            if (animateCounter >= 1)
+            {
+                animationPlaying = false;
+            }
         }
 	}
 
@@ -131,10 +157,9 @@ public class Canvas : MonoBehaviour {
     }
 
     void GetScore () {
-        int[] scores = new int[2];
+        scores = new int[2];
         scores[0] = 0;
         scores[1] = 0;
-        Debug.Log(colors[1] + ", " + colors[1].Equals(colors[1]));
         Color[] canvas_colors = texture.GetPixels(0, 0, width, height);
         int counter = 10;
         for (int i = 0; i < width * height; ++i) {
@@ -153,6 +178,21 @@ public class Canvas : MonoBehaviour {
 
             }
         }
-        Debug.Log(scores[0] + ", " + scores[1]);
+    }
+
+    void StartScoreShow()
+    {
+        ball.SetActive(false);
+        GetScore();
+
+        int sum = scores[0] + scores[1];
+        float rate_1 = (float)scores[0] / sum;
+        float rate_2 = (float)scores[1] / sum;
+
+        P1DisplayTargetScaleX = maximumBar * rate_1;
+        P2DisplayTargetScaleX = maximumBar * rate_2;
+
+        animationPlaying = true;
+
     }
 }
