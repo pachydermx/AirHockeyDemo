@@ -13,8 +13,8 @@ public class Canvas : MonoBehaviour {
     private Color[] colors;
 	private int ball_x;
 	private int ball_y;
-	private int width = 1024;
-	private int height = 768;
+	private int width = 1920;
+	private int height = 1080;
 
 	private int default_range = 50;
 	private int range;
@@ -63,8 +63,16 @@ public class Canvas : MonoBehaviour {
 	}
 
 	void SetCoordinate(float[] xy) {
+        /*
 		ball_x = (int)((xy[0]/10.5) * width + width / 2);
 		ball_y = (int)((xy[1]/7.8) * height + height / 2);
+        */
+        float rate_x = (float)(xy[0] / 9.6);
+        float rate_y = (float)(xy[1] / 5.4);
+
+        ball_x = (int)(rate_x * width / 2 + (width / 2));
+        ball_y = (int)(rate_y * height / 2 + (height / 2));
+
 		//Debug.Log(ball_x + ", " + ball_y);
 	}
 
