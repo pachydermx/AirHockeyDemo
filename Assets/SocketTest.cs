@@ -239,7 +239,7 @@ public class SocketTest : MonoBehaviour {
     {
         if (calibrationPointSet < 2)
         {
-            calibrationPoints[calibrationPointSet] = points["spray:spray"];
+            calibrationPoints[calibrationPointSet] = points["Smasher:Smasher"];
             // prepare for next calibration
             calibrationPointSet += 1;
             moveCursor(calibrationDefaults[calibrationPointSet]);
