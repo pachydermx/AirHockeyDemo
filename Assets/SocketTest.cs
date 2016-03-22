@@ -6,6 +6,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+//using System.Diagnostics; // yama 0316
 
 using System.Collections.Generic;
 
@@ -31,6 +32,9 @@ public class SocketTest : MonoBehaviour {
 
     // real game object
     public GameObject Smasher;
+    public GameObject Baketsu; // yama 0317
+    public GameObject Spray; // yama 0318
+    public GameObject manager; // yama 0321
 
     // calibration
     protected Vector3[] calibrationPoints = new Vector3[4];
@@ -50,6 +54,8 @@ public class SocketTest : MonoBehaviour {
     // level
     protected float touchLevel;
     protected bool levelSet = false;
+
+    protected System.Diagnostics.Process vicon; // yama 0316
 
     void Start()
     {
@@ -71,7 +77,12 @@ public class SocketTest : MonoBehaviour {
         tid.Start();
 
         // execute vicon client
-        System.Diagnostics.Process.Start(Application.dataPath + "/ViconClient.exe");
+        vicon = System.Diagnostics.Process.Start(Application.dataPath + "/ViconClient.exe");
+        //Process vicon; // yama 0316
+        //vicon = Process.Start("/ViconClient.exe"); //yama 0316
+
+        Baketsu.SetActive(false);
+
     }
 
     void Update()
@@ -102,6 +113,28 @@ public class SocketTest : MonoBehaviour {
                         // create cursors
                         if (!TestCursorList.ContainsKey(name))
                         {
+                            if (name.Contains("baketsu2")) // 0317 yama <--
+                            {
+                                //Debug.Log("OK");
+                                Baketsu.SetActive(true);
+                            }
+                            else if (name.Contains("spray"))
+                            {
+                                Spray.SetActive(true);
+                            }
+                            else
+                            {
+                                // create 
+                                GameObject newCursor = (GameObject)Instantiate(TestCursor, Vector3.zero, Quaternion.identity);
+                                // set parent
+                                newCursor.transform.parent = Canvas.transform;
+                                TestCursorList.Add(name, newCursor);
+
+                                // create counter
+                                counter.Add(name, 0);
+                            } // -->
+
+                            /*
                             // create 
                             GameObject newCursor = (GameObject)Instantiate(TestCursor, Vector3.zero, Quaternion.identity);
                             // set parent
@@ -110,8 +143,10 @@ public class SocketTest : MonoBehaviour {
 
                             // create counter
                             counter.Add(name, 0);
+                            */
                         }
-                        counter[name] += 1;
+                        
+                        //counter[name] += 1; // yama 0317
                     }
                 }
             }
@@ -160,6 +195,8 @@ public class SocketTest : MonoBehaviour {
                 moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
             }
             Smasher.transform.position = getRealCoordinate(points["Smasher:Smasher"]);
+            Baketsu.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0317
+            Spray.transform.position = getRealCoordinate(points["spray:spray"]); // yama 0318
         }
         if (levelSet)
         {
@@ -172,6 +209,12 @@ public class SocketTest : MonoBehaviour {
                 deployWall(getRealCoordinate(points["Pen4:Pen4"]));
             }
         }
+        
+        if (Input.GetKeyDown(KeyCode.Q)) { // yama 0316 finish viconclient
+            vicon.CloseMainWindow();
+            vicon.Close();
+        }
+        
     }
 
     void deployWall(Vector3 position)
@@ -202,7 +245,7 @@ public class SocketTest : MonoBehaviour {
             TestCursorList[name].transform.position = newPositon;
         } else
         {
-            Debug.Log("Cannot found " + name);
+            //Debug.Log("Cannot found " + name);  // yama 0317 
         }
 
     }
@@ -251,8 +294,8 @@ public class SocketTest : MonoBehaviour {
 
             Smasher.SetActive(true);
         }
-        for (int i = 0; i < 2; i++)
-            Debug.Log(calibrationPoints[i]);
+        for (int i = 0; i < 2; i++) 
+            Debug.Log(calibrationPoints[i]); 
     }
 
     void setlevel()
@@ -263,7 +306,7 @@ public class SocketTest : MonoBehaviour {
 
     void saveSetting()
     {
-        Debug.Log("Saving Calibration");
+        Debug.Log("Saving Calibration"); 
         if (calibrationComplete && levelSet)
         {
             PlayerPrefs.SetFloat("cp0x", calibrationPoints[0].x);
@@ -278,7 +321,7 @@ public class SocketTest : MonoBehaviour {
 
             PlayerPrefs.SetInt("set", 1);
             PlayerPrefs.Save();
-            Debug.Log("Calibration Saved");
+            Debug.Log("Calibration Saved"); 
         } else
         {
             Debug.LogError("Calibration is not complete");
@@ -302,10 +345,32 @@ public class SocketTest : MonoBehaviour {
             // config objects
             Smasher.SetActive(true);
 
-            Debug.Log("Calibration Loaded.");
+            Debug.Log("Calibration Loaded."); 
         } else
         {
-            Debug.LogError("Save is not found");
+            Debug.LogError("Save is not found"); 
+        }
+    }
+
+    /*
+    void sendB2position() // yama 0317
+    {
+        //Debug.Log("manager OK");
+        Canvas.SendMessage("DoSprinkle", Baketsu.transform.position);
+    }
+    */
+
+    void sendPosition(String name) // yama 0318 GimmickDiscrimination
+    {
+        if (name.Contains("Spray")) // yama 0321
+        {
+            //Debug.Log("Stop");
+            Spray.SendMessage("stopFlag", 1);
+            Canvas.SendMessage("DoSpray", Spray.transform.position);  
+        }
+        else if (name.Contains("Baketsu"))
+        {
+            Canvas.SendMessage("DoSprinkle", Baketsu.transform.position);
         }
     }
 }

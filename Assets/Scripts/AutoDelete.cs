@@ -14,8 +14,8 @@ public class AutoDelete : MonoBehaviour {
 	}
 
 	IEnumerator Delete () {
-		yield return new WaitForSeconds(0.6F);
+		yield return new WaitForSeconds(0.6F); 
 
-		Destroy(this.gameObject);
+        Destroy(this.gameObject);
 	}
 }

@@ -44,12 +44,71 @@ public class UDPCommunicator : MonoBehaviour {
         fuel = 50;
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     void test()
     {
-        byte[] umsg = Encoding.UTF8.GetBytes("hello");
+        byte[] umsg = Encoding.UTF8.GetBytes("hello, Ushitani");
+        //byte[] umsg = Encoding.UTF8.GetBytes("0");
         udp.Send(umsg, umsg.Length);
         Debug.Log("MSG");
 
+    }
+
+    void controlSpray(int dir) // yama 0321
+    {
+        String mes = dir.ToString();
+        byte[] umsg = Encoding.UTF8.GetBytes(mes);
+        //byte[] umsg = Encoding.UTF8.GetBytes("1");
+        udp.Send(umsg, umsg.Length);
+        Debug.Log("dir = "+mes);
     }
 
     void Message()
@@ -65,13 +124,13 @@ public class UDPCommunicator : MonoBehaviour {
                 */
                 IPEndPoint remoteEP = null;
                 //byte[] data = udp.Receive(ref remoteEP);
-                //string text = Encoding.UTF8.GetString(data);
+                //string text = Encoding.UTF8.GetString(data);１１２
 
                 //Debug.Log(msg);
                 if (msg)
                 {
                 }
-                byte[] sdata = Encoding.UTF8.GetBytes("hello\n");
+                byte[] sdata = Encoding.UTF8.GetBytes("hello, Jack\n");
                 udp.Send(sdata, sdata.Length, remoteEP);
                 Debug.Log("Send Message");
             } catch (Exception err)

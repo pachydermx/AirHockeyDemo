@@ -59,7 +59,7 @@ public class Main : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			canvas.SendMessage("DoExplode");
 		}
-	}
+    }
 
 	void Player(int player_id){
 		ball.SendMessage("Player", player_id);

@@ -29,7 +29,10 @@ public class Canvas : MonoBehaviour {
     protected float P2DisplayTargetScaleX;
     protected float maximumBar = 192;
 
-    public GameObject Cursor; // 0310 yamamoto
+    // 線の補間に使用
+    private float temp_x;   // yama 0316
+    private float temp_y;   // yama 0316
+    private float dis_sum = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -63,9 +66,24 @@ public class Canvas : MonoBehaviour {
 		}
 
 		if (Input.GetMouseButton(0)){
-			// deploy wall
-			DeployWall(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-		}
+            // deploy wall
+            DeployWall(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+        }
+        /*else  // yama 0318 未完成
+        {
+            temp_x = Input.mousePosition.x;
+            temp_y = Input.mousePosition.y;
+        }
+        Debug.Log("temp_x:"+ temp_x +", temp_y:"+ temp_y);
+        
+        if (dis_sum > 4)
+        {
+            dis_sum -= 0.05f;
+        }else if(dis_sum < 0){
+            dis_sum = 0;
+        }
+        */
 
         // get score
         if (Input.GetKeyDown(KeyCode.F5))
@@ -89,7 +107,7 @@ public class Canvas : MonoBehaviour {
             }
         }
 	}
-
+    
 	void SetColor (Color new_color){
 		paint_color = new_color;
 	}
@@ -117,11 +135,12 @@ public class Canvas : MonoBehaviour {
 
 		while (y <= x){
 			int i;
+            
 			for (i = -x+x0; i < x+x0; ++i) {
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
 			}
-
+            
 			for (i = -y+x0; i < y+x0; ++i) {
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
@@ -139,16 +158,148 @@ public class Canvas : MonoBehaviour {
 		texture.Apply(false);
 	}
 
+    void DoSprinkle(Vector3 position) // yama 0317 Baketsu Gimmick
+    {
+        float[] xy0 = { position.x, position.y };
+        float rate_x = (float)(xy0[0] / 9.6);
+        float rate_y = (float)(xy0[1] / 5.4);
+
+        int x0 = (int)(rate_x * width / 2 + (width / 2));
+        int y0 = (int)(rate_y * height / 2 + (height / 2));
+        int x = 200;
+        int y = 0;
+        int decisionOver2 = 1 - x;
+        
+        /*
+        for(int i = 0; i < 3600; i++)
+        {
+            float temp_x = x0 * Mathf.Cos(0.1f) + y0 * Mathf.Sin(0.1f);
+            float temp_y = x0 * Mathf.Sin(0.1f) - y0 * Mathf.Cos(0.1f);
+            x0 += (int)temp_x;
+            y0 += (int)temp_y;
+            texture.SetPixel(x0, y0, paint_color);
+        }
+        */
+
+        
+        while (y <= x)
+        {
+        
+        int i; 
+        
+        for (i = -x + x0; i < x + x0; ++i)
+            {
+                texture.SetPixel(i, y + y0, paint_color);
+                texture.SetPixel(i, -y + y0, paint_color);
+            }
+
+            for (i = -y + x0; i < y + x0; ++i)
+            {
+                texture.SetPixel(i, x + y0, paint_color);
+                texture.SetPixel(i, -x + y0, paint_color);
+            }
+
+            y++;
+            if (decisionOver2 <= 0)
+            {
+                decisionOver2 += 2 * y + 1;
+            }
+            else {
+                x--;
+                decisionOver2 += 2 * (y - x) + 1;
+            }
+        }
+        
+        texture.Apply(false);
+    }
+
+    void DoSpray(Vector3 position) // yama 0318 Spray Gimmick
+    {
+        float[] xy0 = { position.x, position.y };
+        float rate_x = (float)(xy0[0] / 9.6);
+        float rate_y = (float)(xy0[1] / 5.4);
+
+        int x = (int)(rate_x * width / 2 + (width / 2));
+        int y = (int)(rate_y * height / 2 + (height / 2)) + 50;
+
+        for (int i = 1; i < 100; i++)
+        {
+            for (int j = 0; j < (i * 2 - 1); j++)
+            {
+                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + i * 3, paint_color);
+                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 1 + i * 3, paint_color);
+                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 2 + i * 3, paint_color);
+            }
+        }
+
+        //Debug.Log("Spray OK");
+    }
+
 	void DoExplode () {
 		range = 200;
 	}
 
-	void DeployWall (Vector2 mouse_position) {
-		if (mouse_position.x < 0)
-			Instantiate(p1_wall, mouse_position, Quaternion.identity);
+    void DeployWall (Vector2 mouse_position) {
+        float distance = ((mouse_position.x - temp_x) * (mouse_position.x - temp_x) + (mouse_position.y - temp_y) * (mouse_position.y - temp_y)); // yamamo 0316 -->
+        
+        dis_sum += distance;
+        if (dis_sum < 4)
+        {
 
-		if (mouse_position.x > 0)
+            if (mouse_position.x < 0)
+            {
+                if (distance < 0.01)
+                {
+                    Instantiate(p1_wall, mouse_position, Quaternion.identity);
+                }
+                else
+                {
+                    int max = (int)(distance / 0.01);
+                    Debug.Log(max);
+
+                    for (int i = 0; i < max; i++)
+                    {
+                        Vector2 move = new Vector2((temp_x + i * (mouse_position.x - temp_x) / max), (temp_y + i * (mouse_position.y - temp_y) / max));
+                        Instantiate(p1_wall, move, Quaternion.identity);
+                    }
+                }
+            }
+            else
+            {
+                if (distance < 0.01)
+                {
+                    Instantiate(p2_wall, mouse_position, Quaternion.identity);
+                }
+                else
+                {
+                    int max = (int)(distance / 0.01);
+                    Debug.Log(max);
+
+                    for (int i = 0; i < max; i++)
+                    {
+                        Vector2 move = new Vector2((temp_x + i * (mouse_position.x - temp_x) / max), (temp_y + i * (mouse_position.y - temp_y) / max));
+                        Instantiate(p2_wall, move, Quaternion.identity);
+                    }
+                }
+            }
+        }
+        /*
+        else
+        {
+            dis_sum = 0;
+        }
+        */
+        temp_x = mouse_position.x;
+        temp_y = mouse_position.y;  // <--
+        
+        /* // yama 0316
+        if (mouse_position.x < 0)
+            Instantiate(p1_wall, mouse_position, Quaternion.identity);
+            
+
+        if (mouse_position.x > 0)
 			Instantiate(p2_wall, mouse_position, Quaternion.identity);
+            */
 	}
 
     void SetColors(Color[] received_colors)
