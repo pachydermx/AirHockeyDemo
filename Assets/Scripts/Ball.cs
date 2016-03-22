@@ -40,6 +40,7 @@ public class Ball : MonoBehaviour {
 
 	// switch player
 	void Player (int id) {
+        //Debug.Log("Player switched to " + id);
 		// switch apperance of ball
 		default_ball.enabled = false;
 		p1_ball.enabled = false;
