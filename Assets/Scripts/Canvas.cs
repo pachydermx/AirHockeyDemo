@@ -7,14 +7,21 @@ public class Canvas : MonoBehaviour {
 	public GameObject p2_wall;
     public GameObject manager;
 
+    // textures
 	public RawImage image;
+    public RawImage normal;
 	private Texture2D texture;
+    private Texture2D normal_texture;
+
 	private Color paint_color;
     private Color[] colors;
 	private int ball_x;
 	private int ball_y;
 	private int width = 1920;
 	private int height = 1080;
+
+    private Color normal_color;
+    private Color normal_color2;
 
 	private int default_range = 50;
 	private int range;
@@ -38,18 +45,33 @@ public class Canvas : MonoBehaviour {
 	void Start () {
 		// init texture
 		texture = image.texture as Texture2D;
+        normal_texture = normal.texture as Texture2D;
+
+        normal_color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        normal_color2 = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+
+
+        Color default_normal = normal_color2;
 
 		Color[] colors = new Color[width*height];
-		for (int i =0; i < width*height; ++i) 
+		Color[] ncolors = new Color[width*height];
+		for (int i =0; i < width*height; ++i)
+        {
 			colors[i] = Color.clear;
+            ncolors[i] = default_normal;
+        }
 
 		texture.SetPixels(0, 0, width, height, colors);
+
+        normal_texture.SetPixels(0, 0, width, height, ncolors);
 
 		// init properties
 		paint_color = Color.clear;
 		ball_x = width / 2;
 		ball_y = height / 2;
 		range = default_range;
+
+        normal_texture.Apply(false);
 	}
 
 	// Update is called once per frame
@@ -126,6 +148,7 @@ public class Canvas : MonoBehaviour {
 		//Debug.Log(ball_x + ", " + ball_y);
 	}
 
+    // this is an implementation of ecalipse painting
 	void DrawRound (int radius) {
 		int x0 = ball_x;
 		int y0 = ball_y;
@@ -139,11 +162,15 @@ public class Canvas : MonoBehaviour {
 			for (i = -x+x0; i < x+x0; ++i) {
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
+				normal_texture.SetPixel( i, y+y0, normal_color );
+				normal_texture.SetPixel( i, -y+y0, normal_color );
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
+				normal_texture.SetPixel( i, x+y0, normal_color2 );
+				normal_texture.SetPixel( i, -x+y0, normal_color2 );
 			}
 
 			y++;
@@ -156,6 +183,7 @@ public class Canvas : MonoBehaviour {
 		}
 
 		texture.Apply(false);
+        normal_texture.Apply(false);
 	}
 
     void DoSprinkle(Vector3 position) // yama 0317 Baketsu Gimmick
