@@ -16,8 +16,14 @@ public class Canvas : MonoBehaviour {
 	private int width = 1920;
 	private int height = 1080;
 
+    /* yama 0323 
 	private int default_range = 50;
 	private int range;
+    */
+    public int default_range = 50;
+    public int range;
+
+    private int itemcount = 0;
 
     protected int[] scores;
     public GameObject P1Display;
@@ -54,11 +60,23 @@ public class Canvas : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        //Debug.Log("range:" + range);
 		DrawRound(range);
 
-		if (range > default_range) {
-			range -= 5;
+        /*
+        // tanaka 0322
+		if (range > default_range)
+        {
+            itemcount++;
+
+            if (itemcount > 100)
+            {
+                //range -= 5;
+                range = default_range;
+                itemcount = 0;
+            }
 		}
+        */
 
 		// receive touch
 		if (Input.touchCount > 0){
@@ -301,6 +319,11 @@ public class Canvas : MonoBehaviour {
 			Instantiate(p2_wall, mouse_position, Quaternion.identity);
             */
 	}
+
+    void DoBig(int size)
+    {
+        range = size;
+    }
 
     void SetColors(Color[] received_colors)
     {

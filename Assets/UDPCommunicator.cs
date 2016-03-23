@@ -45,54 +45,6 @@ public class UDPCommunicator : MonoBehaviour {
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     void test()
     {
         byte[] umsg = Encoding.UTF8.GetBytes("hello, Ushitani");
