@@ -19,6 +19,8 @@ public class Canvas : MonoBehaviour {
     private Color[] ncolors;
 	private int ball_x;
 	private int ball_y;
+    private int last_ball_x;
+    private int last_ball_y;
 	private int width = 1920;
 	private int height = 1080;
 
@@ -45,6 +47,10 @@ public class Canvas : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        // init variables
+        last_ball_x = 0;
+        last_ball_y = 0;
+
 		// init texture
 		texture = image.texture as Texture2D;
         normal_texture = normal.texture as Texture2D;
@@ -72,7 +78,7 @@ public class Canvas : MonoBehaviour {
         normal_texture.SetPixels(0, 0, width, height, ncolors);
 
 		// init properties
-		paint_color = Color.clear;
+		paint_color = Color.red;
 		ball_x = width / 2;
 		ball_y = height / 2;
 		range = default_range;
@@ -173,8 +179,10 @@ public class Canvas : MonoBehaviour {
                 //colors[(width * ( -y + y0 )) + i] = paint_color;
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
-				normal_texture.SetPixel( i, y+y0,  GetNormalColor(y_start, y_end, y+ y0));
-				normal_texture.SetPixel( i, -y+y0,  GetNormalColor(y_start, y_end, y+ y0));
+				normal_texture.SetPixel( i, y+y0,  GetNormalColor(x0, y0, i, y + y0, radius));
+				normal_texture.SetPixel( i, -y+y0,  GetNormalColor(x0, y0, i, -y + y0, radius));
+				//normal_texture.SetPixel( i, y+y0,  GetNormalColor(y_start, y_end, y+ y0));
+				//normal_texture.SetPixel( i, -y+y0,  GetNormalColor(y_start, y_end, y+ y0));
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
@@ -182,8 +190,10 @@ public class Canvas : MonoBehaviour {
                 //colors[(width * ( -x + y0 )) + i] = paint_color;
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
-				normal_texture.SetPixel( i, x+y0,  GetNormalColor(y_start, y_end, y+ y0));
-				normal_texture.SetPixel( i, -x+y0,  GetNormalColor(y_start, y_end, y+ y0));
+				normal_texture.SetPixel( i, x+y0,  GetNormalColor(x0, y0, i, x + y0, radius));
+				normal_texture.SetPixel( i, -x+y0,  GetNormalColor(x0, y0, i, -x + y0, radius));
+				//normal_texture.SetPixel( i, x+y0,  GetNormalColor(y_start, y_end, y+ y0));
+				//normal_texture.SetPixel( i, -x+y0,  GetNormalColor(y_start, y_end, y+ y0));
 			}
 
 			y++;
@@ -197,13 +207,18 @@ public class Canvas : MonoBehaviour {
 
         //texture.SetPixels(0, 0, width, height, colors);
 
+        // record ball posisition
+        last_ball_x = ball_x;
+        last_ball_y = ball_y;
+
 		texture.Apply(false);
         normal_texture.Apply(false);
 	}
 
-    Color GetNormalColor(int start, int end, int pos)
+    Color GetNormalColor(int ball_x, int ball_y, int pos_x, int pos_y, int radius)
     {
-        float percentage = (float)(pos - start) / (end - start);
+        float distance = Mathf.Abs((last_ball_y - ball_y) * pos_x - (last_ball_x - ball_x) * pos_y + last_ball_x * ball_y - last_ball_y * ball_x) / Mathf.Sqrt((last_ball_y - ball_y) * (last_ball_y - ball_y) + (last_ball_x - ball_x) * (last_ball_x - ball_x));
+        float percentage = (float)(distance / radius);
         float grayscale = 0 + percentage * 1;
         Color result = new Color(grayscale, grayscale, grayscale, 1.0f);
         return result;
