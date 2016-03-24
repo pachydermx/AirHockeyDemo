@@ -25,8 +25,8 @@ public class Ball : MonoBehaviour {
 
         player_color = new Color[3];
         player_color[0] = Color.clear;
-        player_color[1] = new Color(.453125F, .796875F, 1.0F, 1.0F);
-        player_color[2] = new Color(1.0F, .5859375F, .89453125F, 1.0F);
+        player_color[1] = new Color(.453125F, .796875F, 1.0F, 0.5F);
+        player_color[2] = new Color(1.0F, .5859375F, .89453125F, 0.5F);
 
         // tell manager color
         manager.SendMessage("SetColors", player_color);

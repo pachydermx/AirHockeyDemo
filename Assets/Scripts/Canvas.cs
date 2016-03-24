@@ -220,6 +220,10 @@ public class Canvas : MonoBehaviour {
                 {
                     normal_texture.SetPixel( i, y+y0,  GetNormalColor(id, x0, y0, i, y + y0, radius));
                     normal_texture.SetPixel( i, -y+y0,  GetNormalColor(id, x0, y0, i, -y + y0, radius));
+                } else if (splash)
+                {
+                    normal_texture.SetPixel( i, y+y0,  GetNormalColorCentral(x0, y0, radius, i, y+y0));
+                    normal_texture.SetPixel( i, -y+y0,  GetNormalColorCentral(x0, y0, radius, i, -y+y0));
                 }
 			}
             
@@ -230,6 +234,10 @@ public class Canvas : MonoBehaviour {
                 {
                     normal_texture.SetPixel(i, x + y0, GetNormalColor(id, x0, y0, i, x + y0, radius));
                     normal_texture.SetPixel(i, -x + y0, GetNormalColor(id, x0, y0, i, -x + y0, radius));
+                } else if (splash)
+                {
+                    normal_texture.SetPixel( i, x+y0,  GetNormalColorCentral(x0, y0, radius, i, x+y0));
+                    normal_texture.SetPixel( i, -x+y0,  GetNormalColorCentral(x0, y0, radius, i, -x+y0));
                 }
 			}
 
@@ -256,6 +264,14 @@ public class Canvas : MonoBehaviour {
 
 	void DrawRound (int id, int radius) {
         DrawRoundAt(id, ball_x[id], ball_y[id], radius, false);
+        if (Random.value < 0.2)
+        {
+            int splash_rad = 80;
+            int ink_x = (int)(ball_x[id] + Random.value * splash_rad * 2) - splash_rad;
+            int ink_y = (int)(ball_y[id] + Random.value * splash_rad * 2) - splash_rad;
+            int rad = (int)(Random.value * 30);
+            DrawRoundAt(id, ink_x, ink_y, rad, true);
+        }
 	}
 
     Color GetNormalColor(int id, int ball_x, int ball_y, int pos_x, int pos_y, int radius)
@@ -282,7 +298,7 @@ public class Canvas : MonoBehaviour {
     {
         float distance = Mathf.Sqrt((pos_x - x0) * (pos_x - x0) + (pos_y - y0) * (pos_y - y0));
         float percentage = (float)(distance / radius);
-        float grayscale = 0 + percentage * 1;
+        float grayscale = 1.0f - percentage * 0.4f;
         Color result = new Color(grayscale, grayscale, grayscale, percentage);
         return result;
     }
