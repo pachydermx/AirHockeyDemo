@@ -365,7 +365,7 @@ public class Canvas : MonoBehaviour {
     }
 
 	void DoExplode () {
-		range = 200;
+		range = 100;
 	}
 
     void DeployWall (Vector2 mouse_position) {

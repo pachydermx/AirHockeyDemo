@@ -21,6 +21,8 @@ public class ItemBoX : MonoBehaviour {
     public int clone_flag = 0;
     public int bomb_flag = 0;
 
+    private int bomb_range = 0;
+
     Ball ball;
     //Canvas script;
 
@@ -83,18 +85,10 @@ public class ItemBoX : MonoBehaviour {
 
         else if(bomb_flag==1)
         {
-            canvas.SendMessage("DoBig", 95);
-            Debug.Log("bomb: " + bomb_flag);
-            bomb_flag = 2;
+            canvas.SendMessage("DoExplode");
             Debug.Log("bomb: " + bomb_flag);
 
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                canvas.SendMessage("DoExplode");
-                Debug.Log("explosion");
-            }
-
-            bomb_flag = 0;
+            bomb_flag = 0;            
         }
 
         else
