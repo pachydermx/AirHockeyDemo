@@ -10,6 +10,7 @@ public class TCPCommunicator : MonoBehaviour {
     string host = "192.168.1.190";
     int port = 10001;
     static TcpClient tcp;
+    static NetworkStream str;
     Thread thread;
 
     bool msg = false;
@@ -22,6 +23,7 @@ public class TCPCommunicator : MonoBehaviour {
         tcp.Client.ReceiveTimeout = 1000;
 
         tcp.Connect(host, port);
+        str = tcp.GetStream();
 
     }
 
@@ -37,8 +39,7 @@ public class TCPCommunicator : MonoBehaviour {
         //byte[] umsg = Encoding.UTF8.GetBytes("1");
         //tcp.Send(umsg, umsg.Length);
         //tcp.
-        NetworkStream stream = tcp.GetStream();
-        stream.Write(umsg, 0, umsg.Length);
+        str.Write(umsg, 0, umsg.Length);
         Debug.Log("dir = " + mes);
     }
 }
