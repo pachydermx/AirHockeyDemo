@@ -72,7 +72,7 @@ public class Canvas : MonoBehaviour {
         normal_texture.SetPixels(0, 0, width, height, ncolors);
 
 		// init properties
-		paint_color = Color.clear;
+		paint_color = Color.red;
 		ball_x = width / 2;
 		ball_y = height / 2;
 		range = default_range;
@@ -173,8 +173,8 @@ public class Canvas : MonoBehaviour {
                 //colors[(width * ( -y + y0 )) + i] = paint_color;
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
-				normal_texture.SetPixel( i, y+y0,  GetNormalColor(y_start, y_end, y+ y0));
-				normal_texture.SetPixel( i, -y+y0,  GetNormalColor(y_start, y_end, y+ y0));
+                normal_texture.SetPixel(i, y + y0, GetNormalColor(x0, y0, radius, i, y + y0));
+                normal_texture.SetPixel(i, -y + y0, GetNormalColor(x0, y0, radius, i, -y + y0));
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
@@ -182,8 +182,8 @@ public class Canvas : MonoBehaviour {
                 //colors[(width * ( -x + y0 )) + i] = paint_color;
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
-				normal_texture.SetPixel( i, x+y0,  GetNormalColor(y_start, y_end, y+ y0));
-				normal_texture.SetPixel( i, -x+y0,  GetNormalColor(y_start, y_end, y+ y0));
+                normal_texture.SetPixel(i, x + y0, GetNormalColor(x0, y0, radius, i, x + y0));
+                normal_texture.SetPixel(i, -x + y0, GetNormalColor(x0, y0, radius, i, -x + y0));
 			}
 
 			y++;
@@ -201,11 +201,12 @@ public class Canvas : MonoBehaviour {
         normal_texture.Apply(false);
 	}
 
-    Color GetNormalColor(int start, int end, int pos)
+    Color GetNormalColor(int x0, int y0, int radius, int pos_x, int pos_y)
     {
-        float percentage = (float)(pos - start) / (end - start);
+        float distance = Mathf.Sqrt((pos_x - x0) * (pos_x - x0) + (pos_y - y0) * (pos_y - y0));
+        float percentage = (float)(distance / radius);
         float grayscale = 0 + percentage * 1;
-        Color result = new Color(grayscale, grayscale, grayscale, 1.0f);
+        Color result = new Color(grayscale, grayscale, grayscale, percentage);
         return result;
     }
 
