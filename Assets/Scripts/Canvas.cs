@@ -171,6 +171,12 @@ public class Canvas : MonoBehaviour {
         int y_start = y0 - radius;
         int y_end = y0 + radius;
 
+        bool not_moving = false;
+        if (x0 == last_ball_x && y0 == last_ball_y)
+        {
+            not_moving = true;
+        }
+
 		while (y <= x){
 			int i;
             
@@ -179,8 +185,11 @@ public class Canvas : MonoBehaviour {
                 //colors[(width * ( -y + y0 )) + i] = paint_color;
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
-				normal_texture.SetPixel( i, y+y0,  GetNormalColor(x0, y0, i, y + y0, radius));
-				normal_texture.SetPixel( i, -y+y0,  GetNormalColor(x0, y0, i, -y + y0, radius));
+                if (!not_moving)
+                {
+                    normal_texture.SetPixel( i, y+y0,  GetNormalColor(x0, y0, i, y + y0, radius));
+                    normal_texture.SetPixel( i, -y+y0,  GetNormalColor(x0, y0, i, -y + y0, radius));
+                }
 				//normal_texture.SetPixel( i, y+y0,  GetNormalColor(y_start, y_end, y+ y0));
 				//normal_texture.SetPixel( i, -y+y0,  GetNormalColor(y_start, y_end, y+ y0));
 			}
@@ -190,8 +199,11 @@ public class Canvas : MonoBehaviour {
                 //colors[(width * ( -x + y0 )) + i] = paint_color;
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
-				normal_texture.SetPixel( i, x+y0,  GetNormalColor(x0, y0, i, x + y0, radius));
-				normal_texture.SetPixel( i, -x+y0,  GetNormalColor(x0, y0, i, -x + y0, radius));
+                if (!not_moving)
+                {
+                    normal_texture.SetPixel(i, x + y0, GetNormalColor(x0, y0, i, x + y0, radius));
+                    normal_texture.SetPixel(i, -x + y0, GetNormalColor(x0, y0, i, -x + y0, radius));
+                }
 				//normal_texture.SetPixel( i, x+y0,  GetNormalColor(y_start, y_end, y+ y0));
 				//normal_texture.SetPixel( i, -x+y0,  GetNormalColor(y_start, y_end, y+ y0));
 			}
@@ -219,8 +231,8 @@ public class Canvas : MonoBehaviour {
     {
         float distance = Mathf.Abs((last_ball_y - ball_y) * pos_x - (last_ball_x - ball_x) * pos_y + last_ball_x * ball_y - last_ball_y * ball_x) / Mathf.Sqrt((last_ball_y - ball_y) * (last_ball_y - ball_y) + (last_ball_x - ball_x) * (last_ball_x - ball_x));
         float percentage = (float)(distance / radius);
-        float grayscale = 0 + percentage * 1;
-        Color result = new Color(grayscale, grayscale, grayscale, 1.0f);
+        float grayscale = 1.0f - percentage * 0.4f;
+        Color result = new Color(grayscale, grayscale, grayscale, 1 - percentage);
         return result;
     }
 
