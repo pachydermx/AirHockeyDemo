@@ -19,6 +19,7 @@ public class ItemBoX : MonoBehaviour {
     private float temp_time;
     private int t_flag = 0;
     public int clone_flag = 0;
+    public int bomb_flag = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -62,6 +63,21 @@ public class ItemBoX : MonoBehaviour {
                 temp_time += Time.deltaTime;
             }
         }
+
+        else if(bomb_flag==1)
+        {
+            bomb_flag = 2;
+            Debug.Log("bomb: " + bomb_flag);
+
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                canvas.SendMessage("DoExplode");
+                Debug.Log("explosion");
+            }
+
+            bomb_flag = 0;
+        }
+
         else
         {
 
@@ -79,9 +95,12 @@ public class ItemBoX : MonoBehaviour {
         {*/
 
 
-            //GameObject Pack_b = (GameObject)Instantiate(p_another, Vector3.zero, Quaternion.identity);
-            //p_rb.velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) +s_y * Mathf.Cos(angle)); 
-            t_flag = 1;
+        //GameObject Pack_b = (GameObject)Instantiate(p_another, Vector3.zero, Quaternion.identity);
+        //p_rb.velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) +s_y * Mathf.Cos(angle)); 
+
+        //t_flag = 1;
         //}
+
+        bomb_flag = 1;
     }
 }
