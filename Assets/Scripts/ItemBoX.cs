@@ -5,17 +5,20 @@ public class ItemBoX : MonoBehaviour {
     public const float angle = 150;
 
     private GameObject Pack; // yama 0323
+    public GameObject canvas;
+    public GameObject p_another; // yama 0324 clone
+
     private Vector2 p_scale;
     private Rigidbody2D p_rb;
-    private int range;
-    public GameObject canvas;
-    private int g_flag = 0;
 
-    public GameObject p_another;
+    private int range;
+    
+    private int g_flag = 0;
 
     private float time;
     private float temp_time;
     private int t_flag = 0;
+    public int clone_flag = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -36,7 +39,7 @@ public class ItemBoX : MonoBehaviour {
             g_flag %= 2;
         }
 
-        if(t_flag == 1 && temp_time == 0)
+        if(t_flag == 1 && clone_flag == 0)
         {
             float distance = Vector3.Distance(Pack.transform.position, this.gameObject.transform.position);
             if(distance <= 0.55) // yama 0323 微調整必要
@@ -49,9 +52,10 @@ public class ItemBoX : MonoBehaviour {
                 Pack_b.transform.position = Pack.transform.position;
                 Rigidbody2D b_rb = Pack_b.GetComponent<Rigidbody2D>();
                 b_rb.velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
-
+                
                 temp_time = 0;
                 t_flag = 0;
+                clone_flag = 1;
             }
             else
             {
@@ -70,14 +74,14 @@ public class ItemBoX : MonoBehaviour {
         {
             canvas.SendMessage("DoBig", 95);
             Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
-        }else if(g_flag == 1) // yama 0323 分身
+        }else
+        if (g_flag == 1) // yama 0323 分身
         {*/
-            float s_x = p_rb.velocity.x;
-            float s_y = p_rb.velocity.y;
 
-        //GameObject Pack_b = (GameObject)Instantiate(p_another, Vector3.zero, Quaternion.identity);
-        //p_rb.velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) +s_y * Mathf.Cos(angle)); 
-        t_flag = 1;   
+
+            //GameObject Pack_b = (GameObject)Instantiate(p_another, Vector3.zero, Quaternion.identity);
+            //p_rb.velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) +s_y * Mathf.Cos(angle)); 
+            t_flag = 1;
         //}
     }
 }
