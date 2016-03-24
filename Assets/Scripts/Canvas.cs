@@ -93,15 +93,12 @@ public class Canvas : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-<<<<<<< HEAD
         for (int i = 0; i < n_ball; i++)
         {
             DrawRound(i, range);
         }
-=======
         //Debug.Log("range:" + range);
 		//DrawRound(range);
->>>>>>> origin/Bomb
 
         /*
         // tanaka 0322
@@ -184,7 +181,6 @@ public class Canvas : MonoBehaviour {
 		paint_color = new_color;
 	}
 
-<<<<<<< HEAD
 	void SetCoordinate(float[] xynid) {
         float rate_x = (float)(xynid[0] / 9.6);
         float rate_y = (float)(xynid[1] / 5.4);
@@ -262,7 +258,6 @@ public class Canvas : MonoBehaviour {
         DrawRoundAt(id, ball_x[id], ball_y[id], radius, false);
 	}
 
-<<<<<<< HEAD
     Color GetNormalColor(int id, int ball_x, int ball_y, int pos_x, int pos_y, int radius)
     {
         float grayscale;
