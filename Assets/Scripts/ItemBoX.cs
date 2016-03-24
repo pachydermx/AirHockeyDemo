@@ -62,6 +62,7 @@ public class ItemBoX : MonoBehaviour {
                 Pack_b.transform.position = Pack.transform.position;
                 Rigidbody2D b_rb = Pack_b.GetComponent<Rigidbody2D>();
                 b_rb.velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
+<<<<<<< HEAD
                 ball = Pack_b.GetComponent<Ball>();
                 ball.canvas = GameObject.Find("Canvas");
                 ball.manager = GameObject.Find("Manager");
@@ -70,6 +71,12 @@ public class ItemBoX : MonoBehaviour {
                 //ball.c_script = GameObject.Find("Canvas").GetComponent<Canvas>();
                 //ball.canvas.SendMessage("")
                 //Debug.Log("c_script.range:" + ball.c_script.default_range);
+=======
+                
+                temp_time = 0;
+                t_flag = 0;
+                clone_flag = 1;
+>>>>>>> mastertcp
             }
             else
             {
@@ -79,8 +86,20 @@ public class ItemBoX : MonoBehaviour {
 
         else if(bomb_flag==1)
         {
+<<<<<<< HEAD
             canvas.SendMessage("DoBig", 95);
             Debug.Log("bomb: " + bomb_flag);
+=======
+            bomb_flag = 2;
+            Debug.Log("bomb: " + bomb_flag);
+
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                canvas.SendMessage("DoExplode");
+                Debug.Log("explosion");
+            }
+
+>>>>>>> mastertcp
             bomb_flag = 0;
         }
 
@@ -104,6 +123,7 @@ public class ItemBoX : MonoBehaviour {
         //GameObject Pack_b = (GameObject)Instantiate(p_another, Vector3.zero, Quaternion.identity);
         //p_rb.velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) +s_y * Mathf.Cos(angle)); 
 
+<<<<<<< HEAD
         //t_flag = 1;//分身フラグ
         //}
 
@@ -114,5 +134,11 @@ public class ItemBoX : MonoBehaviour {
     {
         clone_flag = 0;
         Debug.Log("flag = " + clone_flag);
+=======
+        //t_flag = 1;
+        //}
+
+        bomb_flag = 1;
+>>>>>>> mastertcp
     }
 }
