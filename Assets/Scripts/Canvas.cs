@@ -15,10 +15,11 @@ public class Canvas : MonoBehaviour {
 
 	private Color paint_color;
     private Color[] colors;
-	private int ball_x;
-	private int ball_y;
-    private int last_ball_x;
-    private int last_ball_y;
+	private int[] ball_x;
+	private int[] ball_y;
+    private int n_ball = 0;
+    private int[] last_ball_x;
+    private int[] last_ball_y;
 	private int width = 1920;
 	private int height = 1080;
 
@@ -28,7 +29,8 @@ public class Canvas : MonoBehaviour {
     protected int[] scores;
     public GameObject P1Display;
     public GameObject P2Display;
-    public GameObject ball;
+    public GameObject ref_ball;
+    private GameObject[] ball;
     protected bool animationPlaying = false;
     protected float animateCounter = 0;
     protected float P1DisplayTargetScaleX;
@@ -43,8 +45,14 @@ public class Canvas : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         // init variables
-        last_ball_x = 0;
-        last_ball_y = 0;
+        int length = 8;
+        ball_x = new int[length];
+        ball_y = new int[length];
+        last_ball_x = new int[length];
+        last_ball_y = new int[length];
+        ball = new GameObject[length]; 
+        last_ball_x[0] = 0;
+        last_ball_y[0] = 0;
 
 		// init texture
 		texture = image.texture as Texture2D;
@@ -65,18 +73,24 @@ public class Canvas : MonoBehaviour {
         }
 
 		texture.SetPixels(0, 0, width, height, colors);
-        normal_texture.SetPixels(0, 0, width, height, colors);
+        //normal_texture.SetPixels(0, 0, width, height, colors);
 
 		// init properties
 		paint_color = Color.clear;
-		ball_x = width / 2;
-		ball_y = height / 2;
+		ball_x[0] = width / 2;
+		ball_y[0] = height / 2;
 		range = default_range;
+
+        // init ball
+        AddNewBall();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		DrawRound(range);
+        for (int i = 0; i < n_ball; i++)
+        {
+            DrawRound(i, range);
+        }
 
 		if (range > default_range) {
 			range -= 5;
@@ -91,6 +105,11 @@ public class Canvas : MonoBehaviour {
             // deploy wall
             DeployWall(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
+        }
+
+        if (Input.GetKeyDown(KeyCode.Insert))
+        {
+            AddNewBall();
         }
         /*else  // yama 0318 未完成
         {
@@ -129,35 +148,44 @@ public class Canvas : MonoBehaviour {
             }
         }
 	}
+
+    void AddNewBall()
+    {
+        ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, Vector3.zero, Quaternion.identity);
+        ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
+        manager.SendMessage("AddNewBall", ball[n_ball]);
+
+        n_ball++;
+    }
     
 	void SetColor (Color new_color){
 		paint_color = new_color;
 	}
 
-	void SetCoordinate(float[] xy) {
-        float rate_x = (float)(xy[0] / 9.6);
-        float rate_y = (float)(xy[1] / 5.4);
+	void SetCoordinate(float[] xynid) {
+        float rate_x = (float)(xynid[0] / 9.6);
+        float rate_y = (float)(xynid[1] / 5.4);
 
-        ball_x = (int)(rate_x * width / 2 + (width / 2));
-        ball_y = (int)(rate_y * height / 2 + (height / 2));
+        int id = (int)xynid[2];
+
+        ball_x[id] = (int)(rate_x * width / 2 + (width / 2));
+        ball_y[id] = (int)(rate_y * height / 2 + (height / 2));
 
 		//Debug.Log(ball_x + ", " + ball_y);
 	}
 
     // this is an implementation of ecalipse painting
-	void DrawRound (int radius) {
-		int x0 = ball_x;
-		int y0 = ball_y;
+    void DrawRoundAt(int id, int pos_x, int pos_y, int radius, bool splash)
+    {
+		int x0 = pos_x;
+		int y0 = pos_y;
 		int x = radius;
 		int y = 0;
 		int decisionOver2 = 1 - x;
 
-        int y_start = y0 - radius;
-        int y_end = y0 + radius;
-
         // prevent glitch
         bool not_moving = false;
-        if (x0 == last_ball_x && y0 == last_ball_y)
+        if (x0 == last_ball_x[id] && y0 == last_ball_y[id])
         {
             not_moving = true;
         }
@@ -169,20 +197,20 @@ public class Canvas : MonoBehaviour {
 			for (i = -x+x0; i < x+x0; ++i) {
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
-                if (!not_moving)
+                if (!not_moving && !splash)
                 {
-                    normal_texture.SetPixel( i, y+y0,  GetNormalColor(x0, y0, i, y + y0, radius));
-                    normal_texture.SetPixel( i, -y+y0,  GetNormalColor(x0, y0, i, -y + y0, radius));
+                    normal_texture.SetPixel( i, y+y0,  GetNormalColor(id, x0, y0, i, y + y0, radius));
+                    normal_texture.SetPixel( i, -y+y0,  GetNormalColor(id, x0, y0, i, -y + y0, radius));
                 }
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
-                if (!not_moving)
+                if (!not_moving && !splash)
                 {
-                    normal_texture.SetPixel(i, x + y0, GetNormalColor(x0, y0, i, x + y0, radius));
-                    normal_texture.SetPixel(i, -x + y0, GetNormalColor(x0, y0, i, -x + y0, radius));
+                    normal_texture.SetPixel(i, x + y0, GetNormalColor(id, x0, y0, i, x + y0, radius));
+                    normal_texture.SetPixel(i, -x + y0, GetNormalColor(id, x0, y0, i, -x + y0, radius));
                 }
 			}
 
@@ -197,21 +225,28 @@ public class Canvas : MonoBehaviour {
 
 
         // record ball posisition
-        last_ball_x = ball_x;
-        last_ball_y = ball_y;
+        if (!splash)
+        {
+            last_ball_x[id] = ball_x[id];
+            last_ball_y[id] = ball_y[id];
+        }
 
 		texture.Apply(false);
         normal_texture.Apply(false);
+    }
+
+	void DrawRound (int id, int radius) {
+        DrawRoundAt(id, ball_x[id], ball_y[id], radius, false);
 	}
 
-    Color GetNormalColor(int ball_x, int ball_y, int pos_x, int pos_y, int radius)
+    Color GetNormalColor(int id, int ball_x, int ball_y, int pos_x, int pos_y, int radius)
     {
         float grayscale;
         float percentage;
         if (Random.value > 0.01f)
         {
             // caculate normal color
-            float distance = Mathf.Abs((last_ball_y - ball_y) * pos_x - (last_ball_x - ball_x) * pos_y + last_ball_x * ball_y - last_ball_y * ball_x) / Mathf.Sqrt((last_ball_y - ball_y) * (last_ball_y - ball_y) + (last_ball_x - ball_x) * (last_ball_x - ball_x));
+            float distance = Mathf.Abs((last_ball_y[id] - ball_y) * pos_x - (last_ball_x[id] - ball_x) * pos_y + last_ball_x[id] * ball_y - last_ball_y[id] * ball_x) / Mathf.Sqrt((last_ball_y[id] - ball_y) * (last_ball_y[id] - ball_y) + (last_ball_x[id] - ball_x) * (last_ball_x[id] - ball_x));
             percentage = (float)(distance / radius);
             grayscale = 1.0f - percentage * 0.4f;
         } else
@@ -408,7 +443,10 @@ public class Canvas : MonoBehaviour {
 
     void StartScoreShow()
     {
-        ball.SetActive(false);
+        foreach(GameObject the_ball in ball)
+        {
+            the_ball.SetActive(false);
+        }
         GetScore();
 
         int sum = scores[0] + scores[1];
