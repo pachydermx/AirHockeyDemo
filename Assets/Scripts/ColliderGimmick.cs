@@ -32,7 +32,7 @@ public class ColliderGimmick : MonoBehaviour {
     {
         //if (other.tag == "Pack")
         //{
-            Debug.Log("Trigger");
+            //Debug.Log("Trigger"+ other.name);
             
             manager.SendMessage("sendPosition", Gimmick.name);
         //}

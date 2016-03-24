@@ -6,10 +6,16 @@ public class Ball : MonoBehaviour {
 	private SpriteRenderer p1_ball;
 	private SpriteRenderer p2_ball;
 
-	public GameObject canvas;
+	//public GameObject canvas;
+    //public GameObject manager;
+
+    public GameObject canvas;
     public GameObject manager;
 
-	private Color[] player_color;
+    private Color[] player_color;
+
+    private float[] real_position;
+    //public Canvas c_script;
 
 	// Use this for initialization
 	void Start () {
@@ -24,8 +30,11 @@ public class Ball : MonoBehaviour {
 
         // tell manager color
         manager.SendMessage("SetColors", player_color);
+    
+        //c_script = canvas.GetComponent<Canvas>();
+        //Debug.Log("range" + c_script.default_range);
 
-		Player(0);
+        Player(0);
 	}
 	
 	// Update is called once per frame
@@ -35,7 +44,13 @@ public class Ball : MonoBehaviour {
 		float[] xy = new float[2];
 		xy[0] = (transform.position.x);
 		xy[1] = (transform.position.y);
-		canvas.SendMessage("SetCoordinate", xy);
+        real_position = xy;
+        //canvas.SendMessage("SetCoordinate", real_position);
+        //c_script.SetCoordinate(real_position);
+        //c_script.DrawRound(50, real_position);
+
+        canvas.SendMessage("SetCoordinate", real_position);
+        canvas.SendMessage("ReceiveDrawRound", real_position);
 	}
 
 	// switch player

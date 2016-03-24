@@ -61,7 +61,7 @@ public class Canvas : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Debug.Log("range:" + range);
-		DrawRound(range);
+		//DrawRound(range);
 
         /*
         // tanaka 0322
@@ -130,7 +130,7 @@ public class Canvas : MonoBehaviour {
 		paint_color = new_color;
 	}
 
-	void SetCoordinate(float[] xy) {
+	public void SetCoordinate(float[] xy) { 
         /*
 		ball_x = (int)((xy[0]/10.5) * width + width / 2);
 		ball_y = (int)((xy[1]/7.8) * height + height / 2);
@@ -138,15 +138,25 @@ public class Canvas : MonoBehaviour {
         float rate_x = (float)(xy[0] / 9.6);
         float rate_y = (float)(xy[1] / 5.4);
 
+        
+
         ball_x = (int)(rate_x * width / 2 + (width / 2));
         ball_y = (int)(rate_y * height / 2 + (height / 2));
+
+        xy[0] = ball_x;// yama 0324
+        xy[1] = ball_y;
 
 		//Debug.Log(ball_x + ", " + ball_y);
 	}
 
-	void DrawRound (int radius) {
-		int x0 = ball_x;
+	public void DrawRound (int radius, float[] position) {
+        /*
+        int x0 = ball_x;
 		int y0 = ball_y;
+        */
+        int x0 = (int)position[0];
+        int y0 = (int)position[1];
+
 		int x = radius;
 		int y = 0;
 		int decisionOver2 = 1 - x;
@@ -175,6 +185,11 @@ public class Canvas : MonoBehaviour {
 
 		texture.Apply(false);
 	}
+
+    public void ReceiveDrawRound(float[] position)
+    {
+        DrawRound(50, position);
+    }
 
     void DoSprinkle(Vector3 position) // yama 0317 Baketsu Gimmick
     {
