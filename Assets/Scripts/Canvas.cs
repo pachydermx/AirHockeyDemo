@@ -15,6 +15,8 @@ public class Canvas : MonoBehaviour {
 
 	private Color paint_color;
     private Color[] colors;
+    // for normal map
+    private Color[] ncolors;
 	private int ball_x;
 	private int ball_y;
 	private int width = 1920;
@@ -53,15 +55,19 @@ public class Canvas : MonoBehaviour {
 
         Color default_normal = normal_color2;
 
-		Color[] colors = new Color[width*height];
-		Color[] ncolors = new Color[width*height];
+		colors = new Color[width*height];
+		ncolors = new Color[width*height];
+
 		for (int i =0; i < width*height; ++i)
         {
-			colors[i] = Color.clear;
+			colors[i] = Color.red;
             ncolors[i] = default_normal;
         }
 
+
 		texture.SetPixels(0, 0, width, height, colors);
+        normal_texture.SetPixels(0, 0, width, height, ncolors);
+
 
         normal_texture.SetPixels(0, 0, width, height, ncolors);
 
@@ -71,7 +77,7 @@ public class Canvas : MonoBehaviour {
 		ball_y = height / 2;
 		range = default_range;
 
-        normal_texture.Apply(false);
+        normal_texture.Apply(true);
 	}
 
 	// Update is called once per frame
@@ -160,6 +166,8 @@ public class Canvas : MonoBehaviour {
 			int i;
             
 			for (i = -x+x0; i < x+x0; ++i) {
+                //colors[(width * ( y + y0 )) + i] = paint_color;
+                //colors[(width * ( -y + y0 )) + i] = paint_color;
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
 				normal_texture.SetPixel( i, y+y0, normal_color );
@@ -167,6 +175,8 @@ public class Canvas : MonoBehaviour {
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
+                //colors[(width * ( x + y0 )) + i] = paint_color;
+                //colors[(width * ( -x + y0 )) + i] = paint_color;
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
 				normal_texture.SetPixel( i, x+y0, normal_color2 );
@@ -181,6 +191,8 @@ public class Canvas : MonoBehaviour {
 				decisionOver2 += 2 * (y - x) + 1;
 			}
 		}
+
+        //texture.SetPixels(0, 0, width, height, colors);
 
 		texture.Apply(false);
         normal_texture.Apply(false);
