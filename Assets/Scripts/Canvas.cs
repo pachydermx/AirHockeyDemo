@@ -15,17 +15,12 @@ public class Canvas : MonoBehaviour {
 
 	private Color paint_color;
     private Color[] colors;
-    // for normal map
-    private Color[] ncolors;
 	private int ball_x;
 	private int ball_y;
     private int last_ball_x;
     private int last_ball_y;
 	private int width = 1920;
 	private int height = 1080;
-
-    private Color normal_color;
-    private Color normal_color2;
 
 	private int default_range = 50;
 	private int range;
@@ -55,35 +50,28 @@ public class Canvas : MonoBehaviour {
 		texture = image.texture as Texture2D;
         normal_texture = normal.texture as Texture2D;
 
-        normal_color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        normal_color2 = new Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-
-        Color default_normal = normal_color2;
-
 		colors = new Color[width*height];
-		ncolors = new Color[width*height];
-
 		for (int i =0; i < width*height; ++i)
         {
-			colors[i] = Color.red;
-            ncolors[i] = default_normal;
+			colors[i] = Color.clear;
         }
 
+        for (int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                normal_texture.SetPixel(x, y, Color.clear);
+            }
+        }
 
 		texture.SetPixels(0, 0, width, height, colors);
-        normal_texture.SetPixels(0, 0, width, height, ncolors);
-
-
-        normal_texture.SetPixels(0, 0, width, height, ncolors);
+        normal_texture.SetPixels(0, 0, width, height, colors);
 
 		// init properties
-		paint_color = Color.red;
+		paint_color = Color.clear;
 		ball_x = width / 2;
 		ball_y = height / 2;
 		range = default_range;
-
-        normal_texture.Apply(true);
 	}
 
 	// Update is called once per frame
@@ -147,10 +135,6 @@ public class Canvas : MonoBehaviour {
 	}
 
 	void SetCoordinate(float[] xy) {
-        /*
-		ball_x = (int)((xy[0]/10.5) * width + width / 2);
-		ball_y = (int)((xy[1]/7.8) * height + height / 2);
-        */
         float rate_x = (float)(xy[0] / 9.6);
         float rate_y = (float)(xy[1] / 5.4);
 
@@ -171,18 +155,18 @@ public class Canvas : MonoBehaviour {
         int y_start = y0 - radius;
         int y_end = y0 + radius;
 
+        // prevent glitch
         bool not_moving = false;
         if (x0 == last_ball_x && y0 == last_ball_y)
         {
             not_moving = true;
         }
 
+        // paint circle
 		while (y <= x){
 			int i;
             
 			for (i = -x+x0; i < x+x0; ++i) {
-                //colors[(width * ( y + y0 )) + i] = paint_color;
-                //colors[(width * ( -y + y0 )) + i] = paint_color;
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
                 if (!not_moving)
@@ -193,8 +177,6 @@ public class Canvas : MonoBehaviour {
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
-                //colors[(width * ( x + y0 )) + i] = paint_color;
-                //colors[(width * ( -x + y0 )) + i] = paint_color;
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
                 if (!not_moving)
@@ -213,7 +195,6 @@ public class Canvas : MonoBehaviour {
 			}
 		}
 
-        //texture.SetPixels(0, 0, width, height, colors);
 
         // record ball posisition
         last_ball_x = ball_x;
@@ -229,11 +210,13 @@ public class Canvas : MonoBehaviour {
         float percentage;
         if (Random.value > 0.01f)
         {
+            // caculate normal color
             float distance = Mathf.Abs((last_ball_y - ball_y) * pos_x - (last_ball_x - ball_x) * pos_y + last_ball_x * ball_y - last_ball_y * ball_x) / Mathf.Sqrt((last_ball_y - ball_y) * (last_ball_y - ball_y) + (last_ball_x - ball_x) * (last_ball_x - ball_x));
             percentage = (float)(distance / radius);
             grayscale = 1.0f - percentage * 0.4f;
         } else
         {
+            // add noise
             percentage = 0.5f + 0.5f * Random.value;
             grayscale = Random.value;
         }
