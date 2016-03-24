@@ -23,8 +23,14 @@ public class Canvas : MonoBehaviour {
 	private int width = 1920;
 	private int height = 1080;
 
+    /* yama 0323 
 	private int default_range = 50;
 	private int range;
+    */
+    public int default_range = 50;
+    public int range;
+
+    private int itemcount = 0;
 
     protected int[] scores;
     public GameObject P1Display;
@@ -87,14 +93,30 @@ public class Canvas : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+<<<<<<< HEAD
         for (int i = 0; i < n_ball; i++)
         {
             DrawRound(i, range);
         }
+=======
+        //Debug.Log("range:" + range);
+		//DrawRound(range);
+>>>>>>> origin/Bomb
 
-		if (range > default_range) {
-			range -= 5;
+        /*
+        // tanaka 0322
+		if (range > default_range)
+        {
+            itemcount++;
+
+            if (itemcount > 100)
+            {
+                //range -= 5;
+                range = default_range;
+                itemcount = 0;
+            }
 		}
+        */
 
 		// receive touch
 		if (Input.touchCount > 0){
@@ -162,6 +184,7 @@ public class Canvas : MonoBehaviour {
 		paint_color = new_color;
 	}
 
+<<<<<<< HEAD
 	void SetCoordinate(float[] xynid) {
         float rate_x = (float)(xynid[0] / 9.6);
         float rate_y = (float)(xynid[1] / 5.4);
@@ -239,6 +262,7 @@ public class Canvas : MonoBehaviour {
         DrawRoundAt(id, ball_x[id], ball_y[id], radius, false);
 	}
 
+<<<<<<< HEAD
     Color GetNormalColor(int id, int ball_x, int ball_y, int pos_x, int pos_y, int radius)
     {
         float grayscale;
@@ -411,6 +435,11 @@ public class Canvas : MonoBehaviour {
 			Instantiate(p2_wall, mouse_position, Quaternion.identity);
             */
 	}
+
+    void DoBig(int size)
+    {
+        range = size;
+    }
 
     void SetColors(Color[] received_colors)
     {

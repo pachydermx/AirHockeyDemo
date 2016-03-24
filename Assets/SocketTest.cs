@@ -35,6 +35,7 @@ public class SocketTest : MonoBehaviour {
     public GameObject Baketsu; // yama 0317
     public GameObject Spray; // yama 0318
     public GameObject manager; // yama 0321
+    public GameObject Itembox; // yama 0323
 
     // calibration
     protected Vector3[] calibrationPoints = new Vector3[4];
@@ -371,6 +372,10 @@ public class SocketTest : MonoBehaviour {
         else if (name.Contains("Baketsu"))
         {
             Canvas.SendMessage("DoSprinkle", Baketsu.transform.position);
+        }
+        else if (name.Contains("ItemBox"))
+        {
+            Itembox.SendMessage("ItemUse");
         }
     }
 }

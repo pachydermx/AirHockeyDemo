@@ -27,4 +27,21 @@ public class ColliderGimmick : MonoBehaviour {
     {
         manager.SendMessage("sendPosition", Gimmick.name);
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //if (other.tag == "Pack")
+        //{
+            //Debug.Log("Trigger"+ other.name);
+            
+            manager.SendMessage("sendPosition", Gimmick.name);
+        //}
+    }
+    /*
+    void OnTriggerStay2D(Collider2D other)
+    {
+        Debug.Log("Trigger");
+        manager.SendMessage("sendPosition", Gimmick.name);
+    }
+    */
 }
