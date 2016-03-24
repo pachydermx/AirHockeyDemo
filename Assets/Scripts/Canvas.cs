@@ -241,6 +241,15 @@ public class Canvas : MonoBehaviour {
         return result;
     }
 
+    Color GetNormalColorCentral(int x0, int y0, int radius, int pos_x, int pos_y)
+    {
+        float distance = Mathf.Sqrt((pos_x - x0) * (pos_x - x0) + (pos_y - y0) * (pos_y - y0));
+        float percentage = (float)(distance / radius);
+        float grayscale = 0 + percentage * 1;
+        Color result = new Color(grayscale, grayscale, grayscale, percentage);
+        return result;
+    }
+
     void DoSprinkle(Vector3 position) // yama 0317 Baketsu Gimmick
     {
         float[] xy0 = { position.x, position.y };
