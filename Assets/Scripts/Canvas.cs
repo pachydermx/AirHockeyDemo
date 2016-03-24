@@ -162,6 +162,9 @@ public class Canvas : MonoBehaviour {
 		int y = 0;
 		int decisionOver2 = 1 - x;
 
+        int y_start = y0 - radius;
+        int y_end = y0 + radius;
+
 		while (y <= x){
 			int i;
             
@@ -170,8 +173,8 @@ public class Canvas : MonoBehaviour {
                 //colors[(width * ( -y + y0 )) + i] = paint_color;
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
-				normal_texture.SetPixel( i, y+y0, normal_color );
-				normal_texture.SetPixel( i, -y+y0, normal_color );
+				normal_texture.SetPixel( i, y+y0,  GetNormalColor(y_start, y_end, y+ y0));
+				normal_texture.SetPixel( i, -y+y0,  GetNormalColor(y_start, y_end, y+ y0));
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
@@ -179,8 +182,8 @@ public class Canvas : MonoBehaviour {
                 //colors[(width * ( -x + y0 )) + i] = paint_color;
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
-				normal_texture.SetPixel( i, x+y0, normal_color2 );
-				normal_texture.SetPixel( i, -x+y0, normal_color2 );
+				normal_texture.SetPixel( i, x+y0,  GetNormalColor(y_start, y_end, y+ y0));
+				normal_texture.SetPixel( i, -x+y0,  GetNormalColor(y_start, y_end, y+ y0));
 			}
 
 			y++;
@@ -197,6 +200,14 @@ public class Canvas : MonoBehaviour {
 		texture.Apply(false);
         normal_texture.Apply(false);
 	}
+
+    Color GetNormalColor(int start, int end, int pos)
+    {
+        float percentage = (float)(pos - start) / (end - start);
+        float grayscale = 0 + percentage * 1;
+        Color result = new Color(grayscale, grayscale, grayscale, 1.0f);
+        return result;
+    }
 
     void DoSprinkle(Vector3 position) // yama 0317 Baketsu Gimmick
     {
