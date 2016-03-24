@@ -190,8 +190,6 @@ public class Canvas : MonoBehaviour {
                     normal_texture.SetPixel( i, y+y0,  GetNormalColor(x0, y0, i, y + y0, radius));
                     normal_texture.SetPixel( i, -y+y0,  GetNormalColor(x0, y0, i, -y + y0, radius));
                 }
-				//normal_texture.SetPixel( i, y+y0,  GetNormalColor(y_start, y_end, y+ y0));
-				//normal_texture.SetPixel( i, -y+y0,  GetNormalColor(y_start, y_end, y+ y0));
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
@@ -204,8 +202,6 @@ public class Canvas : MonoBehaviour {
                     normal_texture.SetPixel(i, x + y0, GetNormalColor(x0, y0, i, x + y0, radius));
                     normal_texture.SetPixel(i, -x + y0, GetNormalColor(x0, y0, i, -x + y0, radius));
                 }
-				//normal_texture.SetPixel( i, x+y0,  GetNormalColor(y_start, y_end, y+ y0));
-				//normal_texture.SetPixel( i, -x+y0,  GetNormalColor(y_start, y_end, y+ y0));
 			}
 
 			y++;
@@ -229,9 +225,18 @@ public class Canvas : MonoBehaviour {
 
     Color GetNormalColor(int ball_x, int ball_y, int pos_x, int pos_y, int radius)
     {
-        float distance = Mathf.Abs((last_ball_y - ball_y) * pos_x - (last_ball_x - ball_x) * pos_y + last_ball_x * ball_y - last_ball_y * ball_x) / Mathf.Sqrt((last_ball_y - ball_y) * (last_ball_y - ball_y) + (last_ball_x - ball_x) * (last_ball_x - ball_x));
-        float percentage = (float)(distance / radius);
-        float grayscale = 1.0f - percentage * 0.4f;
+        float grayscale;
+        float percentage;
+        if (Random.value > 0.01f)
+        {
+            float distance = Mathf.Abs((last_ball_y - ball_y) * pos_x - (last_ball_x - ball_x) * pos_y + last_ball_x * ball_y - last_ball_y * ball_x) / Mathf.Sqrt((last_ball_y - ball_y) * (last_ball_y - ball_y) + (last_ball_x - ball_x) * (last_ball_x - ball_x));
+            percentage = (float)(distance / radius);
+            grayscale = 1.0f - percentage * 0.4f;
+        } else
+        {
+            percentage = 0.5f + 0.5f * Random.value;
+            grayscale = Random.value;
+        }
         Color result = new Color(grayscale, grayscale, grayscale, 1 - percentage);
         return result;
     }
