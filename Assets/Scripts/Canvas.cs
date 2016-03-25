@@ -280,17 +280,15 @@ public class Canvas : MonoBehaviour {
     {
         float grayscale;
         float percentage;
-        if (Random.value > 0.01f)
-        {
-            // caculate normal color
-            float distance = Mathf.Abs((last_ball_y[id] - ball_y) * pos_x - (last_ball_x[id] - ball_x) * pos_y + last_ball_x[id] * ball_y - last_ball_y[id] * ball_x) / Mathf.Sqrt((last_ball_y[id] - ball_y) * (last_ball_y[id] - ball_y) + (last_ball_x[id] - ball_x) * (last_ball_x[id] - ball_x));
-            percentage = (float)(distance / radius);
-            grayscale = 1.0f - percentage * 0.4f;
-        } else
-        {
+        // caculate normal color
+        float distance = Mathf.Abs((last_ball_y[id] - ball_y) * pos_x - (last_ball_x[id] - ball_x) * pos_y + last_ball_x[id] * ball_y - last_ball_y[id] * ball_x) / Mathf.Sqrt((last_ball_y[id] - ball_y) * (last_ball_y[id] - ball_y) + (last_ball_x[id] - ball_x) * (last_ball_x[id] - ball_x));
+        percentage = (float)(distance / radius);
+        grayscale = 1.0f - percentage * 0.4f;
+        if (Random.value > 0.7f)
+        { 
             // add noise
             percentage = 0.5f + 0.5f * Random.value;
-            grayscale = Random.value;
+            grayscale += Random.value - 0.5f;
         }
         Color result = new Color(grayscale, grayscale, grayscale, 1 - percentage);
         return result;
@@ -300,7 +298,13 @@ public class Canvas : MonoBehaviour {
     {
         float distance = Mathf.Sqrt((pos_x - x0) * (pos_x - x0) + (pos_y - y0) * (pos_y - y0));
         float percentage = (float)(distance / radius);
-        float grayscale = 1.0f - percentage * 0.4f;
+        float grayscale = 1.0f - percentage * 0.3f;
+        if (Random.value > 0.7f)
+        { 
+            // add noise
+            percentage = 0.5f + 0.5f * Random.value;
+            grayscale += Random.value - 0.5f;
+        }
         Color result = new Color(grayscale, grayscale, grayscale, percentage);
         return result;
     }
