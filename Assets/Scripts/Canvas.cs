@@ -13,7 +13,7 @@ public class Canvas : MonoBehaviour {
 	private Texture2D texture;
     private Texture2D normal_texture;
 
-	private Color paint_color;
+	private Color[] paint_color;
     private Color[] colors;
 	private int[] ball_x;
 	private int[] ball_y;
@@ -56,7 +56,8 @@ public class Canvas : MonoBehaviour {
         ball_y = new int[length];
         last_ball_x = new int[length];
         last_ball_y = new int[length];
-        ball = new GameObject[length]; 
+        ball = new GameObject[length];
+        paint_color = new Color[length];
         last_ball_x[0] = 0;
         last_ball_y[0] = 0;
 
@@ -82,7 +83,6 @@ public class Canvas : MonoBehaviour {
         //normal_texture.SetPixels(0, 0, width, height, colors);
 
 		// init properties
-		paint_color = Color.clear;
 		ball_x[0] = width / 2;
 		ball_y[0] = height / 2;
 		range = default_range;
@@ -95,8 +95,14 @@ public class Canvas : MonoBehaviour {
 	void Update () {
         for (int i = 0; i < n_ball; i++)
         {
-            DrawRound(i, range);
+            if(paint_color[i].a > 0)
+            {
+                DrawRound(i, range);
+            }
         }
+        // apply texture
+        texture.Apply(false);
+        normal_texture.Apply(false);
         //Debug.Log("range:" + range);
 		//DrawRound(range);
 
@@ -172,15 +178,16 @@ public class Canvas : MonoBehaviour {
 
     void AddNewBall()
     {
-        ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, Vector3.zero, Quaternion.identity);
+        ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
         ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
+        paint_color[n_ball] = Color.clear;
         manager.SendMessage("AddNewBall", ball[n_ball]);
 
         n_ball++;
     }
     
-	void SetColor (Color new_color){
-		paint_color = new_color;
+	void SetColor (float[] rgbanid){
+		paint_color[(int)rgbanid[4]] = new Color(rgbanid[0], rgbanid[1], rgbanid[2], rgbanid[3]);
 	}
 
 	void SetCoordinate(float[] xynid) {
@@ -216,8 +223,8 @@ public class Canvas : MonoBehaviour {
 			int i;
             
 			for (i = -x+x0; i < x+x0; ++i) {
-				texture.SetPixel( i, y+y0, paint_color );
-				texture.SetPixel( i, -y+y0, paint_color );
+				texture.SetPixel( i, y+y0, paint_color[id] );
+				texture.SetPixel( i, -y+y0, paint_color[id] );
                 if (!not_moving && !splash)
                 {
                     normal_texture.SetPixel( i, y+y0,  GetNormalColor(id, x0, y0, i, y + y0, radius));
@@ -230,8 +237,8 @@ public class Canvas : MonoBehaviour {
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
-				texture.SetPixel( i, x+y0, paint_color );
-				texture.SetPixel( i, -x+y0, paint_color );
+				texture.SetPixel( i, x+y0, paint_color[id] );
+				texture.SetPixel( i, -x+y0, paint_color[id] );
                 if (!not_moving && !splash)
                 {
                     normal_texture.SetPixel(i, x + y0, GetNormalColor(id, x0, y0, i, x + y0, radius));
@@ -260,12 +267,11 @@ public class Canvas : MonoBehaviour {
             last_ball_y[id] = ball_y[id];
         }
 
-		texture.Apply(false);
-        normal_texture.Apply(false);
     }
 
 	void DrawRound (int id, int radius) {
-        DrawRoundAt(id, ball_x[id], ball_y[id], radius, false);
+        int radius_noised = (int)(radius - 15 + 30 * Random.value);
+        DrawRoundAt(id, ball_x[id], ball_y[id], radius_noised, false);
         if (Random.value < 0.2)
         {
             int splash_rad = 80;
@@ -305,6 +311,12 @@ public class Canvas : MonoBehaviour {
             percentage = 0.5f + 0.5f * Random.value;
             grayscale += Random.value - 0.5f;
         }
+        Color original = normal_texture.GetPixel(x0, y0);
+        if (original.a > 0.1)
+        {
+            float original_grayscale = original.r;
+            grayscale = (grayscale + original_grayscale) / 2;
+        }
         Color result = new Color(grayscale, grayscale, grayscale, percentage);
         return result;
     }
@@ -340,14 +352,14 @@ public class Canvas : MonoBehaviour {
         
         for (i = -x + x0; i < x + x0; ++i)
             {
-                texture.SetPixel(i, y + y0, paint_color);
-                texture.SetPixel(i, -y + y0, paint_color);
+                texture.SetPixel(i, y + y0, paint_color[0]);
+                texture.SetPixel(i, -y + y0, paint_color[0]);
             }
 
             for (i = -y + x0; i < y + x0; ++i)
             {
-                texture.SetPixel(i, x + y0, paint_color);
-                texture.SetPixel(i, -x + y0, paint_color);
+                texture.SetPixel(i, x + y0, paint_color[0]);
+                texture.SetPixel(i, -x + y0, paint_color[0]);
             }
 
             y++;
@@ -377,9 +389,9 @@ public class Canvas : MonoBehaviour {
         {
             for (int j = 0; j < (i * 2 - 1); j++)
             {
-                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + i * 3, paint_color);
-                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 1 + i * 3, paint_color);
-                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 2 + i * 3, paint_color);
+                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + i * 3, paint_color[0]);
+                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 1 + i * 3, paint_color[0]);
+                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 2 + i * 3, paint_color[0]);
             }
         }
 
