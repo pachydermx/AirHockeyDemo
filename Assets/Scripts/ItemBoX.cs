@@ -4,7 +4,7 @@ using System.Collections;
 public class ItemBoX : MonoBehaviour {
     public const float angle = 150;
 
-    private GameObject Pack; // yama 0323
+    public GameObject Pack; // yama 0323
     public GameObject canvas;
     public GameObject p_another; // yama 0324 clone
 
@@ -26,10 +26,12 @@ public class ItemBoX : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Pack = GameObject.Find("Ball");
-        //canvas = GameObject.Find("Canvas");
+        /*
+        Pack = GameObject.Find("Ball_0");
+        canvas = GameObject.Find("Canvas");
         p_scale = Pack.GetComponent<SpriteRenderer>().bounds.size;
         p_rb = Pack.GetComponent<Rigidbody2D>();
+        */
         time = 0;
         bomb_flag = 0;
     }
@@ -56,8 +58,9 @@ public class ItemBoX : MonoBehaviour {
                 t_flag = 0;
                 clone_flag = 1;
 
-                Debug.Log("copy OK");
+                //Debug.Log("copy OK");
 
+                /*
                 p_rb.velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) + s_y * Mathf.Cos(angle));
                 GameObject Pack_b = (GameObject)Instantiate(p_another, Vector3.zero, Quaternion.identity);
                 Pack_b.transform.position = Pack.transform.position;
@@ -66,6 +69,8 @@ public class ItemBoX : MonoBehaviour {
                 ball = Pack_b.GetComponent<Ball>();
                 ball.canvas = GameObject.Find("Canvas");
                 ball.manager = GameObject.Find("Manager");
+                */
+                canvas.SendMessage("AddNewBall");
                 //script = GetComponent<Canvas>();
                 //ball.canvas.SendMessage("DrawRound");
                 //ball.c_script = GameObject.Find("Canvas").GetComponent<Canvas>();
@@ -113,7 +118,7 @@ public class ItemBoX : MonoBehaviour {
             if (bomb_flag == 1)
             {
             //canvas.SendMessage("DoExplode");
-            Pack.SendMessage("setFlag", bomb_flag);
+            //Pack.SendMessage("setFlag", bomb_flag);
                 //Debug.Log("bomb_flag:"+bomb_flag);
                 
                 //t_flag = 0;
@@ -126,7 +131,7 @@ public class ItemBoX : MonoBehaviour {
         if (g_flag == 0) // yama 0323 巨大化
         {
             canvas.SendMessage("DoBig", 95);
-            Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
+            //Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
         }
         else if (g_flag == 1) // yama 0323 分身
         {
