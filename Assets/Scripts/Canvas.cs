@@ -17,7 +17,7 @@ public class Canvas : MonoBehaviour {
     private Color[] colors;
 	private int[] ball_x;
 	private int[] ball_y;
-    private int n_ball = 0;
+    private int n_ball;
     private int[] last_ball_x;
     private int[] last_ball_y;
 	private int width = 1920;
@@ -50,45 +50,12 @@ public class Canvas : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        // init variables
-        int length = 8;
-        ball_x = new int[length];
-        ball_y = new int[length];
-        last_ball_x = new int[length];
-        last_ball_y = new int[length];
-        ball = new GameObject[length];
-        paint_color = new Color[length];
-        last_ball_x[0] = 0;
-        last_ball_y[0] = 0;
 
 		// init texture
 		texture = image.texture as Texture2D;
         normal_texture = normal.texture as Texture2D;
 
-		colors = new Color[width*height];
-		for (int i =0; i < width*height; ++i)
-        {
-			colors[i] = Color.clear;
-        }
-
-        for (int x = 0; x < width; x++)
-        {
-            for(int y = 0; y < height; y++)
-            {
-                normal_texture.SetPixel(x, y, Color.clear);
-            }
-        }
-
-		texture.SetPixels(0, 0, width, height, colors);
-        //normal_texture.SetPixels(0, 0, width, height, colors);
-
-		// init properties
-		ball_x[0] = width / 2;
-		ball_y[0] = height / 2;
-		range = default_range;
-
-        // init ball
-        AddNewBall();
+        ResetStage();
 	}
 
 	// Update is called once per frame
@@ -137,6 +104,11 @@ public class Canvas : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Insert))
         {
             AddNewBall();
+        }
+
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            ResetStage();
         }
         /*else  // yama 0318 未完成
         {
@@ -527,6 +499,54 @@ public class Canvas : MonoBehaviour {
         P2DisplayTargetScaleX = maximumBar * rate_2;
 
         animationPlaying = true;
+
+    }
+
+    void ResetStage()
+    {
+        // init variables
+        int length = 8;
+        ball_x = new int[length];
+        ball_y = new int[length];
+        last_ball_x = new int[length];
+        last_ball_y = new int[length];
+        paint_color = new Color[length];
+        last_ball_x[0] = 0;
+        last_ball_y[0] = 0;
+        // clean canvas
+		colors = new Color[width*height];
+		for (int i =0; i < width*height; ++i)
+        {
+			colors[i] = Color.clear;
+        }
+
+        for (int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                normal_texture.SetPixel(x, y, Color.clear);
+            }
+        }
+
+		texture.SetPixels(0, 0, width, height, colors);
+
+		// init properties
+		ball_x[0] = width / 2;
+		ball_y[0] = height / 2;
+		range = default_range;
+
+        // clean balls
+        for (int i = 0; i < n_ball; i++)
+        {
+            Destroy(ball[i]);
+        }
+        manager.SendMessage("ResetStage");
+
+
+        // start game
+        ball = new GameObject[length];
+        n_ball = 0;
+        AddNewBall();
 
     }
 }
