@@ -7,12 +7,19 @@ public class Canvas : MonoBehaviour {
 	public GameObject p2_wall;
     public GameObject manager;
 
+    // textures
 	public RawImage image;
+    public RawImage normal;
 	private Texture2D texture;
+    private Texture2D normal_texture;
+
 	private Color paint_color;
     private Color[] colors;
-	private int ball_x;
-	private int ball_y;
+	private int[] ball_x;
+	private int[] ball_y;
+    private int n_ball = 0;
+    private int[] last_ball_x;
+    private int[] last_ball_y;
 	private int width = 1920;
 	private int height = 1080;
 
@@ -28,7 +35,8 @@ public class Canvas : MonoBehaviour {
     protected int[] scores;
     public GameObject P1Display;
     public GameObject P2Display;
-    public GameObject ball;
+    public GameObject ref_ball;
+    private GameObject[] ball;
     protected bool animationPlaying = false;
     protected float animateCounter = 0;
     protected float P1DisplayTargetScaleX;
@@ -42,26 +50,55 @@ public class Canvas : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        // init variables
+        int length = 8;
+        ball_x = new int[length];
+        ball_y = new int[length];
+        last_ball_x = new int[length];
+        last_ball_y = new int[length];
+        ball = new GameObject[length]; 
+        last_ball_x[0] = 0;
+        last_ball_y[0] = 0;
+
 		// init texture
 		texture = image.texture as Texture2D;
+        normal_texture = normal.texture as Texture2D;
 
-		Color[] colors = new Color[width*height];
-		for (int i =0; i < width*height; ++i) 
+		colors = new Color[width*height];
+		for (int i =0; i < width*height; ++i)
+        {
 			colors[i] = Color.clear;
+        }
+
+        for (int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                normal_texture.SetPixel(x, y, Color.clear);
+            }
+        }
 
 		texture.SetPixels(0, 0, width, height, colors);
+        //normal_texture.SetPixels(0, 0, width, height, colors);
 
 		// init properties
 		paint_color = Color.clear;
-		ball_x = width / 2;
-		ball_y = height / 2;
+		ball_x[0] = width / 2;
+		ball_y[0] = height / 2;
 		range = default_range;
+
+        // init ball
+        AddNewBall();
 	}
 
 	// Update is called once per frame
 	void Update () {
+        for (int i = 0; i < n_ball; i++)
+        {
+            DrawRound(i, range);
+        }
         //Debug.Log("range:" + range);
-		DrawRound(range);
+		//DrawRound(range);
 
         // tanaka 0324
 		if (range >= 200)
@@ -74,7 +111,7 @@ public class Canvas : MonoBehaviour {
             if(itemcount >= 100)
             {
                 DoBig(default_range);
-                ball.transform.localScale = new Vector3(ball.transform.localScale.x / 1.5f, ball.transform.localScale.y / 1.5f, 1);
+                ball[0].transform.localScale = new Vector3(ball[0].transform.localScale.x / 1.5f, ball[0].transform.localScale.y / 1.5f, 1);
                 itemcount = 0;
             }
         }
@@ -89,6 +126,11 @@ public class Canvas : MonoBehaviour {
             // deploy wall
             DeployWall(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
+        }
+
+        if (Input.GetKeyDown(KeyCode.Insert))
+        {
+            AddNewBall();
         }
         /*else  // yama 0318 未完成
         {
@@ -127,43 +169,78 @@ public class Canvas : MonoBehaviour {
             }
         }
 	}
+
+    void AddNewBall()
+    {
+        ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, Vector3.zero, Quaternion.identity);
+        ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
+        manager.SendMessage("AddNewBall", ball[n_ball]);
+
+        n_ball++;
+    }
     
 	void SetColor (Color new_color){
 		paint_color = new_color;
 	}
 
-	void SetCoordinate(float[] xy) {
-        /*
-		ball_x = (int)((xy[0]/10.5) * width + width / 2);
-		ball_y = (int)((xy[1]/7.8) * height + height / 2);
-        */
-        float rate_x = (float)(xy[0] / 9.6);
-        float rate_y = (float)(xy[1] / 5.4);
+	void SetCoordinate(float[] xynid) {
+        float rate_x = (float)(xynid[0] / 9.6);
+        float rate_y = (float)(xynid[1] / 5.4);
 
-        ball_x = (int)(rate_x * width / 2 + (width / 2));
-        ball_y = (int)(rate_y * height / 2 + (height / 2));
+        int id = (int)xynid[2];
+
+        ball_x[id] = (int)(rate_x * width / 2 + (width / 2));
+        ball_y[id] = (int)(rate_y * height / 2 + (height / 2));
 
 		//Debug.Log(ball_x + ", " + ball_y);
 	}
 
-	void DrawRound (int radius) {
-		int x0 = ball_x;
-		int y0 = ball_y;
+    // this is an implementation of ecalipse painting
+    void DrawRoundAt(int id, int pos_x, int pos_y, int radius, bool splash)
+    {
+		int x0 = pos_x;
+		int y0 = pos_y;
 		int x = radius;
 		int y = 0;
 		int decisionOver2 = 1 - x;
 
+        // prevent glitch
+        bool not_moving = false;
+        if (x0 == last_ball_x[id] && y0 == last_ball_y[id])
+        {
+            not_moving = true;
+        }
+
+        // paint circle
 		while (y <= x){
 			int i;
             
 			for (i = -x+x0; i < x+x0; ++i) {
 				texture.SetPixel( i, y+y0, paint_color );
 				texture.SetPixel( i, -y+y0, paint_color );
+                if (!not_moving && !splash)
+                {
+                    normal_texture.SetPixel( i, y+y0,  GetNormalColor(id, x0, y0, i, y + y0, radius));
+                    normal_texture.SetPixel( i, -y+y0,  GetNormalColor(id, x0, y0, i, -y + y0, radius));
+                } else if (splash)
+                {
+                    normal_texture.SetPixel( i, y+y0,  GetNormalColorCentral(x0, y0, radius, i, y+y0));
+                    normal_texture.SetPixel( i, -y+y0,  GetNormalColorCentral(x0, y0, radius, i, -y+y0));
+                }
 			}
             
 			for (i = -y+x0; i < y+x0; ++i) {
 				texture.SetPixel( i, x+y0, paint_color );
 				texture.SetPixel( i, -x+y0, paint_color );
+                if (!not_moving && !splash)
+                {
+                    normal_texture.SetPixel(i, x + y0, GetNormalColor(id, x0, y0, i, x + y0, radius));
+                    normal_texture.SetPixel(i, -x + y0, GetNormalColor(id, x0, y0, i, -x + y0, radius));
+                } else if (splash)
+                {
+                    normal_texture.SetPixel( i, x+y0,  GetNormalColorCentral(x0, y0, radius, i, x+y0));
+                    normal_texture.SetPixel( i, -x+y0,  GetNormalColorCentral(x0, y0, radius, i, -x+y0));
+                }
 			}
 
 			y++;
@@ -175,8 +252,58 @@ public class Canvas : MonoBehaviour {
 			}
 		}
 
+
+        // record ball posisition
+        if (!splash)
+        {
+            last_ball_x[id] = ball_x[id];
+            last_ball_y[id] = ball_y[id];
+        }
+
 		texture.Apply(false);
+        normal_texture.Apply(false);
+    }
+
+	void DrawRound (int id, int radius) {
+        DrawRoundAt(id, ball_x[id], ball_y[id], radius, false);
+        if (Random.value < 0.2)
+        {
+            int splash_rad = 80;
+            int ink_x = (int)(ball_x[id] + Random.value * splash_rad * 2) - splash_rad;
+            int ink_y = (int)(ball_y[id] + Random.value * splash_rad * 2) - splash_rad;
+            int rad = (int)(Random.value * 30);
+            DrawRoundAt(id, ink_x, ink_y, rad, true);
+        }
 	}
+
+    Color GetNormalColor(int id, int ball_x, int ball_y, int pos_x, int pos_y, int radius)
+    {
+        float grayscale;
+        float percentage;
+        if (Random.value > 0.01f)
+        {
+            // caculate normal color
+            float distance = Mathf.Abs((last_ball_y[id] - ball_y) * pos_x - (last_ball_x[id] - ball_x) * pos_y + last_ball_x[id] * ball_y - last_ball_y[id] * ball_x) / Mathf.Sqrt((last_ball_y[id] - ball_y) * (last_ball_y[id] - ball_y) + (last_ball_x[id] - ball_x) * (last_ball_x[id] - ball_x));
+            percentage = (float)(distance / radius);
+            grayscale = 1.0f - percentage * 0.4f;
+        } else
+        {
+            // add noise
+            percentage = 0.5f + 0.5f * Random.value;
+            grayscale = Random.value;
+        }
+        Color result = new Color(grayscale, grayscale, grayscale, 1 - percentage);
+        return result;
+    }
+
+    Color GetNormalColorCentral(int x0, int y0, int radius, int pos_x, int pos_y)
+    {
+        float distance = Mathf.Sqrt((pos_x - x0) * (pos_x - x0) + (pos_y - y0) * (pos_y - y0));
+        float percentage = (float)(distance / radius);
+        float grayscale = 1.0f - percentage * 0.4f;
+        Color result = new Color(grayscale, grayscale, grayscale, percentage);
+        return result;
+    }
 
     void DoSprinkle(Vector3 position) // yama 0317 Baketsu Gimmick
     {
@@ -364,7 +491,10 @@ public class Canvas : MonoBehaviour {
 
     void StartScoreShow()
     {
-        ball.SetActive(false);
+        foreach(GameObject the_ball in ball)
+        {
+            the_ball.SetActive(false);
+        }
         GetScore();
 
         int sum = scores[0] + scores[1];

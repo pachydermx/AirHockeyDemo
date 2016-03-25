@@ -16,7 +16,8 @@ public class SprayController : MonoBehaviour {
         direction = 0;
         flag = 0;
         manager = GameObject.Find("Manager");
-	}
+        //manager.SendMessage("controlSpray", direction);
+    }
 	
 	// Update is called once per frame
 	void Update () {

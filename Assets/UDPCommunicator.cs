@@ -50,7 +50,7 @@ public class UDPCommunicator : MonoBehaviour {
         byte[] umsg = Encoding.UTF8.GetBytes("hello, Ushitani");
         //byte[] umsg = Encoding.UTF8.GetBytes("0");
         udp.Send(umsg, umsg.Length);
-        Debug.Log("MSG");
+        //Debug.Log("MSG");
 
     }
 

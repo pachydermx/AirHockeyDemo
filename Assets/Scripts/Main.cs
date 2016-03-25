@@ -2,15 +2,19 @@
 using System.Collections;
 
 public class Main : MonoBehaviour {
-	public GameObject ball;
-	private Rigidbody2D ball_rb;
+	public GameObject[] ball;
+	private Rigidbody2D[] ball_rb;
+    private int n_ball = 0;
     private Color[] colors;
 
 	public GameObject canvas;
 
 	// Use this for initialization
 	void Start () {
-		ball_rb = ball.GetComponent<Rigidbody2D>();
+        // init variables
+        int length = 8;
+        ball = new GameObject[length];
+        ball_rb = new Rigidbody2D[length];
 
         // set framerate
         Application.targetFrameRate = 120;
@@ -23,24 +27,30 @@ public class Main : MonoBehaviour {
 		// the force
 		int force = 100;
 		if (Input.GetKeyDown(KeyCode.UpArrow)){
-			ball_rb.AddForce(new Vector2(0, force));
+            for(int i = 0; i < n_ball; i++)
+                ball_rb[i].AddForce(new Vector2(0, force));
 		}
 		if (Input.GetKeyDown(KeyCode.DownArrow)){
-			ball_rb.AddForce(new Vector2(0, -force));
+            for(int i = 0; i < n_ball; i++)
+                ball_rb[i].AddForce(new Vector2(0, -force));
 		}
 		if (Input.GetKeyDown(KeyCode.LeftArrow)){
-			ball_rb.AddForce(new Vector2(-force, 0));
+            for(int i = 0; i < n_ball; i++)
+                ball_rb[i].AddForce(new Vector2(-force, 0));
 		}
 		if (Input.GetKeyDown(KeyCode.RightArrow)){
-			ball_rb.AddForce(new Vector2(force, 0));
+            for(int i = 0; i < n_ball; i++)
+                ball_rb[i].AddForce(new Vector2(force, 0));
 		}
 
 		// ball sw
 		if (Input.GetKeyDown(KeyCode.Alpha1)){
-			ball.SendMessage("Player", 1);
+            for(int i = 0; i < n_ball; i++)
+                ball[i].SendMessage("Player", 1);
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha2)){
-			ball.SendMessage("Player", 2);
+            for(int i = 0; i < n_ball; i++)
+                ball[i].SendMessage("Player", 2);
 		}
 
 		// test draw
@@ -61,6 +71,7 @@ public class Main : MonoBehaviour {
 		}
     }
 
+    /*
 	void Player(int player_id){
 		ball.SendMessage("Player", player_id);
 	}
@@ -68,6 +79,7 @@ public class Main : MonoBehaviour {
 	void Accelerate(Vector2 direction){
 		ball_rb.AddForce(direction * 10);
 	}
+    */
 
     void SetColors(Color[] received_colors)
     {
@@ -76,4 +88,10 @@ public class Main : MonoBehaviour {
         canvas.SendMessage("SetColors", colors);
     }
 	
+    void AddNewBall(GameObject new_ball)
+    {
+        ball[n_ball] = new_ball;
+        ball_rb[n_ball] = new_ball.GetComponent<Rigidbody2D>();
+        n_ball++;
+    }
 }
