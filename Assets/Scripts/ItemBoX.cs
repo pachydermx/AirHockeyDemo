@@ -20,12 +20,9 @@ public class ItemBoX : MonoBehaviour {
     private int t_flag = 0;
     public int clone_flag = 0;
     public int bomb_flag = 0;
-<<<<<<< HEAD
-=======
 
     Ball ball;
     //Canvas script;
->>>>>>> origin/Directional_Normal_map
 
 	// Use this for initialization
 	void Start () {
@@ -89,8 +86,6 @@ public class ItemBoX : MonoBehaviour {
                 clone_flag = 0;
             }
         }
-<<<<<<< HEAD
-=======
 
         else if(bomb_flag==1)
         {
@@ -110,7 +105,6 @@ public class ItemBoX : MonoBehaviour {
 
         else
         {
->>>>>>> origin/Directional_Normal_map
 
         //else if(t_flag == 2)
         //{
@@ -124,7 +118,7 @@ public class ItemBoX : MonoBehaviour {
                 
                 //t_flag = 0;
             }
-        //}
+        }
 	}
 
     void ItemUse()
@@ -133,7 +127,6 @@ public class ItemBoX : MonoBehaviour {
         {
             canvas.SendMessage("DoBig", 95);
             Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
-<<<<<<< HEAD
         }
         else if (g_flag == 1) // yama 0323 分身
         {
@@ -142,10 +135,9 @@ public class ItemBoX : MonoBehaviour {
         {
             bomb_flag = 1;
         }
-=======
-        }else
-        if (g_flag == 1) // yama 0323 分身
-        {*/
+        /*else { 
+            if (g_flag == 1) // yama 0323 分身
+        }
 
 
         //GameObject Pack_b = (GameObject)Instantiate(p_another, Vector3.zero, Quaternion.identity);
@@ -155,6 +147,7 @@ public class ItemBoX : MonoBehaviour {
         //}
 
         bomb_flag = 1;
+        */
     }
 
     void flag_reset()
@@ -165,6 +158,5 @@ public class ItemBoX : MonoBehaviour {
         //}
 
         bomb_flag = 1;
->>>>>>> origin/Directional_Normal_map
     }
 }

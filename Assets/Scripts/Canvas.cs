@@ -111,7 +111,7 @@ public class Canvas : MonoBehaviour {
             if(itemcount >= 100)
             {
                 DoBig(default_range);
-                ball.transform.localScale = new Vector3(ball.transform.localScale.x / 1.5f, ball.transform.localScale.y / 1.5f, 1);
+                ball[0].transform.localScale = new Vector3(ball[0].transform.localScale.x / 1.5f, ball[0].transform.localScale.y / 1.5f, 1);
                 itemcount = 0;
             }
         }
