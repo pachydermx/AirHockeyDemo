@@ -48,6 +48,9 @@ public class Canvas : MonoBehaviour {
     private float temp_y;   // yama 0316
     private float dis_sum = 0;
 
+    // yama 0325 分裂時の方向
+    private float angle = 150;
+
 	// Use this for initialization
 	void Start () {
         // init variables
@@ -178,32 +181,40 @@ public class Canvas : MonoBehaviour {
 
     void AddNewBall()
     {
-        if(n_ball == 0)
+        if(n_ball == 0) // yama 0325 初期パックの設定
         {
             ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
             GameObject box = GameObject.Find("ItemBox");
             box.SendMessage("setBallOriginal", ball[n_ball]);
+
+            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
         }
-        else
+        else // yama 0325 複製パックの設定
         {
             ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
+
+            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
+            ball[n_ball].gameObject.GetComponent<CloneDelete>().enabled = true; // yama 0325 複製削除
+
+            float s_x = ball[0].GetComponent<Rigidbody2D>().velocity.x;
+            float s_y = ball[0].GetComponent<Rigidbody2D>().velocity.y;
+
+            ball[0].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) + s_y * Mathf.Cos(angle));
+            ball[n_ball].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
+
+            // yama 0325 パックの色付け（できてません）
+            //Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
+            //int id = ball[0].GetComponent<Ball>().paint_id;  
+            //ball[n_ball].SendMessage("Player", id);
+            //ball[n_ball].SendMessage("Player", 1);
+            //paint_color[n_ball] = paint_color[0];
         }
         
         ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
-        paint_color[n_ball] = Color.clear;
+        //paint_color[n_ball] = Color.clear;
         ball[n_ball].gameObject.name = "Ball_" + n_ball;
-        manager.SendMessage("AddNewBall", ball[n_ball]);
-
-        if (n_ball > 0)
-        {
-            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true;
-
-        }else if(n_ball == 0)
-        {
-            GameObject box = GameObject.Find("ItemBox");
-            box.SendMessage("setBallOriginal", ball[n_ball]);
-        }
-
+        manager.SendMessage("AddNewBall", ball[n_ball]);            
+        
         n_ball++;
     }
     

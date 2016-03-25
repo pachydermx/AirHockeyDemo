@@ -13,6 +13,8 @@ public class Ball : MonoBehaviour {
 
     private Color[] player_color;
 
+    public int paint_id;
+
     // Use this for initialization
     void Start() {
         // get game objects
@@ -69,6 +71,8 @@ public class Ball : MonoBehaviour {
 			default_ball.enabled = true;
 			break;
 		}
+
+            paint_id = pid;
 
 		// switch paint color
 		canvas.SendMessage("SetColor", new float[] { player_color[pid].r, player_color[pid].g, player_color[pid].b, player_color[pid].a, id});
