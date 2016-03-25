@@ -48,7 +48,7 @@ public class Canvas : MonoBehaviour {
     private float temp_y;   // yama 0316
     private float dis_sum = 0;
 
-    // yama 0325 分裂時の方向
+    // yama 0325 分裂時の回転角度
     private float angle = 150;
 
 	// Use this for initialization
@@ -185,7 +185,7 @@ public class Canvas : MonoBehaviour {
         {
             ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
             GameObject box = GameObject.Find("ItemBox");
-            box.SendMessage("setBallOriginal", ball[n_ball]);
+            //box.SendMessage("setBallOriginal", ball[n_ball]); // yama 0325 アイテムBOX active = true のときはコメントアウトしない
 
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
         }
@@ -364,7 +364,43 @@ public class Canvas : MonoBehaviour {
         int x = 200;
         int y = 0;
         int decisionOver2 = 1 - x;
-        
+
+        int radius = x;
+        int id = 1;
+
+        int radius_noised = (int)(x - 15 + 30 * Random.value);
+        while (y <= x)
+        {
+            int i;
+
+            for (i = -x + x0; i < x + x0; ++i)
+            {
+                texture.SetPixel(i, y + y0, paint_color[id]);
+                texture.SetPixel(i, -y + y0, paint_color[id]);
+                normal_texture.SetPixel(i, y + y0, GetNormalColor(id, x0, y0, i, y + y0, radius));
+                normal_texture.SetPixel(i, -y + y0, GetNormalColor(id, x0, y0, i, -y + y0, radius));
+                
+            }
+
+            for (i = -y + x0; i < y + x0; ++i)
+            {
+                texture.SetPixel(i, x + y0, paint_color[id]);
+                texture.SetPixel(i, -x + y0, paint_color[id]);
+                normal_texture.SetPixel(i, x + y0, GetNormalColor(id, x0, y0, i, x + y0, radius));
+                normal_texture.SetPixel(i, -x + y0, GetNormalColor(id, x0, y0, i, -x + y0, radius));
+            }
+
+            y++;
+            if (decisionOver2 <= 0)
+            {
+                decisionOver2 += 2 * y + 1;
+            }
+            else {
+                x--;
+                decisionOver2 += 2 * (y - x) + 1;
+            }
+        }
+
         /*
         for(int i = 0; i < 3600; i++)
         {
@@ -374,8 +410,6 @@ public class Canvas : MonoBehaviour {
             y0 += (int)temp_y;
             texture.SetPixel(x0, y0, paint_color);
         }
-        */
-
         
         while (y <= x)
         {
@@ -406,6 +440,7 @@ public class Canvas : MonoBehaviour {
         }
         
         texture.Apply(false);
+        */
     }
 
     void DoSpray(Vector3 position) // yama 0318 Spray Gimmick
