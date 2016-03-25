@@ -178,7 +178,17 @@ public class Canvas : MonoBehaviour {
 
     void AddNewBall()
     {
-        ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
+        if(n_ball == 0)
+        {
+            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
+            GameObject box = GameObject.Find("ItemBox");
+            box.SendMessage("setBallOriginal", ball[n_ball]);
+        }
+        else
+        {
+            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
+        }
+        
         ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
         paint_color[n_ball] = Color.clear;
         ball[n_ball].gameObject.name = "Ball_" + n_ball;
@@ -188,7 +198,12 @@ public class Canvas : MonoBehaviour {
         {
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true;
 
+        }else if(n_ball == 0)
+        {
+            GameObject box = GameObject.Find("ItemBox");
+            box.SendMessage("setBallOriginal", ball[n_ball]);
         }
+
         n_ball++;
     }
     

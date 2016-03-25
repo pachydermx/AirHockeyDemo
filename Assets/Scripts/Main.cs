@@ -99,6 +99,12 @@ public class Main : MonoBehaviour {
     {
         ball[n_ball] = new_ball;
         ball_rb[n_ball] = new_ball.GetComponent<Rigidbody2D>();
+        /*
+        if(n_ball > 0)
+        {
+
+        }
+        */
         n_ball++;
     }
 }

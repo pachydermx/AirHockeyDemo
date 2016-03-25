@@ -26,18 +26,21 @@ public class ItemBoX : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        /*
-        Pack = GameObject.Find("Ball_0");
+        
+        //Pack = GameObject.Find("Ball_0");
         canvas = GameObject.Find("Canvas");
-        p_scale = Pack.GetComponent<SpriteRenderer>().bounds.size;
-        p_rb = Pack.GetComponent<Rigidbody2D>();
-        */
+        //p_scale = Pack.GetComponent<SpriteRenderer>().bounds.size;
+        //p_rb = Pack.GetComponent<Rigidbody2D>();
+        
         time = 0;
         bomb_flag = 0;
+
+        g_flag = 1; // yama 0325 確認用
     }
 	
 	// Update is called once per frame
 	void Update () {
+        /*
         time += Time.deltaTime;
         if(time >= 5.0)
         {
@@ -45,7 +48,21 @@ public class ItemBoX : MonoBehaviour {
             g_flag++;
             g_flag %= 3;
         }
+        */
+        if(t_flag == 1 && clone_flag == 0)
+        {
+            //float distance = Vector3.Distance(Pack.transform.position, this.gameObject.transform.position);
+            //if(distance <= 0.55)
+            //{ 
+                temp_time = 0;
+                t_flag = 0;
+                clone_flag = 1;
 
+                canvas.SendMessage("AddNewBall");   
+            //}
+        }
+
+        /*
         if(t_flag == 1 && clone_flag == 0)
         {
             float distance = Vector3.Distance(Pack.transform.position, this.gameObject.transform.position);
@@ -59,6 +76,7 @@ public class ItemBoX : MonoBehaviour {
                 clone_flag = 1;
 
                 //Debug.Log("copy OK");
+                */
 
                 /*
                 p_rb.velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) + s_y * Mathf.Cos(angle));
@@ -70,6 +88,7 @@ public class ItemBoX : MonoBehaviour {
                 ball.canvas = GameObject.Find("Canvas");
                 ball.manager = GameObject.Find("Manager");
                 */
+                /*
                 canvas.SendMessage("AddNewBall");
                 //script = GetComponent<Canvas>();
                 //ball.canvas.SendMessage("DrawRound");
@@ -82,6 +101,7 @@ public class ItemBoX : MonoBehaviour {
                 clone_flag = 1;
             }
         }
+        
 
         if(clone_flag == 1)
         {
@@ -124,14 +144,16 @@ public class ItemBoX : MonoBehaviour {
                 //t_flag = 0;
             }
         }
+        */
 	}
 
     void ItemUse()
     {
+        
         if (g_flag == 0) // yama 0323 巨大化
         {
             canvas.SendMessage("DoBig", 95);
-            //Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
+            Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
         }
         else if (g_flag == 1) // yama 0323 分身
         {
@@ -143,15 +165,6 @@ public class ItemBoX : MonoBehaviour {
         /*else { 
             if (g_flag == 1) // yama 0323 分身
         }
-
-
-        //GameObject Pack_b = (GameObject)Instantiate(p_another, Vector3.zero, Quaternion.identity);
-        //p_rb.velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) +s_y * Mathf.Cos(angle)); 
-
-        //t_flag = 1;//分身フラグ
-        //}
-
-        bomb_flag = 1;
         */
     }
 
@@ -163,5 +176,12 @@ public class ItemBoX : MonoBehaviour {
         //}
 
         bomb_flag = 1;
+    }
+
+    void setBallOriginal(GameObject ball)
+    {
+        Pack = ball;
+        p_scale = Pack.GetComponent<SpriteRenderer>().bounds.size;
+        p_rb = GetComponent<Rigidbody2D>();
     }
 }
