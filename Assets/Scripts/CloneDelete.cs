@@ -18,7 +18,7 @@ public class CloneDelete : MonoBehaviour {
     IEnumerator Delete()
     {
         yield return new WaitForSeconds(3.0f);
-       
+        
         Destroy(this.gameObject);
     }
 }

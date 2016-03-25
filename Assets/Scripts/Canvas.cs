@@ -63,20 +63,22 @@ public class Canvas : MonoBehaviour {
         //Debug.Log("range:" + range);
 		DrawRound(range);
 
-        /*
-        // tanaka 0322
-		if (range > default_range)
+        // tanaka 0324
+		if (range >= 200)
+        {
+            //range -= 5;
+            range = default_range;
+		}else if(range > default_range)
         {
             itemcount++;
-
-            if (itemcount > 100)
+            if(itemcount >= 100)
             {
-                //range -= 5;
-                range = default_range;
+                DoBig(default_range);
+                ball.transform.localScale = new Vector3(ball.transform.localScale.x / 1.5f, ball.transform.localScale.y / 1.5f, 1);
                 itemcount = 0;
             }
-		}
-        */
+        }
+        
 
 		// receive touch
 		if (Input.touchCount > 0){
@@ -255,6 +257,12 @@ public class Canvas : MonoBehaviour {
 
 	void DoExplode () {
 		range = 200;
+        /*
+        if(range == default_range)
+        {
+            Debug.Log("return default");
+        }
+        */
 	}
 
     void DeployWall (Vector2 mouse_position) {

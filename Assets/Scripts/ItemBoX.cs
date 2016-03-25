@@ -19,6 +19,7 @@ public class ItemBoX : MonoBehaviour {
     private float temp_time;
     private int t_flag = 0;
     public int clone_flag = 0;
+    public int bomb_flag = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -27,7 +28,8 @@ public class ItemBoX : MonoBehaviour {
         p_scale = Pack.GetComponent<SpriteRenderer>().bounds.size;
         p_rb = Pack.GetComponent<Rigidbody2D>();
         time = 0;
-	}
+        bomb_flag = 0;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -36,7 +38,7 @@ public class ItemBoX : MonoBehaviour {
         {
             time = 0;
             g_flag++;
-            g_flag %= 2;
+            g_flag %= 3;
         }
 
         if(t_flag == 1 && clone_flag == 0)
@@ -57,31 +59,45 @@ public class ItemBoX : MonoBehaviour {
                 t_flag = 0;
                 clone_flag = 1;
             }
-            else
+        }
+
+        if(clone_flag == 1)
+        {
+            temp_time += Time.deltaTime;
+            if(temp_time >= 3.0f)
             {
-                temp_time += Time.deltaTime;
+                clone_flag = 0;
             }
         }
-        else
-        {
 
-        }
+        //else if(t_flag == 2)
+        //{
+            //bomb_flag = 1;
+
+            if (bomb_flag == 1)
+            {
+            //canvas.SendMessage("DoExplode");
+            Pack.SendMessage("setFlag", bomb_flag);
+                //Debug.Log("bomb_flag:"+bomb_flag);
+                
+                //t_flag = 0;
+            }
+        //}
 	}
 
     void ItemUse()
-    {/*
+    {
         if (g_flag == 0) // yama 0323 巨大化
         {
             canvas.SendMessage("DoBig", 95);
             Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
-        }else
-        if (g_flag == 1) // yama 0323 分身
-        {*/
-
-
-            //GameObject Pack_b = (GameObject)Instantiate(p_another, Vector3.zero, Quaternion.identity);
-            //p_rb.velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) +s_y * Mathf.Cos(angle)); 
+        }
+        else if (g_flag == 1) // yama 0323 分身
+        {
             t_flag = 1;
-        //}
+        }else if(g_flag == 2) // yama 0325 爆発
+        {
+            bomb_flag = 1;
+        }
     }
 }
