@@ -174,7 +174,13 @@ public class Canvas : MonoBehaviour {
     {
         ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, Vector3.zero, Quaternion.identity);
         ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
+        ball[n_ball].gameObject.name = "Ball_" + n_ball;
         manager.SendMessage("AddNewBall", ball[n_ball]);
+
+        if(n_ball > 0)
+        {
+            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true;
+        }
 
         n_ball++;
     }
