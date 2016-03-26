@@ -4,17 +4,17 @@ using System.Collections;
 public class Main : MonoBehaviour {
 	public GameObject[] ball;
 	private Rigidbody2D[] ball_rb;
-    private int n_ball = 0;
+    private int n_ball;
     private Color[] colors;
 
 	public GameObject canvas;
 
+    // for smasher debugging
+    public GameObject smasher;
+    private bool smasher_controlled_by_mouse = false;
+
 	// Use this for initialization
 	void Start () {
-        // init variables
-        int length = 8;
-        ball = new GameObject[length];
-        ball_rb = new Rigidbody2D[length];
 
         // set framerate
         Application.targetFrameRate = 120;
@@ -25,7 +25,19 @@ public class Main : MonoBehaviour {
         {
             Display.displays[1].Activate();
         }
+
+        ResetStage();
 	}
+
+    void ResetStage()
+    {
+        // init variables
+        int length = 8;
+        ball = new GameObject[length];
+        ball_rb = new Rigidbody2D[length];
+        n_ball = 0;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -76,6 +88,20 @@ public class Main : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			canvas.SendMessage("DoExplode");
 		}
+
+        // smasher debug
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            smasher.SetActive(true);
+            smasher_controlled_by_mouse = true;
+        }
+
+        if (smasher_controlled_by_mouse)
+        {
+            Vector3 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouse_position.z = 0;
+            smasher.SendMessage("Move", mouse_position);
+        }
     }
 
     /*

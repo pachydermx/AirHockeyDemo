@@ -17,7 +17,7 @@ public class Canvas : MonoBehaviour {
     private Color[] colors;
 	private int[] ball_x;
 	private int[] ball_y;
-    private int n_ball = 0;
+    private int n_ball;
     private int[] last_ball_x;
     private int[] last_ball_y;
 	private int width = 1920;
@@ -48,50 +48,17 @@ public class Canvas : MonoBehaviour {
     private float temp_y;   // yama 0316
     private float dis_sum = 0;
 
-    // yama 0325 分裂時の回転角度
-    private float angle = 150;
+    // settings
+    private bool kick_off_when_start = false;
 
 	// Use this for initialization
 	void Start () {
-        // init variables
-        int length = 8;
-        ball_x = new int[length];
-        ball_y = new int[length];
-        last_ball_x = new int[length];
-        last_ball_y = new int[length];
-        ball = new GameObject[length];
-        paint_color = new Color[length];
-        last_ball_x[0] = 0;
-        last_ball_y[0] = 0;
 
 		// init texture
 		texture = image.texture as Texture2D;
         normal_texture = normal.texture as Texture2D;
 
-		colors = new Color[width*height];
-		for (int i =0; i < width*height; ++i)
-        {
-			colors[i] = Color.clear;
-        }
-
-        for (int x = 0; x < width; x++)
-        {
-            for(int y = 0; y < height; y++)
-            {
-                normal_texture.SetPixel(x, y, Color.clear);
-            }
-        }
-
-		texture.SetPixels(0, 0, width, height, colors);
-        //normal_texture.SetPixels(0, 0, width, height, colors);
-
-		// init properties
-		ball_x[0] = width / 2;
-		ball_y[0] = height / 2;
-		range = default_range;
-
-        // init ball
-        AddNewBall();
+        ResetStage();
 	}
 
 	// Update is called once per frame
@@ -141,6 +108,11 @@ public class Canvas : MonoBehaviour {
         {
             AddNewBall();
         }
+
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            ResetStage();
+        }
         /*else  // yama 0318 未完成
         {
             temp_x = Input.mousePosition.x;
@@ -181,40 +153,29 @@ public class Canvas : MonoBehaviour {
 
     void AddNewBall()
     {
-        if(n_ball == 0) // yama 0325 初期パックの設定
-        {
-            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
-            GameObject box = GameObject.Find("ItemBox");
-            //box.SendMessage("setBallOriginal", ball[n_ball]); // yama 0325 アイテムBOX active = true のときはコメントアウトしない
-
-            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
-        }
-        else // yama 0325 複製パックの設定
-        {
-            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
-
-            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
-            ball[n_ball].gameObject.GetComponent<CloneDelete>().enabled = true; // yama 0325 複製削除
-
-            float s_x = ball[0].GetComponent<Rigidbody2D>().velocity.x;
-            float s_y = ball[0].GetComponent<Rigidbody2D>().velocity.y;
-
-            ball[0].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) + s_y * Mathf.Cos(angle));
-            ball[n_ball].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
-
-            // yama 0325 パックの色付け（できてません）
-            //Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
-            //int id = ball[0].GetComponent<Ball>().paint_id;  
-            //ball[n_ball].SendMessage("Player", id);
-            //ball[n_ball].SendMessage("Player", 1);
-            //paint_color[n_ball] = paint_color[0];
-        }
-        
+        // instantiate
+        ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
+        // config
         ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
-        //paint_color[n_ball] = Color.clear;
+        paint_color[n_ball] = Color.clear;
         ball[n_ball].gameObject.name = "Ball_" + n_ball;
-        manager.SendMessage("AddNewBall", ball[n_ball]);            
-        
+        manager.SendMessage("AddNewBall", ball[n_ball]);
+
+        if (n_ball > 0)
+        {
+            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true;
+
+        }
+
+        // kick off
+        if (kick_off_when_start)
+        {
+            float power = 150;
+            float direction = Random.value * 2 * Mathf.PI;
+            Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
+            ball[n_ball].GetComponent<Rigidbody2D>().AddForce(kick_off);
+        }
+
         n_ball++;
     }
     
@@ -364,43 +325,7 @@ public class Canvas : MonoBehaviour {
         int x = 200;
         int y = 0;
         int decisionOver2 = 1 - x;
-
-        int radius = x;
-        int id = 1;
-
-        int radius_noised = (int)(x - 15 + 30 * Random.value);
-        while (y <= x)
-        {
-            int i;
-
-            for (i = -x + x0; i < x + x0; ++i)
-            {
-                texture.SetPixel(i, y + y0, paint_color[id]);
-                texture.SetPixel(i, -y + y0, paint_color[id]);
-                normal_texture.SetPixel(i, y + y0, GetNormalColor(id, x0, y0, i, y + y0, radius));
-                normal_texture.SetPixel(i, -y + y0, GetNormalColor(id, x0, y0, i, -y + y0, radius));
-                
-            }
-
-            for (i = -y + x0; i < y + x0; ++i)
-            {
-                texture.SetPixel(i, x + y0, paint_color[id]);
-                texture.SetPixel(i, -x + y0, paint_color[id]);
-                normal_texture.SetPixel(i, x + y0, GetNormalColor(id, x0, y0, i, x + y0, radius));
-                normal_texture.SetPixel(i, -x + y0, GetNormalColor(id, x0, y0, i, -x + y0, radius));
-            }
-
-            y++;
-            if (decisionOver2 <= 0)
-            {
-                decisionOver2 += 2 * y + 1;
-            }
-            else {
-                x--;
-                decisionOver2 += 2 * (y - x) + 1;
-            }
-        }
-
+        
         /*
         for(int i = 0; i < 3600; i++)
         {
@@ -410,6 +335,8 @@ public class Canvas : MonoBehaviour {
             y0 += (int)temp_y;
             texture.SetPixel(x0, y0, paint_color);
         }
+        */
+
         
         while (y <= x)
         {
@@ -440,7 +367,6 @@ public class Canvas : MonoBehaviour {
         }
         
         texture.Apply(false);
-        */
     }
 
     void DoSpray(Vector3 position) // yama 0318 Spray Gimmick
@@ -476,66 +402,12 @@ public class Canvas : MonoBehaviour {
 	}
 
     void DeployWall (Vector2 mouse_position) {
-        float distance = ((mouse_position.x - temp_x) * (mouse_position.x - temp_x) + (mouse_position.y - temp_y) * (mouse_position.y - temp_y)); // yamamo 0316 -->
-        
-        dis_sum += distance;
-        if (dis_sum < 4)
-        {
-
-            if (mouse_position.x < 0)
-            {
-                if (distance < 0.01)
-                {
-                    Instantiate(p1_wall, mouse_position, Quaternion.identity);
-                }
-                else
-                {
-                    int max = (int)(distance / 0.01);
-                    Debug.Log(max);
-
-                    for (int i = 0; i < max; i++)
-                    {
-                        Vector2 move = new Vector2((temp_x + i * (mouse_position.x - temp_x) / max), (temp_y + i * (mouse_position.y - temp_y) / max));
-                        Instantiate(p1_wall, move, Quaternion.identity);
-                    }
-                }
-            }
-            else
-            {
-                if (distance < 0.01)
-                {
-                    Instantiate(p2_wall, mouse_position, Quaternion.identity);
-                }
-                else
-                {
-                    int max = (int)(distance / 0.01);
-                    Debug.Log(max);
-
-                    for (int i = 0; i < max; i++)
-                    {
-                        Vector2 move = new Vector2((temp_x + i * (mouse_position.x - temp_x) / max), (temp_y + i * (mouse_position.y - temp_y) / max));
-                        Instantiate(p2_wall, move, Quaternion.identity);
-                    }
-                }
-            }
-        }
-        /*
-        else
-        {
-            dis_sum = 0;
-        }
-        */
-        temp_x = mouse_position.x;
-        temp_y = mouse_position.y;  // <--
-        
-        /* // yama 0316
         if (mouse_position.x < 0)
             Instantiate(p1_wall, mouse_position, Quaternion.identity);
             
 
         if (mouse_position.x > 0)
 			Instantiate(p2_wall, mouse_position, Quaternion.identity);
-            */
 	}
 
     void DoBig(int size)
@@ -588,6 +460,54 @@ public class Canvas : MonoBehaviour {
         P2DisplayTargetScaleX = maximumBar * rate_2;
 
         animationPlaying = true;
+
+    }
+
+    void ResetStage()
+    {
+        // init variables
+        int length = 8;
+        ball_x = new int[length];
+        ball_y = new int[length];
+        last_ball_x = new int[length];
+        last_ball_y = new int[length];
+        paint_color = new Color[length];
+        last_ball_x[0] = 0;
+        last_ball_y[0] = 0;
+        // clean canvas
+		colors = new Color[width*height];
+		for (int i =0; i < width*height; ++i)
+        {
+			colors[i] = Color.clear;
+        }
+
+        for (int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                normal_texture.SetPixel(x, y, Color.clear);
+            }
+        }
+
+		texture.SetPixels(0, 0, width, height, colors);
+
+		// init properties
+		ball_x[0] = width / 2;
+		ball_y[0] = height / 2;
+		range = default_range;
+
+        // clean balls
+        for (int i = 0; i < n_ball; i++)
+        {
+            Destroy(ball[i]);
+        }
+        manager.SendMessage("ResetStage");
+
+
+        // start game
+        ball = new GameObject[length];
+        n_ball = 0;
+        AddNewBall();
 
     }
 }
