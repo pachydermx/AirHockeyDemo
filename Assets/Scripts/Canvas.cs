@@ -150,7 +150,9 @@ public class Canvas : MonoBehaviour {
 
     void AddNewBall()
     {
+        // instantiate
         ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
+        // config
         ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
         paint_color[n_ball] = Color.clear;
         ball[n_ball].gameObject.name = "Ball_" + n_ball;
@@ -161,6 +163,13 @@ public class Canvas : MonoBehaviour {
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true;
 
         }
+
+        // kick off
+        float power = 150;
+        float direction = Random.value * 2 * Mathf.PI;
+        Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
+        ball[n_ball].GetComponent<Rigidbody2D>().AddForce(kick_off);
+
         n_ball++;
     }
     
