@@ -9,6 +9,10 @@ public class Main : MonoBehaviour {
 
 	public GameObject canvas;
 
+    // for smasher debugging
+    public GameObject smasher;
+    private bool smasher_controlled_by_mouse = false;
+
 	// Use this for initialization
 	void Start () {
 
@@ -84,6 +88,20 @@ public class Main : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			canvas.SendMessage("DoExplode");
 		}
+
+        // smasher debug
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            smasher.SetActive(true);
+            smasher_controlled_by_mouse = true;
+        }
+
+        if (smasher_controlled_by_mouse)
+        {
+            Vector3 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouse_position.z = 0;
+            smasher.SendMessage("Move", mouse_position);
+        }
     }
 
     /*

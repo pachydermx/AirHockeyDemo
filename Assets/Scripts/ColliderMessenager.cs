@@ -20,6 +20,6 @@ public class ColliderMessenager : MonoBehaviour {
 	}
 
 	void OnCollisionStay2D(Collision2D collision) {
-		manager.SendMessage("Player", player_id);
+        collision.gameObject.SendMessage("Player", player_id);
 	}
 }

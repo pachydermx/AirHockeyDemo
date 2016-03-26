@@ -48,6 +48,9 @@ public class Canvas : MonoBehaviour {
     private float temp_y;   // yama 0316
     private float dis_sum = 0;
 
+    // settings
+    private bool kick_off_when_start = false;
+
 	// Use this for initialization
 	void Start () {
 
@@ -165,10 +168,13 @@ public class Canvas : MonoBehaviour {
         }
 
         // kick off
-        float power = 150;
-        float direction = Random.value * 2 * Mathf.PI;
-        Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
-        ball[n_ball].GetComponent<Rigidbody2D>().AddForce(kick_off);
+        if (kick_off_when_start)
+        {
+            float power = 150;
+            float direction = Random.value * 2 * Mathf.PI;
+            Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
+            ball[n_ball].GetComponent<Rigidbody2D>().AddForce(kick_off);
+        }
 
         n_ball++;
     }
