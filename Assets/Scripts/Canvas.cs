@@ -387,66 +387,12 @@ public class Canvas : MonoBehaviour {
 	}
 
     void DeployWall (Vector2 mouse_position) {
-        float distance = ((mouse_position.x - temp_x) * (mouse_position.x - temp_x) + (mouse_position.y - temp_y) * (mouse_position.y - temp_y)); // yamamo 0316 -->
-        
-        dis_sum += distance;
-        if (dis_sum < 4)
-        {
-
-            if (mouse_position.x < 0)
-            {
-                if (distance < 0.01)
-                {
-                    Instantiate(p1_wall, mouse_position, Quaternion.identity);
-                }
-                else
-                {
-                    int max = (int)(distance / 0.01);
-                    Debug.Log(max);
-
-                    for (int i = 0; i < max; i++)
-                    {
-                        Vector2 move = new Vector2((temp_x + i * (mouse_position.x - temp_x) / max), (temp_y + i * (mouse_position.y - temp_y) / max));
-                        Instantiate(p1_wall, move, Quaternion.identity);
-                    }
-                }
-            }
-            else
-            {
-                if (distance < 0.01)
-                {
-                    Instantiate(p2_wall, mouse_position, Quaternion.identity);
-                }
-                else
-                {
-                    int max = (int)(distance / 0.01);
-                    Debug.Log(max);
-
-                    for (int i = 0; i < max; i++)
-                    {
-                        Vector2 move = new Vector2((temp_x + i * (mouse_position.x - temp_x) / max), (temp_y + i * (mouse_position.y - temp_y) / max));
-                        Instantiate(p2_wall, move, Quaternion.identity);
-                    }
-                }
-            }
-        }
-        /*
-        else
-        {
-            dis_sum = 0;
-        }
-        */
-        temp_x = mouse_position.x;
-        temp_y = mouse_position.y;  // <--
-        
-        /* // yama 0316
         if (mouse_position.x < 0)
             Instantiate(p1_wall, mouse_position, Quaternion.identity);
             
 
         if (mouse_position.x > 0)
 			Instantiate(p2_wall, mouse_position, Quaternion.identity);
-            */
 	}
 
     void DoBig(int size)

@@ -16,9 +16,7 @@ public class ColliderMessenager : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
-		manager.SendMessage("Player", player_id);
-
-        manager.SendMessage("test");
+        collision.gameObject.SendMessage("Player", player_id);
 	}
 
 	void OnCollisionStay2D(Collision2D collision) {
