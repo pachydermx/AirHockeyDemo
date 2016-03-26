@@ -49,7 +49,7 @@ public class Canvas : MonoBehaviour {
     private float dis_sum = 0;
 
     // settings
-    private bool kick_off_when_start = false;
+    private bool kick_off_when_start = true;
 
 	// Use this for initialization
 	void Start () {
@@ -197,6 +197,44 @@ public class Canvas : MonoBehaviour {
 
     // this is an implementation of ecalipse painting
     void DrawRoundAt(int id, int pos_x, int pos_y, int radius, bool splash)
+    {
+        // prevent glitch
+        bool not_moving = false;
+        if (pos_x == last_ball_x[id] && pos_y == last_ball_y[id])
+        {
+            not_moving = true;
+        }
+
+        // paint
+        for (int x = -radius; x < radius; x++)
+        {
+            int height = (int)Mathf.Sqrt(radius * radius - x * x);
+
+            for (int y = -height; y < height; y++)
+            {
+                // color
+				texture.SetPixel( pos_x + x, pos_y + y, paint_color[id] );
+                // normal map
+                if (!not_moving && !splash)
+                {
+                    normal_texture.SetPixel(pos_x + x, pos_y + y, GetNormalColor(id, pos_x, pos_y, pos_x + x, pos_y + y, radius));
+                } else if (splash)
+                {
+                    normal_texture.SetPixel( pos_x + x, pos_y + y,  GetNormalColorCentral(pos_x, pos_y, radius, pos_x + x, pos_y + y) );
+                }
+            }
+        }
+
+        // record ball posisition
+        if (!splash)
+        {
+            last_ball_x[id] = ball_x[id];
+            last_ball_y[id] = ball_y[id];
+        }
+    }
+
+    // legacy algorithm
+    void DrawRoundAt2(int id, int pos_x, int pos_y, int radius, bool splash)
     {
 		int x0 = pos_x;
 		int y0 = pos_y;
