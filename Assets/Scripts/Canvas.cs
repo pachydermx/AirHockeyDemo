@@ -431,12 +431,6 @@ public class Canvas : MonoBehaviour {
 
 	void DoExplode () {
 		range = 200;
-        /*
-        if(range == default_range)
-        {
-            Debug.Log("return default");
-        }
-        */
 	}
 
     void DeployWall (Vector2 mouse_position) {
