@@ -17,8 +17,13 @@ public class Ball : MonoBehaviour {
 
     public int default_pid = 0;
 
+    SpriteRenderer MainSpriteRenderer;
+    public Sprite BombPack;
+
     // Use this for initialization
     void Start() {
+        //MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>(); //0328 tanaka icon
+
         // get game objects
         canvas = GameObject.Find("Canvas");
         manager = GameObject.Find("Manager");
@@ -47,6 +52,11 @@ public class Ball : MonoBehaviour {
         xy[1] = (transform.position.y);
         xy[2] = (float)id;
         canvas.SendMessage("SetCoordinate", xy);
+    }
+
+    void changePack()
+    {
+        MainSpriteRenderer.sprite = BombPack;
     }
 
     void SetID(int new_id)

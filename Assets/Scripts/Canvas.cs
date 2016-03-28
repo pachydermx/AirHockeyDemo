@@ -507,7 +507,7 @@ public class Canvas : MonoBehaviour {
             }
         }
 
-        //Debug.Log("Spray OK");
+        //Debug.Log("Color");
     }
 
 	void DoExplode () {

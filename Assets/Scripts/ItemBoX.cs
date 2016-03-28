@@ -7,6 +7,8 @@ public class ItemBoX : MonoBehaviour {
     public GameObject Pack; // yama 0323
     public GameObject canvas;
 
+    public GameObject DefaultBall;
+
     public Vector2 p_scale;
     private Rigidbody2D p_rb;
 
@@ -23,9 +25,18 @@ public class ItemBoX : MonoBehaviour {
     Ball ball;
     //Canvas script;
 
+    //Icon 0328 tanaka
+    SpriteRenderer MainSpriteRenderer;
+    public Sprite BigIcon;
+    public Sprite DoubleIcon;
+    public Sprite BombIcon;
+
 	// Use this for initialization
 	void Start () {
+        MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>(); //0328 tanaka icon
+
         canvas = GameObject.Find("Canvas");
+        DefaultBall = GameObject.Find("ball");
 
         time = 0;
         bomb_flag = 0;
@@ -63,6 +74,21 @@ public class ItemBoX : MonoBehaviour {
         if(bomb_flag == 1)
         {
             Pack.SendMessage("setFlag", bomb_flag);
+            DefaultBall.SendMessage("changePack");
+        }
+
+        //0328 tanaka icon
+        if(g_flag == 0)
+        {
+            MainSpriteRenderer.sprite = BigIcon;
+        }
+        else if(g_flag == 1)
+        {
+            MainSpriteRenderer.sprite = DoubleIcon;
+        }
+        else if(g_flag == 2)
+        {
+            MainSpriteRenderer.sprite = BombIcon;
         }
 	}
 
