@@ -7,7 +7,7 @@ public class ItemBoX : MonoBehaviour {
     public GameObject Pack; // yama 0323
     public GameObject canvas;
 
-    private Vector2 p_scale;
+    public Vector2 p_scale;
     private Rigidbody2D p_rb;
 
     //private int range;
@@ -68,7 +68,8 @@ public class ItemBoX : MonoBehaviour {
 
     void ItemUse()
     {
-        
+       
+               
         if (g_flag == 0) // yama 0323 巨大化
         {
             canvas.SendMessage("DoBig", 95);
@@ -95,7 +96,7 @@ public class ItemBoX : MonoBehaviour {
     void setBallOriginal(GameObject ball)
     {
         Pack = ball;
-        p_scale = Pack.GetComponent<SpriteRenderer>().bounds.size;
+        p_scale = Pack.transform.localScale;
         p_rb = GetComponent<Rigidbody2D>();
     }
 }

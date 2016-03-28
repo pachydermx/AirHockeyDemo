@@ -48,6 +48,10 @@ public class Canvas : MonoBehaviour {
     private float temp_y;   // yama 0316
     private float dis_sum = 0;
 
+
+    // yama 0325 分裂時の方向
+    private float angle = 150;
+
     // settings
     private bool kick_off_when_start = true;
 
@@ -66,7 +70,7 @@ public class Canvas : MonoBehaviour {
 	void Update () {
         for (int i = 0; i < n_ball; i++)
         {
-            if(paint_color[i].a > 0)
+            if(paint_color[i].a > 0 && ball[i] != null)
             {
                 DrawRound(i, range);
             }
@@ -88,7 +92,10 @@ public class Canvas : MonoBehaviour {
             if(itemcount >= 100)
             {
                 DoBig(default_range);
-                ball[0].transform.localScale = new Vector3(ball[0].transform.localScale.x / 1.5f, ball[0].transform.localScale.y / 1.5f, 1);
+                GameObject box = GameObject.Find("ItemBox");
+                ItemBoX s = box.GetComponent<ItemBoX>();
+                //ball[0].transform.localScale = new Vector3(ball[0].transform.localScale.x / 1.5f, ball[0].transform.localScale.y / 1.5f, 1);
+                ball[0].transform.localScale = new Vector3(s.p_scale.x , s.p_scale.y, 1);
                 itemcount = 0;
             }
         }
@@ -152,8 +159,9 @@ public class Canvas : MonoBehaviour {
         }
 	}
 
+    /*
     void AddNewBall()
-    {
+    {   
         // instantiate
         ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
         // config
@@ -167,6 +175,36 @@ public class Canvas : MonoBehaviour {
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true;
 
         }
+        
+        if (n_ball == 0) // yama 0325 初期パックの設定
+        {
+            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
+            GameObject box = GameObject.Find("ItemBox");
+            box.SendMessage("setBallOriginal", ball[n_ball]);
+
+            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
+        }
+        else // yama 0325 複製パックの設定
+        {
+            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
+
+            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
+            ball[n_ball].gameObject.GetComponent<CloneDelete>().enabled = true; // yama 0325 複製削除
+
+            float s_x = ball[0].GetComponent<Rigidbody2D>().velocity.x;
+            float s_y = ball[0].GetComponent<Rigidbody2D>().velocity.y;
+
+            ball[0].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) + s_y * Mathf.Cos(angle));
+            ball[n_ball].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
+
+            // yama 0325 パックの色付け（できてません）
+            //Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
+            //int id = ball[0].GetComponent<Ball>().paint_id;  
+            //ball[n_ball].SendMessage("Player", id);
+            //ball[n_ball].SendMessage("Player", 1);
+            //paint_color[n_ball] = paint_color[0];
+        }
+
 
         // kick off
         if (kick_off_when_start)
@@ -179,8 +217,50 @@ public class Canvas : MonoBehaviour {
 
         n_ball++;
     }
-    
-	void SetColor (float[] rgbanid){
+    */
+
+    void AddNewBall()
+    {
+        if (n_ball == 0) // yama 0325 初期パックの設定
+        {
+            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
+            GameObject box = GameObject.Find("ItemBox");
+            box.SendMessage("setBallOriginal", ball[n_ball]);
+
+            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
+        }
+        else // yama 0325 複製パックの設定
+        {
+            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
+
+            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
+            ball[n_ball].gameObject.GetComponent<CloneDelete>().enabled = true; // yama 0325 複製削除
+
+            float s_x = ball[0].GetComponent<Rigidbody2D>().velocity.x;
+            float s_y = ball[0].GetComponent<Rigidbody2D>().velocity.y;
+
+            ball[0].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) + s_y * Mathf.Cos(angle));
+            ball[n_ball].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
+
+            // yama 0325 パックの色付け（できてません）
+            Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
+            int id = ball[0].GetComponent<Ball>().paint_id;  
+            //ball[n_ball].SendMessage("Player", id);
+            //paint_color[n_ball] = paint_color[0];
+
+            ball[n_ball].GetComponent<Ball>().default_pid = id;
+        }
+
+        ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
+        //paint_color[n_ball] = Color.clear;
+        ball[n_ball].gameObject.name = "Ball_" + n_ball;
+        manager.SendMessage("AddNewBall", ball[n_ball]);
+
+        n_ball++;
+    }
+
+
+    void SetColor (float[] rgbanid){
 		paint_color[(int)rgbanid[4]] = new Color(rgbanid[0], rgbanid[1], rgbanid[2], rgbanid[3]);
 	}
 

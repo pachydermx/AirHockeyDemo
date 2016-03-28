@@ -7,8 +7,6 @@ public class Main : MonoBehaviour {
     private int n_ball;
     private Color[] colors;
 
-    public GameObject start_scene;
-
 	public GameObject canvas;
 
     // for smasher debugging
@@ -17,16 +15,24 @@ public class Main : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        /*
+        // init variables
+        int length = 8;
+        ball = new GameObject[length];
+        ball_rb = new Rigidbody2D[length];
+        */
+
         // set framerate
         Application.targetFrameRate = 120;
 
         // active display
         Debug.Log("Display connected:" + Display.displays.Length);
-        Display.displays[0].Activate();
         if (Display.displays.Length > 1)
         {
             Display.displays[1].Activate();
         }
+
+        ResetStage();
 	}
 
     void ResetStage()
@@ -37,8 +43,6 @@ public class Main : MonoBehaviour {
         ball_rb = new Rigidbody2D[length];
         n_ball = 0;
 
-        // switch scene
-        start_scene.SetActive(false);
     }
 	
 	// Update is called once per frame
