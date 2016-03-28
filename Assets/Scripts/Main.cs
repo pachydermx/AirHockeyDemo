@@ -15,6 +15,12 @@ public class Main : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        /*
+        // init variables
+        int length = 8;
+        ball = new GameObject[length];
+        ball_rb = new Rigidbody2D[length];
+        */
 
         // set framerate
         Application.targetFrameRate = 120;
