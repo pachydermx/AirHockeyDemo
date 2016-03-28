@@ -33,7 +33,8 @@ public class SocketTest : MonoBehaviour {
     // real game object
     public GameObject Smasher;
     public GameObject Baketsu; // yama 0317
-    public GameObject[] Spray = new GameObject[2]; // yama 0328
+    public GameObject Spray1; // yama 0328
+    public GameObject Spray2; // yama 0328
     public GameObject manager; // yama 0321
     public GameObject Itembox; // yama 0323
 
@@ -121,10 +122,10 @@ public class SocketTest : MonoBehaviour {
                             }
                             else if (name.Contains("Spray1"))
                             {
-                                Spray[0].SetActive(true);
+                                Spray1.SetActive(true);
                             }else if (name.Contains("Spray2"))
                             {
-                                Spray[1].SetActive(true);
+                                Spray2.SetActive(true);
                             }
                             else
                             {
@@ -200,8 +201,8 @@ public class SocketTest : MonoBehaviour {
             }
             Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
             Baketsu.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0317
-            Spray[0].transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
-            Spray[1].transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
+            Spray1.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
+            Spray2.transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
         }
         if (levelSet)
         {
@@ -219,7 +220,6 @@ public class SocketTest : MonoBehaviour {
             vicon.CloseMainWindow();
             vicon.Close();
         }
-        
     }
 
     void deployWall(Vector3 position)
@@ -369,13 +369,14 @@ public class SocketTest : MonoBehaviour {
     {
         if (name.Contains("Spray1")) // yama 0321
         {
-            //Debug.Log("Stop");
-            Spray[0].SendMessage("stopFlag", 1);
-            Canvas.SendMessage("DoSpray", Spray[0].transform.position);  
-        }else if (name.Contains("Spray2"))
+            //Debug.Log("Gimmick name:"+Spray1.name);
+            Spray1.SendMessage("stopFlag", 1);
+            Canvas.SendMessage("DoSpray", Spray1.transform.position);
+        }
+        else if (name.Contains("Spray2"))
         {
-            Spray[1].SendMessage("stopFlag", 1);
-            Canvas.SendMessage("DoSpray", Spray[1].transform.position);
+            Spray2.SendMessage("stopFlag", 1);
+            Canvas.SendMessage("DoSpray", Spray2.transform.position);
         }
         else if (name.Contains("Baketsu"))
         {
