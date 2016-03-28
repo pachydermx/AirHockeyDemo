@@ -32,7 +32,8 @@ public class SocketTest : MonoBehaviour {
 
     // real game object
     public GameObject Smasher;
-    public GameObject Baketsu; // yama 0317
+    public GameObject Baketsu1; // yama 0317
+    public GameObject Baketsu2; // yama 0328
     public GameObject Spray1; // yama 0328
     public GameObject Spray2; // yama 0328
     public GameObject manager; // yama 0321
@@ -115,15 +116,19 @@ public class SocketTest : MonoBehaviour {
                         // create cursors
                         if (!TestCursorList.ContainsKey(name))
                         {
-                            if (name.Contains("baketsu2")) // 0317 yama <--
+                            if (name.Contains("baketsu1")) // 0317 yama <--
                             {
                                 //Debug.Log("OK");
-                                Baketsu.SetActive(true);
+                                Baketsu1.SetActive(true);
+                            }else if (name.Contains("baketsu2"))
+                            {
+                                Baketsu2.SetActive(true);
                             }
                             else if (name.Contains("Spray1"))
                             {
                                 Spray1.SetActive(true);
-                            }else if (name.Contains("Spray2"))
+                            }
+                            else if (name.Contains("Spray2"))
                             {
                                 Spray2.SetActive(true);
                             }
@@ -200,7 +205,8 @@ public class SocketTest : MonoBehaviour {
                 moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
             }
             Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
-            Baketsu.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0317
+            Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
+            Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
             Spray1.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
             Spray2.transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
         }
@@ -371,16 +377,21 @@ public class SocketTest : MonoBehaviour {
         {
             //Debug.Log("Gimmick name:"+Spray1.name);
             Spray1.SendMessage("stopFlag", 1);
-            Canvas.SendMessage("DoSpray", Spray1.transform.position);
+            Canvas.GetComponent<Canvas>().DoSpray(Spray1.transform.position, 1);
+            //Canvas.SendMessage("DoSpray", Spray1.transform.position);
         }
         else if (name.Contains("Spray2"))
         {
             Spray2.SendMessage("stopFlag", 1);
-            Canvas.SendMessage("DoSpray", Spray2.transform.position);
+            Canvas.GetComponent<Canvas>().DoSpray(Spray2.transform.position, 2);
+            //Canvas.SendMessage("DoSpray", Spray2.transform.position);
         }
-        else if (name.Contains("Baketsu"))
+        else if (name.Contains("Baketsu1"))
         {
-            Canvas.SendMessage("DoSprinkle", Baketsu.transform.position);
+            Canvas.SendMessage("DoSprinkle", Baketsu1.transform.position);
+        }else if (name.Contains("Baketsu2"))
+        {
+            Canvas.SendMessage("DoSprinkle", Baketsu2.transform.position);
         }
         else if (name.Contains("ItemBox"))
         {
