@@ -58,7 +58,7 @@ public class Canvas : MonoBehaviour {
 		texture = image.texture as Texture2D;
         normal_texture = normal.texture as Texture2D;
 
-        ResetStage();
+        //ResetStage();
 	}
 
 	// Update is called once per frame
