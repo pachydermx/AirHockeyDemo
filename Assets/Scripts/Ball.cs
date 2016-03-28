@@ -2,9 +2,9 @@
 using System.Collections;
 
 public class Ball : MonoBehaviour {
-    private SpriteRenderer default_ball;
-    private SpriteRenderer p1_ball;
-    private SpriteRenderer p2_ball;
+    public SpriteRenderer default_ball;
+    public SpriteRenderer p1_ball;
+    public SpriteRenderer p2_ball;
 
     public GameObject canvas;
     public GameObject manager;
@@ -14,6 +14,8 @@ public class Ball : MonoBehaviour {
     private Color[] player_color;
 
     public int paint_id;
+
+    public int default_pid = 0;
 
     // Use this for initialization
     void Start() {
@@ -33,7 +35,7 @@ public class Ball : MonoBehaviour {
         // tell manager color
         //manager.SendMessage("SetColors", player_color);
 
-        Player(0);
+        Player(default_pid);
     }
 
     // Update is called once per frame
@@ -71,6 +73,7 @@ public class Ball : MonoBehaviour {
 			default_ball.enabled = true;
 			break;
 		}
+
 
             paint_id = pid;
 

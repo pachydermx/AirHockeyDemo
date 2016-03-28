@@ -69,7 +69,7 @@ public class Canvas : MonoBehaviour {
 	void Update () {
         for (int i = 0; i < n_ball; i++)
         {
-            if(paint_color[i].a > 0)
+            if(paint_color[i].a > 0 && ball[i] != null)
             {
                 DrawRound(i, range);
             }
@@ -242,11 +242,12 @@ public class Canvas : MonoBehaviour {
             ball[n_ball].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
 
             // yama 0325 パックの色付け（できてません）
-            //Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
-            //int id = ball[0].GetComponent<Ball>().paint_id;  
+            Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
+            int id = ball[0].GetComponent<Ball>().paint_id;  
             //ball[n_ball].SendMessage("Player", id);
-            //ball[n_ball].SendMessage("Player", 1);
             //paint_color[n_ball] = paint_color[0];
+
+            ball[n_ball].GetComponent<Ball>().default_pid = id;
         }
 
         ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
