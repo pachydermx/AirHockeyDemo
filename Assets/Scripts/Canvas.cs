@@ -474,8 +474,8 @@ public class Canvas : MonoBehaviour {
 
     void StartScoreShow()
     {
-        // clear stage
         GetScore();
+
         ClearStage();
 
         int sum = scores[0] + scores[1];

@@ -22,6 +22,7 @@ public class Main : MonoBehaviour {
 
         // active display
         Debug.Log("Display connected:" + Display.displays.Length);
+        Display.displays[0].Activate();
         if (Display.displays.Length > 1)
         {
             Display.displays[1].Activate();
