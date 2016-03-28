@@ -59,6 +59,7 @@ public class Canvas : MonoBehaviour {
         normal_texture = normal.texture as Texture2D;
 
         //ResetStage();
+        RefreshCanvas();
 	}
 
 	// Update is called once per frame
@@ -457,15 +458,9 @@ public class Canvas : MonoBehaviour {
         scores[0] = 0;
         scores[1] = 0;
         Color[] canvas_colors = texture.GetPixels(0, 0, width, height);
-        int counter = 10;
         for (int i = 0; i < width * height; ++i) {
             if (!canvas_colors[i].Equals(Color.clear))
             {
-                if (counter > 0)
-                {
-                    Debug.Log(canvas_colors[i].r);
-                    counter--;
-                }
                 if (canvas_colors[i].r <= 0.5) {
                     scores[0]++;
                 } else { 
@@ -474,15 +469,14 @@ public class Canvas : MonoBehaviour {
 
             }
         }
+        Debug.Log("Score " + scores[0] + " : " + scores[1]);
     }
 
     void StartScoreShow()
     {
-        foreach(GameObject the_ball in ball)
-        {
-            the_ball.SetActive(false);
-        }
+        // clear stage
         GetScore();
+        ClearStage();
 
         int sum = scores[0] + scores[1];
         float rate_1 = (float)scores[0] / sum;
@@ -495,18 +489,8 @@ public class Canvas : MonoBehaviour {
 
     }
 
-    void ResetStage()
+    void RefreshCanvas()
     {
-        // init variables
-        int length = 8;
-        ball_x = new int[length];
-        ball_y = new int[length];
-        last_ball_x = new int[length];
-        last_ball_y = new int[length];
-        paint_color = new Color[length];
-        last_ball_x[0] = 0;
-        last_ball_y[0] = 0;
-        // clean canvas
 		colors = new Color[width*height];
 		for (int i =0; i < width*height; ++i)
         {
@@ -523,6 +507,22 @@ public class Canvas : MonoBehaviour {
 
 		texture.SetPixels(0, 0, width, height, colors);
 
+    }
+
+    void ClearStage()
+    {
+        // init variables
+        int length = 8;
+        ball_x = new int[length];
+        ball_y = new int[length];
+        last_ball_x = new int[length];
+        last_ball_y = new int[length];
+        paint_color = new Color[length];
+        last_ball_x[0] = 0;
+        last_ball_y[0] = 0;
+        // clean canvas
+        RefreshCanvas();
+
 		// init properties
 		ball_x[0] = width / 2;
 		ball_y[0] = height / 2;
@@ -534,12 +534,15 @@ public class Canvas : MonoBehaviour {
             Destroy(ball[i]);
         }
         manager.SendMessage("ResetStage");
+    }
 
-
+    void ResetStage()
+    {
+        ClearStage();
         // start game
+        int length = 8;
         ball = new GameObject[length];
         n_ball = 0;
         AddNewBall();
-
     }
 }
