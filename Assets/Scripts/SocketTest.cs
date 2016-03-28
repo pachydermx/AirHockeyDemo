@@ -119,7 +119,7 @@ public class SocketTest : MonoBehaviour {
                                 //Debug.Log("OK");
                                 Baketsu.SetActive(true);
                             }
-                            else if (name.Contains("spray"))
+                            else if (name.Contains("Spray1"))
                             {
                                 Spray.SetActive(true);
                             }
@@ -195,19 +195,19 @@ public class SocketTest : MonoBehaviour {
             {
                 moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
             }
-            Smasher.SendMessage("Move", getRealCoordinate(points["Smasher:Smasher"]));
+            Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
             Baketsu.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0317
-            Spray.transform.position = getRealCoordinate(points["spray:spray"]); // yama 0318
+            Spray.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318
         }
         if (levelSet)
         {
-            if(points["Pen3:Pen3"].z < touchLevel)
+            if(points["Pen1:Pen1"].z < touchLevel)
             {
-                deployWall(getRealCoordinate(points["Pen3:Pen3"]));
+                deployWall(getRealCoordinate(points["Pen1:Pen1"]));
             }
-            if(points["Pen4:Pen4"].z < touchLevel)
+            if(points["Pen2:Pen2"].z < touchLevel)
             {
-                deployWall(getRealCoordinate(points["Pen4:Pen4"]));
+                deployWall(getRealCoordinate(points["Pen2:Pen2"]));
             }
         }
         
@@ -283,7 +283,7 @@ public class SocketTest : MonoBehaviour {
     {
         if (calibrationPointSet < 2)
         {
-            calibrationPoints[calibrationPointSet] = points["Smasher:Smasher"];
+            calibrationPoints[calibrationPointSet] = points["Smasher1:Smasher1"];
             // prepare for next calibration
             calibrationPointSet += 1;
             moveCursor(calibrationDefaults[calibrationPointSet]);
@@ -301,7 +301,7 @@ public class SocketTest : MonoBehaviour {
 
     void setlevel()
     {
-        touchLevel = points["Pen3:Pen3"].z;
+        touchLevel = points["Pen1:Pen1"].z;
         levelSet = true;
     }
 
@@ -363,7 +363,7 @@ public class SocketTest : MonoBehaviour {
 
     void sendPosition(String name) // yama 0318 GimmickDiscrimination
     {
-        if (name.Contains("Spray")) // yama 0321
+        if (name.Contains("Spray1")) // yama 0321
         {
             //Debug.Log("Stop");
             Spray.SendMessage("stopFlag", 1);
