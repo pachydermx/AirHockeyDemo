@@ -205,8 +205,8 @@ public class SocketTest : MonoBehaviour {
                 moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
             }
             Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
-            Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
-            Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
+            //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
+            //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
             Spray1.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
             Spray2.transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
         }

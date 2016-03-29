@@ -37,15 +37,17 @@ public class TCPCommunicator2 : MonoBehaviour {
         {
             if (counter % 100 == 0)
             {
-                if (i < 4)
+                //if (i < 4)
+                if(i == 2)
                 {
-                    Debug.Log("connect:"+host[i]);
+                    
                     try
                     {
                         tcp[i] = new TcpClient(host[i], port+i);
-                        tcp[i].Client.ReceiveTimeout = 1000;
+                        tcp[i].Client.ReceiveTimeout = 100;
                         tcp[i].Connect(host[i], port+i);
                         str[i] = tcp[i].GetStream();
+                        Debug.Log("connect:" + host[i]);
                     } catch (Exception e)
                     {
                         Debug.LogException(e);
@@ -68,15 +70,16 @@ public class TCPCommunicator2 : MonoBehaviour {
         if (str[id] != null)
         {
             str[id].Write(umsg, 0, umsg.Length);
+            Debug.Log("id = " + id + ", dir = " + mes);
         }
-        Debug.Log("id = "+ id +", dir = " + mes);
+        
         //str[1].Write(umsg, 0, umsg.Length);
         //Debug.Log("dir = " + mes);
     }
 
     void controlBaketsu(int id)
     {
-        String mes = 1.ToString();
+        String mes = "1";
         byte[] umsg = Encoding.UTF8.GetBytes(mes);
         str[id].Write(umsg, 0, umsg.Length);
         Debug.Log("id = " + id);

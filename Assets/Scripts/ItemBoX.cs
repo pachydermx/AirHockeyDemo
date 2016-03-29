@@ -80,7 +80,7 @@ public class ItemBoX : MonoBehaviour {
         if(bomb_flag == 1)
         {
             Pack.SendMessage("setFlag", bomb_flag);
-            DefaultBall.SendMessage("changePack");
+            //DefaultBall.SendMessage("changePack");
         }
 
         //0328 tanaka icon
