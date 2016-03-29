@@ -488,26 +488,43 @@ public class Canvas : MonoBehaviour {
         texture.Apply(false);
     }
 
-    void DoSpray(Vector3 position) // yama 0318 Spray Gimmick
+    public void DoSpray(Vector3 position, int id) // yama 0318 Spray Gimmick
     {
         float[] xy0 = { position.x, position.y };
         float rate_x = (float)(xy0[0] / 9.6);
         float rate_y = (float)(xy0[1] / 5.4);
 
         int x = (int)(rate_x * width / 2 + (width / 2));
-        int y = (int)(rate_y * height / 2 + (height / 2)) + 50;
+        //int y = (int)(rate_y * height / 2 + (height / 2)) + 50;
 
-        for (int i = 1; i < 100; i++)
+        if (id == 1)
         {
-            for (int j = 0; j < (i * 2 - 1); j++)
+            int y = (int)(rate_y * height / 2 + (height / 2)) + 50;
+            for (int i = 1; i < 100; i++)
             {
-                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + i * 3, paint_color[0]);
-                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 1 + i * 3, paint_color[0]);
-                texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 2 + i * 3, paint_color[0]);
+                for (int j = 0; j < (i * 2 - 1); j++)
+                {
+                    texture.SetPixel(x + j - (i * 2 - 1) / 2, y + i * 3, paint_color[0]);
+                    texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 1 + i * 3, paint_color[0]);
+                    texture.SetPixel(x + j - (i * 2 - 1) / 2, y + 2 + i * 3, paint_color[0]);
+                }
             }
         }
+        else if(id == 2)
+        {
+            int y = (int)(rate_y * height / 2 + (height / 2)) - 50;
+            for (int i = 1; i < 100; i++)
+            {
+                for (int j = 0; j < (i * 2 - 1); j++)
+                {
+                    texture.SetPixel(x + j - (i * 2 - 1) / 2, y - (i * 3), paint_color[0]);
+                    texture.SetPixel(x + j - (i * 2 - 1) / 2, y - (1 + i * 3), paint_color[0]);
+                    texture.SetPixel(x + j - (i * 2 - 1) / 2, y - (2 + i * 3), paint_color[0]);
+                }
+            }
+        }    
 
-        //Debug.Log("Spray OK");
+        //Debug.Log("Color");
     }
 
 	void DoExplode () {

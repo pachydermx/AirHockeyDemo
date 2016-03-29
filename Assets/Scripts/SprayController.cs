@@ -10,6 +10,8 @@ public class SprayController : MonoBehaviour {
 
     private GameObject manager;
 
+    public int id;
+
 	// Use this for initialization
 	void Start () {
         s_time = 0;
@@ -39,7 +41,8 @@ public class SprayController : MonoBehaviour {
                 direction++;
                 direction %= 2;
                 //Debug.Log("time;"+s_time+", dir;"+direction);
-                manager.SendMessage("controlSpray", direction);
+                manager.GetComponent<TCPCommunicator2>().controlSpray(direction, id); // yama 0328 
+                //manager.SendMessage("controlSpray", direction);
             }
         }
  /*
@@ -61,7 +64,8 @@ public class SprayController : MonoBehaviour {
         s_time = 0;
         Debug.Log("Stop");
         flag = stop;
-        manager.SendMessage("controlSpray", 2);
+        //manager.SendMessage("controlSpray", 2);
+        manager.GetComponent<TCPCommunicator2>().controlSpray(2, id); // yama 0328
         //Invoke("Update", 1);
     }
 
