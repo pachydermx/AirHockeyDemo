@@ -256,6 +256,15 @@ public class Canvas : MonoBehaviour {
         ball[n_ball].gameObject.name = "Ball_" + n_ball;
         manager.SendMessage("AddNewBall", ball[n_ball]);
 
+        // kick off
+        if (kick_off_when_start)
+        {
+            float power = 150;
+            float direction = Random.value * 2 * Mathf.PI;
+            Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
+            ball[n_ball].GetComponent<Rigidbody2D>().AddForce(kick_off);
+        }
+
         n_ball++;
     }
 
