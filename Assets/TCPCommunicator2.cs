@@ -22,24 +22,40 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     static int max = 4;
 
+    private int i = 0;
+    private int counter = 0;
+
     // Use this for initialization
     void Start () {
-        for (int i = 0; i < max; i++)
-        {
-            tcp[i] = new TcpClient(host[i], port+i);
-            tcp[i].Client.ReceiveTimeout = 1000;
-            tcp[i].Connect(host[i], port+i);
-            str[i] = tcp[i].GetStream();
-            Debug.Log("connect:"+host[i]);
-        }
-
         
 
     }
 
     // Update is called once per frame
     void Update () {
-	
+	    if(counter < 1000)
+        {
+            if (counter % 100 == 0)
+            {
+                if (i < 4)
+                {
+                    Debug.Log("connect:"+host[i]);
+                    try
+                    {
+                        tcp[i] = new TcpClient(host[i], port+i);
+                        tcp[i].Client.ReceiveTimeout = 1000;
+                        tcp[i].Connect(host[i], port+i);
+                        str[i] = tcp[i].GetStream();
+                    } catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
+                i++;
+
+            }
+        }
+        counter++;
 	}
 
     public void controlSpray(int dir, int id) // yama 0321
@@ -49,9 +65,20 @@ public class TCPCommunicator2 : MonoBehaviour {
         //byte[] umsg = Encoding.UTF8.GetBytes("1");
         //tcp.Send(umsg, umsg.Length);
         //tcp.
-        str[id].Write(umsg, 0, umsg.Length);
+        if (str[id] != null)
+        {
+            str[id].Write(umsg, 0, umsg.Length);
+        }
         Debug.Log("id = "+ id +", dir = " + mes);
         //str[1].Write(umsg, 0, umsg.Length);
         //Debug.Log("dir = " + mes);
+    }
+
+    void controlBaketsu(int id)
+    {
+        String mes = 1.ToString();
+        byte[] umsg = Encoding.UTF8.GetBytes(mes);
+        str[id].Write(umsg, 0, umsg.Length);
+        Debug.Log("id = " + id);
     }
 }

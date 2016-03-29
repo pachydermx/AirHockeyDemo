@@ -389,9 +389,11 @@ public class SocketTest : MonoBehaviour {
         else if (name.Contains("Baketsu1"))
         {
             Canvas.SendMessage("DoSprinkle", Baketsu1.transform.position);
+            manager.SendMessage("controlBaketsu", 2);
         }else if (name.Contains("Baketsu2"))
         {
             Canvas.SendMessage("DoSprinkle", Baketsu2.transform.position);
+            manager.SendMessage("controlBaketsu", 3);
         }
         else if (name.Contains("ItemBox"))
         {
