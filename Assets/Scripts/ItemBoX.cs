@@ -22,6 +22,10 @@ public class ItemBoX : MonoBehaviour {
     public int clone_flag = 0;
     public int bomb_flag = 0;
 
+    public GameObject bomb_obj;
+    public GameObject split_obj;
+    public GameObject expand_obj;
+
     Ball ball;
     //Canvas script;
 
@@ -42,6 +46,7 @@ public class ItemBoX : MonoBehaviour {
         bomb_flag = 0;
 
         g_flag = 0; // yama 0325 確認用
+        SetObject(g_flag);
     }
 	
 	// Update is called once per frame
@@ -53,6 +58,7 @@ public class ItemBoX : MonoBehaviour {
             time = 0;
             g_flag++;
             g_flag %= 3;
+            SetObject(g_flag);
         }
         
         if(t_flag == 1 && clone_flag == 0)
@@ -124,5 +130,28 @@ public class ItemBoX : MonoBehaviour {
         Pack = ball;
         p_scale = Pack.transform.localScale;
         p_rb = GetComponent<Rigidbody2D>();
+    }
+
+    void SetObject(int g_flag)
+    {
+        // reset objects
+        bomb_obj.SetActive(false);
+        split_obj.SetActive(false);
+        expand_obj.SetActive(false);
+
+        switch (g_flag)
+        {
+            case 0:
+                expand_obj.SetActive(true);
+                break;
+            case 1:
+                split_obj.SetActive(true);
+                break;
+            case 2:
+                bomb_obj.SetActive(true);
+                break;
+            default:
+                break;
+        } 
     }
 }

@@ -10,6 +10,7 @@ public class Main : MonoBehaviour {
     public GameObject start_scene;
 
 	public GameObject canvas;
+    public GameObject itembox;
 
     // for smasher debugging
     public GameObject smasher;
@@ -46,6 +47,8 @@ public class Main : MonoBehaviour {
 
         // switch scene
         start_scene.SetActive(false);
+
+        itembox.SetActive(true);
     }
 	
 	// Update is called once per frame
@@ -56,19 +59,23 @@ public class Main : MonoBehaviour {
 		int force = 100;
 		if (Input.GetKeyDown(KeyCode.UpArrow)){
             for(int i = 0; i < n_ball; i++)
-                ball_rb[i].AddForce(new Vector2(0, force));
+                if(ball_rb[i] != null)
+                    ball_rb[i].AddForce(new Vector2(0, force));
 		}
 		if (Input.GetKeyDown(KeyCode.DownArrow)){
             for(int i = 0; i < n_ball; i++)
-                ball_rb[i].AddForce(new Vector2(0, -force));
+                if(ball_rb[i] != null)
+                    ball_rb[i].AddForce(new Vector2(0, -force));
 		}
 		if (Input.GetKeyDown(KeyCode.LeftArrow)){
             for(int i = 0; i < n_ball; i++)
-                ball_rb[i].AddForce(new Vector2(-force, 0));
+                if(ball_rb[i] != null)
+                    ball_rb[i].AddForce(new Vector2(-force, 0));
 		}
 		if (Input.GetKeyDown(KeyCode.RightArrow)){
             for(int i = 0; i < n_ball; i++)
-                ball_rb[i].AddForce(new Vector2(force, 0));
+                if(ball_rb[i] != null)
+                    ball_rb[i].AddForce(new Vector2(force, 0));
 		}
 
 		// ball sw
