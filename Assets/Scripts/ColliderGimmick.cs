@@ -19,12 +19,14 @@ public class ColliderGimmick : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("on");
         manager.SendMessage("sendPosition", Gimmick.name);
 
     }
 
     void OnCollisionStay2D(Collision2D collision)
     {
+        Debug.Log("On");
         manager.SendMessage("sendPosition", Gimmick.name);
     }
 
@@ -37,11 +39,11 @@ public class ColliderGimmick : MonoBehaviour {
             manager.SendMessage("sendPosition", Gimmick.name);
         //}
     }
-    /*
+    
     void OnTriggerStay2D(Collider2D other)
     {
         Debug.Log("Trigger");
         manager.SendMessage("sendPosition", Gimmick.name);
     }
-    */
+    
 }
