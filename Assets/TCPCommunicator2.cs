@@ -80,7 +80,7 @@ public class TCPCommunicator2 : MonoBehaviour {
                         tcp[i] = new TcpClient(host[i], port+i);
                         tcp[i].Client.ReceiveTimeout = 100;
                         tcp[i].Connect(host[i], tport);
-                        //str[i] = tcp[i].GetStream();
+                        str[i] = tcp[i].GetStream();
                         tmessage += "... OK";
                     } catch (Exception e)
                     {
