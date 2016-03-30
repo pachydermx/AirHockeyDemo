@@ -89,7 +89,7 @@ public class Canvas : MonoBehaviour {
 		}else if(range > default_range)
         {
             itemcount++;
-            if(itemcount >= 100)
+            if(itemcount >= 50)
             {
                 DoBig(default_range);
                 GameObject box = GameObject.Find("ItemBox1");

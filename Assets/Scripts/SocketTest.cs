@@ -85,7 +85,7 @@ public class SocketTest : MonoBehaviour {
         //Process vicon; // yama 0316
         //vicon = Process.Start("/ViconClient.exe"); //yama 0316
 
-        //Baketsu.SetActive(false); // yama 0325 試験的にコメントアウト
+        Baketsu1.SetActive(false); // yama 0325 試験的にコメントアウト
 
     }
 

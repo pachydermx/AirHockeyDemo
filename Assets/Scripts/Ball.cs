@@ -54,6 +54,7 @@ public class Ball : MonoBehaviour {
         canvas.SendMessage("SetCoordinate", xy);
     }
 
+
     void SetID(int new_id)
     {
         id = new_id;
