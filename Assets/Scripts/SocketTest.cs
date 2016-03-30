@@ -137,6 +137,10 @@ public class SocketTest : MonoBehaviour {
                             {
                                 Itembox1.SetActive(true);
                             }
+                            else if (name.Contains("Smasher2"))
+                            {
+                                Smasher2.SetActive(true);
+                            }
                             else
                             {
                                 // create 
