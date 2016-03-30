@@ -31,13 +31,14 @@ public class SocketTest : MonoBehaviour {
     protected Dictionary<string, GameObject> TestCursorList = new Dictionary<string, GameObject>();
 
     // real game object
-    public GameObject Smasher;
+    public GameObject Smasher1;
+    public GameObject Smasher2;
     public GameObject Baketsu1; // yama 0317
     public GameObject Baketsu2; // yama 0328
     public GameObject Spray1; // yama 0328
     public GameObject Spray2; // yama 0328
     public GameObject manager; // yama 0321
-    public GameObject Itembox; // yama 0323
+    public GameObject Itembox1; // yama 0323
 
     // calibration
     protected Vector3[] calibrationPoints = new Vector3[4];
@@ -118,7 +119,7 @@ public class SocketTest : MonoBehaviour {
                         {
                             if (name.Contains("baketsu1")) // 0317 yama <--
                             {
-                                //Debug.Log("OK");
+                                Debug.Log("OK");
                                 Baketsu1.SetActive(true);
                             }else if (name.Contains("baketsu2"))
                             {
@@ -131,6 +132,10 @@ public class SocketTest : MonoBehaviour {
                             else if (name.Contains("Spray2"))
                             {
                                 Spray2.SetActive(true);
+                            }
+                            else if (name.Contains("ItemBox1"))
+                            {
+                                Itembox1.SetActive(true);
                             }
                             else
                             {
@@ -204,11 +209,15 @@ public class SocketTest : MonoBehaviour {
             {
                 moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
             }
-            Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
+            Smasher1.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
+            Smasher2.SendMessage("Move", getRealCoordinate(points["Smasher2:Smasher2"]));
             //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
             //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
             Spray1.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
             Spray2.transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
+            Itembox1.transform.position = //getRealCoordinate(points["ItemBox1:ItemBox1"]); //0330 tanaka 
+            new Vector3(getRealCoordinate(points["ItemBox1:ItemBox1"]).x - 0.15f, getRealCoordinate(points["ItemBox1:ItemBox1"]).y + 0.25f, -2.0f); //getRealCoordinate(points["ItemBox1:ItemBox1"]); //0330 tanaka
+            //Itembox1.transform.position = new Vector3(Itembox1.transform.position.x, Itembox1.transform.position.y, 0.5f);
         }
         if (levelSet)
         {
@@ -303,7 +312,7 @@ public class SocketTest : MonoBehaviour {
             calibrationComplete = true;
             Cursor.SetActive(false);
 
-            Smasher.SetActive(true);
+            Smasher1.SetActive(true);
         }
         for (int i = 0; i < 2; i++) 
             Debug.Log(calibrationPoints[i]); 
@@ -354,7 +363,7 @@ public class SocketTest : MonoBehaviour {
             levelSet = true;
 
             // config objects
-            Smasher.SetActive(true);
+            Smasher1.SetActive(true);
 
             Debug.Log("Calibration Loaded."); 
         } else
@@ -395,9 +404,9 @@ public class SocketTest : MonoBehaviour {
             Canvas.SendMessage("DoSprinkle", Baketsu2.transform.position);
             manager.SendMessage("controlBaketsu", 3);
         }
-        else if (name.Contains("ItemBox"))
+        else if (name.Contains("ItemBox1"))
         {
-            Itembox.SendMessage("ItemUse");
+            Itembox1.SendMessage("ItemUse");
         }
     }
 }
@@ -452,7 +461,7 @@ public class Communicator
                     Debug.LogWarning(e.ToString());
                 }
 
-                clock--;
+                //clock--;
                 if(clock < 0)
                 {
                     break;

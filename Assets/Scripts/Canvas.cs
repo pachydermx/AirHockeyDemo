@@ -92,7 +92,7 @@ public class Canvas : MonoBehaviour {
             if(itemcount >= 100)
             {
                 DoBig(default_range);
-                GameObject box = GameObject.Find("ItemBox");
+                GameObject box = GameObject.Find("ItemBox1");
                 ItemBoX s = box.GetComponent<ItemBoX>();
                 //ball[0].transform.localScale = new Vector3(ball[0].transform.localScale.x / 1.5f, ball[0].transform.localScale.y / 1.5f, 1);
                 ball[0].transform.localScale = new Vector3(s.p_scale.x , s.p_scale.y, 1);
@@ -224,7 +224,7 @@ public class Canvas : MonoBehaviour {
         if (n_ball == 0) // yama 0325 初期パックの設定
         {
             ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
-            GameObject box = GameObject.Find("ItemBox");
+            GameObject box = GameObject.Find("ItemBox1");
             box.SendMessage("setBallOriginal", ball[n_ball]);
 
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用

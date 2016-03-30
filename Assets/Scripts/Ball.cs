@@ -54,11 +54,6 @@ public class Ball : MonoBehaviour {
         canvas.SendMessage("SetCoordinate", xy);
     }
 
-    void changePack()
-    {
-        MainSpriteRenderer.sprite = BombPack;
-    }
-
     void SetID(int new_id)
     {
         id = new_id;
