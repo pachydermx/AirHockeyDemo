@@ -488,8 +488,14 @@ public class Canvas : MonoBehaviour {
         texture.Apply(false);
     }
 
-    public void DoSpray(Vector3 position, int id) // yama 0318 Spray Gimmick
+    public void DoSpray(float[] posnid)
     {
+        DoSprayLegacy(new Vector3(posnid[0], posnid[1], posnid[2]), (int)posnid[3]);
+    }
+
+    public void DoSprayLegacy(Vector3 position, int id) // yama 0318 Spray Gimmick
+    {
+        Debug.Log(id);
         float[] xy0 = { position.x, position.y };
         float rate_x = (float)(xy0[0] / 9.6);
         float rate_y = (float)(xy0[1] / 5.4);

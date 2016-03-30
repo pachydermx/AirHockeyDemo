@@ -67,7 +67,7 @@ public class SprayController : MonoBehaviour {
         flag = stop;
         //manager.SendMessage("controlSpray", 2);
         //manager.GetComponent<TCPCommunicator2>().controlSpray(2, id); // yama 0328
-        manager.SendMessage("controlSpray", 2);
+        //manager.SendMessage("controlSpray", 2);
         //Invoke("Update", 1);
     }
 

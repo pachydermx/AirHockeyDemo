@@ -91,7 +91,7 @@ public class SocketTest : MonoBehaviour {
 
     void Update()
     {
-        c.clock = 100;
+        c.clock = 500;
 
         // split dtext
         rawInputs = dtext.Split('&');
@@ -225,6 +225,7 @@ public class SocketTest : MonoBehaviour {
         }
         if (levelSet)
         {
+            /*
             if(points["Pen1:Pen1"].z < touchLevel)
             {
                 deployWall(getRealCoordinate(points["Pen1:Pen1"]));
@@ -233,6 +234,7 @@ public class SocketTest : MonoBehaviour {
             {
                 deployWall(getRealCoordinate(points["Pen2:Pen2"]));
             }
+            */
         }
         
         if (Input.GetKeyDown(KeyCode.Q)) { // yama 0316 finish viconclient
@@ -390,14 +392,23 @@ public class SocketTest : MonoBehaviour {
         {
             //Debug.Log("Gimmick name:"+Spray1.name);
             Spray1.SendMessage("stopFlag", 1);
-            Canvas.GetComponent<Canvas>().DoSpray(Spray1.transform.position, 1);
+            //Canvas.GetComponent<Canvas>().DoSpray(Spray1.transform.position, 1);
+            float[] msg = { Spray1.transform.position.x, Spray1.transform.position.y, Spray1.transform.position.z, 1.0f};
             //Canvas.SendMessage("DoSpray", Spray1.transform.position);
+            Debug.Log(msg[0]);
+            Debug.Log(msg[1]);
+            Debug.Log(msg[2]);
+            Debug.Log(msg[3]);
+            Canvas.SendMessage("DoSpray", msg);
+
         }
         else if (name.Contains("Spray2"))
         {
             Spray2.SendMessage("stopFlag", 1);
-            Canvas.GetComponent<Canvas>().DoSpray(Spray2.transform.position, 2);
+            //Canvas.GetComponent<Canvas>().DoSpray(Spray2.transform.position, 2);
+            float[] msg = { Spray2.transform.position.x, Spray2.transform.position.y, Spray2.transform.position.z, 2.0f};
             //Canvas.SendMessage("DoSpray", Spray2.transform.position);
+            Canvas.SendMessage("DoSpray", msg);
         }
         else if (name.Contains("Baketsu1"))
         {
@@ -421,7 +432,7 @@ public class Communicator
     Socket client;
     bool receiving = false;
 
-    public int clock = 100;
+    public int clock = 500;
 
     public SocketTest st;
 
@@ -465,7 +476,7 @@ public class Communicator
                     Debug.LogWarning(e.ToString());
                 }
 
-                //clock--;
+                clock--;
                 if(clock < 0)
                 {
                     break;

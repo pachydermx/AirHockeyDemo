@@ -36,6 +36,10 @@ public class Smasher : MonoBehaviour {
     void Move (Vector3 position)
     {
         this.gameObject.transform.position = position;
+        if (rb == null)
+        {
+            rb = this.gameObject.GetComponent<Rigidbody2D>();
+        }
         rb.velocity = (position - last_position) * last_framerate / 10;
         //Debug.Log(last_framerate + ", " + rb.velocity.magnitude);
     }
