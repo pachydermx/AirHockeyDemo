@@ -7,13 +7,12 @@ using System.Threading;
 using System.Text;
 
 public class TCPCommunicator2 : MonoBehaviour {
-    /*
     string[] host = new String[4] { "192.168.1.190",
                                     "192.168.1.191",
                                     "192.168.1.192",
                                     "192.168.1.193"};
-                                    */
 
+    /*
     string[] host = new String[4]
     {
         "localhost",
@@ -21,6 +20,7 @@ public class TCPCommunicator2 : MonoBehaviour {
         "localhost",
         "localhost"
     };
+    */
     int port = 10001;
     static TcpClient[] tcp = new TcpClient[4];
     static NetworkStream[] str = new NetworkStream[4];
@@ -70,8 +70,7 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     public void init_connection()
     {
-                //if (i < 4)
-                if(i == 2)
+                if (i < 4)
                 {
                     int tport = port + i;
                     tmessage = "Connecting Peer " + i + "(" + host[i] + ", " + tport + ")";
