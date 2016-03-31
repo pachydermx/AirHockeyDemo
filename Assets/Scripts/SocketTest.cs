@@ -91,7 +91,7 @@ public class SocketTest : MonoBehaviour {
 
     void Update()
     {
-        c.clock = 500;
+        c.clock = 5000;
 
         // split dtext
         rawInputs = dtext.Split('&');
@@ -432,7 +432,7 @@ public class Communicator
     Socket client;
     bool receiving = false;
 
-    public int clock = 500;
+    public int clock = 5000;
 
     public SocketTest st;
 

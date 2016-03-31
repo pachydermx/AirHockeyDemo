@@ -637,6 +637,11 @@ public class Canvas : MonoBehaviour {
             Destroy(ball[i]);
         }
         manager.SendMessage("ResetStage");
+
+        // reset display
+        animateCounter = 0;
+        P1Display.transform.localScale = new Vector3(1, 110, 1);
+        P2Display.transform.localScale = new Vector3(1, 110, 1);
     }
 
     void ResetStage()
