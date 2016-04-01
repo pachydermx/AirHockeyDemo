@@ -32,9 +32,6 @@ public class Ball : MonoBehaviour {
         p1_ball = this.gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         p2_ball = this.gameObject.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
 
-        // tell manager color
-        //manager.SendMessage("SetColors", player_color);
-
         Player(default_pid);
     }
 

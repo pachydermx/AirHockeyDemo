@@ -55,6 +55,9 @@ public class Canvas : MonoBehaviour {
     // settings
     public bool kick_off_when_start = true;
 
+    // debug
+    public int counter = 10;
+
 	// Use this for initialization
 	void Start () {
 
@@ -564,10 +567,11 @@ public class Canvas : MonoBehaviour {
         scores[0] = 0;
         scores[1] = 0;
         Color[] canvas_colors = texture.GetPixels(0, 0, width, height);
+        Color[] paint_color = manager.GetComponent<Main>().colors;
         for (int i = 0; i < width * height; ++i) {
             if (!canvas_colors[i].Equals(Color.clear))
             {
-                if (canvas_colors[i].r <= 0.5) {
+                if (CompareColors(canvas_colors[i], paint_color[1])) {
                     scores[0]++;
                 } else { 
                     scores[1]++;
@@ -576,6 +580,22 @@ public class Canvas : MonoBehaviour {
             }
         }
         Debug.Log("Score " + scores[0] + " : " + scores[1]);
+    }
+
+    bool CompareColors(Color color1, Color color2)
+    {
+        float delta_r = Mathf.Abs(color1.r - color2.r);
+        float delta_g = Mathf.Abs(color1.g - color2.g);
+        float delta_b = Mathf.Abs(color1.b - color2.b);
+        float delta_a = Mathf.Abs(color1.a - color2.a);
+        float delta = delta_r + delta_g + delta_b + delta_a;
+        if (delta < 0.1)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 
     void StartScoreShow()

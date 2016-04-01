@@ -5,7 +5,7 @@ public class Main : MonoBehaviour {
 	public GameObject[] ball;
 	private Rigidbody2D[] ball_rb;
     private int n_ball;
-    private Color[] colors;
+    public Color[] colors;
 
     public GameObject start_scene;
 
@@ -56,7 +56,7 @@ public class Main : MonoBehaviour {
 
 	}
 
-    void ResetStage(bool will_set_timer)
+    void ResetStage(bool new_stage)
     {
         // init variables
         int length = 8;
@@ -70,11 +70,17 @@ public class Main : MonoBehaviour {
         itembox.SetActive(true);
 
         // reset timer
-        if (will_set_timer)
+        if (new_stage)
         {
+            // reset timer
             remaining_time = stage_duration;
             CancelInvoke("TimeDecrease");
             InvokeRepeating("TimeDecrease", 0.0f, 1.0f);
+            // pick colors
+            colors = PickColors();
+            // set score display
+            GameObject.Find("P1Display").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = colors[1];
+            GameObject.Find("P2Display").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = colors[2];
         }
     }
 
@@ -196,13 +202,7 @@ public class Main : MonoBehaviour {
         ball[n_ball] = new_ball;
         ball_rb[n_ball] = new_ball.GetComponent<Rigidbody2D>();
 
-        // pick colors
-        Color[] paint_color = PickColors();
-        new_ball.GetComponent<Ball>().player_color = paint_color;
-        
-        if(n_ball > 0)
-        {
-        }
+        new_ball.GetComponent<Ball>().player_color = colors;
         
         n_ball++;
     }
