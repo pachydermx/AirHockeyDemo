@@ -16,6 +16,16 @@ public class Main : MonoBehaviour {
     public GameObject smasher;
     private bool smasher_controlled_by_mouse = false;
 
+    public Color[] available_colors = {
+        new Color(1.0f, 0.176470588235f, 0.176470588235f, 0.5f),
+        new Color(1.0f, 0.823529411765f, 0.0f, 0.5f),
+        new Color(0.0941176470588f, 1.0f, 0.0f, 0.5f),
+        new Color(0.211764705882f, 0.0f, 1.0f, 0.5f),
+        new Color(0.988235294118f, 0.0f, 1.0f, 0.5f),
+        new Color(.453125F, .796875F, 1.0F, 0.5F),
+        new Color(1.0F, .5859375F, .89453125F, 0.5F)
+    };
+
 	// Use this for initialization
 	void Start () {
         /*
@@ -39,6 +49,7 @@ public class Main : MonoBehaviour {
 
     void ResetStage()
     {
+
         // init variables
         int length = 8;
         ball = new GameObject[length];
@@ -49,6 +60,22 @@ public class Main : MonoBehaviour {
         start_scene.SetActive(false);
 
         itembox.SetActive(true);
+    }
+
+    Color[] PickColors()
+    {
+        Color[] result = new Color[3];
+        int id1 = Random.Range(0, available_colors.Length);
+        int id2 = Random.Range(0, available_colors.Length);
+        while (id1.Equals(id2))
+        {
+            id2 = Random.Range(0, available_colors.Length);
+        }
+        result[0] = Color.clear;
+        result[1] = available_colors[id1];
+        result[2] = available_colors[id2];
+
+        return result;
     }
 	
 	// Update is called once per frame
@@ -141,6 +168,10 @@ public class Main : MonoBehaviour {
     {
         ball[n_ball] = new_ball;
         ball_rb[n_ball] = new_ball.GetComponent<Rigidbody2D>();
+
+        // pick colors
+        Color[] paint_color = PickColors();
+        new_ball.GetComponent<Ball>().player_color = paint_color;
         
         if(n_ball > 0)
         {
