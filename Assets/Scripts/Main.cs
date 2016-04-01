@@ -87,7 +87,16 @@ public class Main : MonoBehaviour {
 
     void TimeDecrease()
     {
-        timer.ShowText(remaining_time.ToString("#."), true);
+        if (remaining_time <= 5)
+        {
+            timer.ShowText(remaining_time.ToString("#."), true);
+        } else if (remaining_time == stage_duration)
+        {
+            timer.ShowText("START", true);
+        } else
+        {
+            timer.ShowText("", false);
+        }
         remaining_time -= 1.0f;
         if (remaining_time < 0)
         {

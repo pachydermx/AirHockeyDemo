@@ -66,15 +66,22 @@ public class Canvas : MonoBehaviour {
     // debug
     public int counter = 10;
 
+    // paint
+    private Vector3[] last_paint_position;
+
 	// Use this for initialization
 	void Start () {
-
+        // init variables
+        last_paint_position = new Vector3[3];
 		// init texture
 		texture = image.texture as Texture2D;
         normal_texture = normal.texture as Texture2D;
 
         RefreshCanvas();
         ResetStage();
+
+        // debug
+        //Debug.Log(Vector3.Angle(new Vector3(1, 0, 0), new Vector3(-1, 1, 0)));
 	}
 
 	// Update is called once per frame
@@ -559,17 +566,45 @@ public class Canvas : MonoBehaviour {
 	}
 
     void DeployWall (Vector2 mouse_position) {
+        int id;
         if (mouse_position.x < 0)
         {
-            GameObject nw = (GameObject)Instantiate(wall, mouse_position, Quaternion.identity);
-            nw.GetComponent<SpriteRenderer>().color = colors[1];
-            nw.GetComponent<ColliderMessenager>().player_id = 1;
+            id = 1;
         } else
         {
-            GameObject nw = (GameObject)Instantiate(wall, mouse_position, Quaternion.identity);
-            nw.GetComponent<SpriteRenderer>().color = colors[2];
-            nw.GetComponent<ColliderMessenager>().player_id = 2;
+            id = 2;
         }
+        // calc
+        Vector3 current_position = new Vector3(mouse_position.x, mouse_position.y, -1);
+        Vector3 size;
+        Quaternion point_to;
+        Vector3 delta = last_paint_position[id] - current_position;
+        Debug.Log(delta);
+        if (delta.magnitude < 1)
+        {
+            if (delta.y > 0) {
+                point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta.normalized, new Vector3(1, 0, 0))));
+            } else if (delta.x < 0)
+            {
+                point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta, new Vector3(0, 1, 0)) + 90));
+            } else
+            {
+                point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta, new Vector3(0, 1, 0)) + 180));
+            }
+            size = new Vector3(delta.magnitude * 10, 1, 1);
+        } else
+        {
+            size = new Vector3(1, 1, 1);
+            point_to = Quaternion.identity;
+        }
+        // deploy
+        GameObject nw = (GameObject)Instantiate(wall, current_position, point_to);
+        nw.transform.localScale = size;
+        GameObject nwp = nw.transform.GetChild(0).gameObject;
+        nwp.GetComponent<SpriteRenderer>().color = colors[id];
+        nw.GetComponent<ColliderMessenager>().player_id = id;
+        // log
+        last_paint_position[id] = current_position;
 	}
 
     void DoBig(int size)
