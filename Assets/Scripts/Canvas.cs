@@ -8,6 +8,13 @@ public class Canvas : MonoBehaviour {
     public GameObject wall;
     public GameObject manager;
 
+    public AudioClip split_sound;
+    public float split_sound_volume = 1.0f;
+    public AudioClip spray_sound;
+    public float spray_sound_volume = 0.3f;
+    public AudioClip explode_sound;
+    public float explode_sound_volume = 1.0f;
+
     // textures
 	public RawImage image;
     public RawImage normal;
@@ -270,6 +277,9 @@ public class Canvas : MonoBehaviour {
         }
 
         n_ball++;
+
+        // sound effect
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(split_sound, split_sound_volume);
     }
 
 
@@ -535,13 +545,17 @@ public class Canvas : MonoBehaviour {
                     texture.SetPixel(x + j - (i * 2 - 1) / 2, y - (2 + i * 3), paint_color[0]);
                 }
             }
-        }    
+        }
 
         //Debug.Log("Color");
+        // sound effect
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(spray_sound, spray_sound_volume);
     }
 
 	void DoExplode () {
 		range = 200;
+        // sound effect
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(explode_sound, explode_sound_volume);
 	}
 
     void DeployWall (Vector2 mouse_position) {
