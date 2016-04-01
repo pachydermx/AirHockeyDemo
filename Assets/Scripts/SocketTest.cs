@@ -60,80 +60,100 @@ public class SocketTest : MonoBehaviour {
 
     protected System.Diagnostics.Process vicon; // yama 0316
 
+    // settings
+    public bool enabled;
+
     void Start()
     {
-        // config server
-        c = new Communicator();
+        if (enabled)
+        {
 
-        // config communicator
-        c.st = this;
-        debugText = DebugText.GetComponent<UnityEngine.UI.Text>();
+            // config server
+            c = new Communicator();
 
-        c.initServer();
+            // config communicator
+            c.st = this;
+            debugText = DebugText.GetComponent<UnityEngine.UI.Text>();
 
-        // start calibration
-        moveCursor(calibrationDefaults[calibrationPointSet]);
+            c.initServer();
 
-        // request vicon info from socket
-        // raw message will be set to dtext variable
-        tid = new Thread(new ThreadStart(c.GetInfo));
-        tid.Start();
+            // start calibration
+            moveCursor(calibrationDefaults[calibrationPointSet]);
 
-        // execute vicon client
-        vicon = System.Diagnostics.Process.Start(Application.dataPath + "/ViconClient.exe");
-        //Process vicon; // yama 0316
-        //vicon = Process.Start("/ViconClient.exe"); //yama 0316
+            // request vicon info from socket
+            // raw message will be set to dtext variable
+            tid = new Thread(new ThreadStart(c.GetInfo));
+            tid.Start();
 
-        //Baketsu.SetActive(false); // yama 0325 試験的にコメントアウト
+            // execute vicon client
+            vicon = System.Diagnostics.Process.Start(Application.dataPath + "/ViconClient.exe");
+            //Process vicon; // yama 0316
+            //vicon = Process.Start("/ViconClient.exe"); //yama 0316
+
+            //Baketsu.SetActive(false); // yama 0325 試験的にコメントアウト
+        }
 
     }
 
     void Update()
     {
-        c.clock = 100;
-
-        // split dtext
-        rawInputs = dtext.Split('&');
-        foreach(string rawInput in rawInputs)
+        if (enabled)
         {
-            // get coordinate from dtext
-            // parse dtext into dictionary
-            // split dtext for analyze
-            infoFromText = rawInput.Split(',');
-            if (infoFromText.Length >= 4)
-            {
-                // test if valid
-                infoTester = infoFromText[0].Split(':');
-                if (infoTester.Length == 2)
-                {
-                    if (infoTester[0].Equals(infoTester[1]))
-                    {
-                        string name = infoFromText[0];
-                        Vector3 position = new Vector3(float.Parse(infoFromText[1]), float.Parse(infoFromText[2]), float.Parse(infoFromText[3]));
-                        // get vector (for dictionary)
-                        points[infoFromText[0]] = position;
+            c.clock = 100;
 
-                        // create cursors
-                        if (!TestCursorList.ContainsKey(name))
+            // split dtext
+            rawInputs = dtext.Split('&');
+            foreach(string rawInput in rawInputs)
+            {
+                // get coordinate from dtext
+                // parse dtext into dictionary
+                // split dtext for analyze
+                infoFromText = rawInput.Split(',');
+                if (infoFromText.Length >= 4)
+                {
+                    // test if valid
+                    infoTester = infoFromText[0].Split(':');
+                    if (infoTester.Length == 2)
+                    {
+                        if (infoTester[0].Equals(infoTester[1]))
                         {
-                            if (name.Contains("baketsu1")) // 0317 yama <--
+                            string name = infoFromText[0];
+                            Vector3 position = new Vector3(float.Parse(infoFromText[1]), float.Parse(infoFromText[2]), float.Parse(infoFromText[3]));
+                            // get vector (for dictionary)
+                            points[infoFromText[0]] = position;
+
+                            // create cursors
+                            if (!TestCursorList.ContainsKey(name))
                             {
-                                //Debug.Log("OK");
-                                Baketsu1.SetActive(true);
-                            }else if (name.Contains("baketsu2"))
-                            {
-                                Baketsu2.SetActive(true);
-                            }
-                            else if (name.Contains("Spray1"))
-                            {
-                                Spray1.SetActive(true);
-                            }
-                            else if (name.Contains("Spray2"))
-                            {
-                                Spray2.SetActive(true);
-                            }
-                            else
-                            {
+                                if (name.Contains("baketsu1")) // 0317 yama <--
+                                {
+                                    //Debug.Log("OK");
+                                    Baketsu1.SetActive(true);
+                                }else if (name.Contains("baketsu2"))
+                                {
+                                    Baketsu2.SetActive(true);
+                                }
+                                else if (name.Contains("Spray1"))
+                                {
+                                    Spray1.SetActive(true);
+                                }
+                                else if (name.Contains("Spray2"))
+                                {
+                                    Spray2.SetActive(true);
+                                }
+                                else
+                                {
+                                    // create 
+                                    GameObject newCursor = (GameObject)Instantiate(TestCursor, Vector3.zero, Quaternion.identity);
+                                    // set parent
+                                    newCursor.transform.parent = Canvas.transform;
+                                    TestCursorList.Add(name, newCursor);
+
+                                    // create counter
+                                    counter.Add(name, 0);
+                                } // -->
+
+                                /*
                                 // create 
                                 GameObject newCursor = (GameObject)Instantiate(TestCursor, Vector3.zero, Quaternion.identity);
                                 // set parent
@@ -142,89 +162,80 @@ public class SocketTest : MonoBehaviour {
 
                                 // create counter
                                 counter.Add(name, 0);
-                            } // -->
-
-                            /*
-                            // create 
-                            GameObject newCursor = (GameObject)Instantiate(TestCursor, Vector3.zero, Quaternion.identity);
-                            // set parent
-                            newCursor.transform.parent = Canvas.transform;
-                            TestCursorList.Add(name, newCursor);
-
-                            // create counter
-                            counter.Add(name, 0);
-                            */
+                                */
+                            }
+                            
+                            //counter[name] += 1; // yama 0317
                         }
-                        
-                        //counter[name] += 1; // yama 0317
                     }
                 }
             }
-        }
 
 
-        // generate debg text
-        string dictext = "";
-        foreach(KeyValuePair<string, Vector3> entry in points)
-        {
-            dictext += entry.Key + " - (" + entry.Value.x + ", " + entry.Value.y + ", " + entry.Value.z + ") \n";
-        }
-        /*
-        foreach(KeyValuePair<string, int> entry in counter)
-        {
-            dictext += entry.Key + " - " + entry.Value + "\n";
-        }
-        */
-        // display info
-        debugText.text = dictext;
-
-        // do calibrate
-        if (Input.GetKeyDown(KeyCode.F14))
-        {
-            setCalibrationPoint();
-        }
-        if (Input.GetKeyDown(KeyCode.F15))
-        {
-            setlevel();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            loadSetting();
-        }
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            saveSetting();
-        }
-
-        // move cursor for debug
-        if (calibrationComplete)
-        {
+            // generate debg text
+            string dictext = "";
             foreach(KeyValuePair<string, Vector3> entry in points)
             {
-                moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
+                dictext += entry.Key + " - (" + entry.Value.x + ", " + entry.Value.y + ", " + entry.Value.z + ") \n";
             }
-            Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
-            //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
-            //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
-            Spray1.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
-            Spray2.transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
-        }
-        if (levelSet)
-        {
-            if(points["Pen1:Pen1"].z < touchLevel)
+            /*
+            foreach(KeyValuePair<string, int> entry in counter)
             {
-                deployWall(getRealCoordinate(points["Pen1:Pen1"]));
+                dictext += entry.Key + " - " + entry.Value + "\n";
             }
-            if(points["Pen2:Pen2"].z < touchLevel)
+            */
+            // display info
+            debugText.text = dictext;
+
+            // do calibrate
+            if (Input.GetKeyDown(KeyCode.F14))
             {
-                deployWall(getRealCoordinate(points["Pen2:Pen2"]));
+                setCalibrationPoint();
             }
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Q)) { // yama 0316 finish viconclient
-            vicon.CloseMainWindow();
-            vicon.Close();
+            if (Input.GetKeyDown(KeyCode.F15))
+            {
+                setlevel();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                loadSetting();
+            }
+            if (Input.GetKeyDown(KeyCode.F2))
+            {
+                saveSetting();
+            }
+
+            // move cursor for debug
+            if (calibrationComplete)
+            {
+                foreach(KeyValuePair<string, Vector3> entry in points)
+                {
+                    moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
+                }
+                Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
+                //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
+                //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
+                Spray1.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
+                Spray2.transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
+            }
+            if (levelSet)
+            {
+                if(points["Pen1:Pen1"].z < touchLevel)
+                {
+                    deployWall(getRealCoordinate(points["Pen1:Pen1"]));
+                }
+                if(points["Pen2:Pen2"].z < touchLevel)
+                {
+                    deployWall(getRealCoordinate(points["Pen2:Pen2"]));
+                }
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Q)) { // yama 0316 finish viconclient
+                vicon.CloseMainWindow();
+                vicon.Close();
+            }
+
         }
     }
 

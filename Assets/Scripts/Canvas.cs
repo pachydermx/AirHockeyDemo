@@ -53,7 +53,7 @@ public class Canvas : MonoBehaviour {
     private float angle = 150;
 
     // settings
-    private bool kick_off_when_start = true;
+    public bool kick_off_when_start = true;
 
 	// Use this for initialization
 	void Start () {
@@ -62,8 +62,8 @@ public class Canvas : MonoBehaviour {
 		texture = image.texture as Texture2D;
         normal_texture = normal.texture as Texture2D;
 
-        //ResetStage();
         RefreshCanvas();
+        ResetStage();
 	}
 
 	// Update is called once per frame
