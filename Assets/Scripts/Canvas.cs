@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Canvas : MonoBehaviour {
 	public GameObject p1_wall;
 	public GameObject p2_wall;
+    public GameObject wall;
     public GameObject manager;
 
     // textures
@@ -14,7 +15,7 @@ public class Canvas : MonoBehaviour {
     private Texture2D normal_texture;
 
 	private Color[] paint_color;
-    private Color[] colors;
+    public Color[] colors;
 	private int[] ball_x;
 	private int[] ball_y;
     private int n_ball;
@@ -545,11 +546,16 @@ public class Canvas : MonoBehaviour {
 
     void DeployWall (Vector2 mouse_position) {
         if (mouse_position.x < 0)
-            Instantiate(p1_wall, mouse_position, Quaternion.identity);
-            
-
-        if (mouse_position.x > 0)
-			Instantiate(p2_wall, mouse_position, Quaternion.identity);
+        {
+            GameObject nw = (GameObject)Instantiate(wall, mouse_position, Quaternion.identity);
+            nw.GetComponent<SpriteRenderer>().color = colors[1];
+            nw.GetComponent<ColliderMessenager>().player_id = 1;
+        } else
+        {
+            GameObject nw = (GameObject)Instantiate(wall, mouse_position, Quaternion.identity);
+            nw.GetComponent<SpriteRenderer>().color = colors[2];
+            nw.GetComponent<ColliderMessenager>().player_id = 2;
+        }
 	}
 
     void DoBig(int size)

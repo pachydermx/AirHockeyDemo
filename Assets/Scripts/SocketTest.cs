@@ -28,6 +28,7 @@ public class SocketTest : MonoBehaviour {
     public GameObject Canvas;
     public GameObject p1_wall;
     public GameObject p2_wall;
+    public GameObject wall;
     protected Dictionary<string, GameObject> TestCursorList = new Dictionary<string, GameObject>();
 
     // real game object
@@ -243,13 +244,13 @@ public class SocketTest : MonoBehaviour {
     {
         if(position.x > 0)
         {
-            GameObject nw = (GameObject)Instantiate(p1_wall, Vector3.zero, Quaternion.identity);
+            GameObject nw = (GameObject)Instantiate(wall, Vector3.zero, Quaternion.identity);
             nw.transform.parent = Canvas.transform;
             nw.transform.position = position;
 
         } else
         {
-            GameObject nw = (GameObject)Instantiate(p2_wall, Vector3.zero, Quaternion.identity);
+            GameObject nw = (GameObject)Instantiate(wall, Vector3.zero, Quaternion.identity);
             nw.transform.parent = Canvas.transform;
             nw.transform.position = position;
         }

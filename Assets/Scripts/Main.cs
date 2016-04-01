@@ -78,6 +78,7 @@ public class Main : MonoBehaviour {
             InvokeRepeating("TimeDecrease", 0.0f, 1.0f);
             // pick colors
             colors = PickColors();
+            SetColors();
             // set score display
             GameObject.Find("P1Display").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = colors[1];
             GameObject.Find("P2Display").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = colors[2];
@@ -190,10 +191,8 @@ public class Main : MonoBehaviour {
 	}
     */
 
-    void SetColors(Color[] received_colors)
+    void SetColors()
     {
-        colors = received_colors;
-        // tell canvas
         canvas.SendMessage("SetColors", colors);
     }
 	
