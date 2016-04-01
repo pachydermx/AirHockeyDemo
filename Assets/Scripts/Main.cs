@@ -12,6 +12,10 @@ public class Main : MonoBehaviour {
 	public GameObject canvas;
     public GameObject itembox;
 
+    // timer
+    public float stage_duration = 30;
+    private float remaining_time;
+
     // for smasher debugging
     public GameObject smasher;
     private bool smasher_controlled_by_mouse = false;
@@ -26,6 +30,9 @@ public class Main : MonoBehaviour {
         new Color(1.0F, .5859375F, .89453125F, 0.5F)
     };
 
+    // timer
+    private Timer timer;
+
 	// Use this for initialization
 	void Start () {
         /*
@@ -34,6 +41,8 @@ public class Main : MonoBehaviour {
         ball = new GameObject[length];
         ball_rb = new Rigidbody2D[length];
         */
+        // get objects
+        timer = GameObject.Find("Timer").GetComponent<Timer>();
 
         // set framerate
         Application.targetFrameRate = 120;
@@ -47,9 +56,8 @@ public class Main : MonoBehaviour {
 
 	}
 
-    void ResetStage()
+    void ResetStage(bool will_set_timer)
     {
-
         // init variables
         int length = 8;
         ball = new GameObject[length];
@@ -60,6 +68,25 @@ public class Main : MonoBehaviour {
         start_scene.SetActive(false);
 
         itembox.SetActive(true);
+
+        // reset timer
+        if (will_set_timer)
+        {
+            remaining_time = stage_duration;
+            CancelInvoke("TimeDecrease");
+            InvokeRepeating("TimeDecrease", 0.0f, 1.0f);
+        }
+    }
+
+    void TimeDecrease()
+    {
+        timer.ShowText(remaining_time.ToString("#."), true);
+        remaining_time -= 1.0f;
+        if (remaining_time < 0)
+        {
+            CancelInvoke("TimeDecrease");
+            canvas.SendMessage("StartScoreShow");
+        }
     }
 
     Color[] PickColors()

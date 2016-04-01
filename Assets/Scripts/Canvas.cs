@@ -582,7 +582,7 @@ public class Canvas : MonoBehaviour {
     {
         GetScore();
 
-        ClearStage();
+        ClearStage(false);
 
         int sum = scores[0] + scores[1];
         float rate_1 = (float)scores[0] / sum;
@@ -615,7 +615,7 @@ public class Canvas : MonoBehaviour {
 
     }
 
-    void ClearStage()
+    void ClearStage(bool will_set_timer)
     {
         // init variables
         int length = 8;
@@ -639,12 +639,16 @@ public class Canvas : MonoBehaviour {
         {
             Destroy(ball[i]);
         }
-        manager.SendMessage("ResetStage");
+        manager.SendMessage("ResetStage", will_set_timer);
     }
 
     void ResetStage()
     {
-        ClearStage();
+        ClearStage(true);
+        // reset score animation
+        P1Display.transform.localScale = new Vector3(1, 110, 1);
+        P2Display.transform.localScale = new Vector3(1, 110, 1);
+        animateCounter = 0;
         // start game
         int length = 8;
         ball = new GameObject[length];
