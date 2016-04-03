@@ -579,17 +579,20 @@ public class Canvas : MonoBehaviour {
         Vector3 size;
         Quaternion point_to;
         Vector3 delta = last_paint_position[id] - current_position;
-        Debug.Log(delta);
+        //Debug.Log(delta);
         if (delta.magnitude < 1)
         {
+            // orthant iii, iv
             if (delta.y > 0) {
                 point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta.normalized, new Vector3(1, 0, 0))));
             } else if (delta.x < 0)
+            // orthant i
             {
                 point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta, new Vector3(0, 1, 0)) + 90));
             } else
+            // orthant ii
             {
-                point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta, new Vector3(0, 1, 0)) + 180));
+                point_to = Quaternion.Euler(new Vector3(0, 0, 90 - Vector3.Angle(delta, new Vector3(0, 1, 0)) + 0));
             }
             size = new Vector3(delta.magnitude * 10, 1, 1);
         } else
