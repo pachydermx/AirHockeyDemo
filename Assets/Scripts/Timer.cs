@@ -7,6 +7,9 @@ public class Timer : MonoBehaviour {
     private TextMesh[] text_mesh;
     private Animator[] text_animation;
 
+    AudioSource audiosource;
+    public AudioClip audioclip;
+
 	// Use this for initialization
 	void Start () {
         // init
@@ -14,6 +17,10 @@ public class Timer : MonoBehaviour {
         text_object = new GameObject[transform.childCount];
         text_mesh = new TextMesh[transform.childCount];
         text_animation = new Animator[transform.childCount];
+
+        audiosource = gameObject.GetComponent<AudioSource>();
+        audiosource.clip = audioclip;
+
         for(int i = 0; i < transform.childCount; i++)
         {
             text_object[i] = transform.GetChild(i).gameObject;
@@ -31,7 +38,7 @@ public class Timer : MonoBehaviour {
         stage_duration = duration;
     }
 
-    public void ShowText(string to_display, bool with_animation)
+    public void ShowText(string to_display, bool with_animation, float count)
     {
         for(int i = 0; i < text_object.Length; i++)
         {
@@ -40,6 +47,16 @@ public class Timer : MonoBehaviour {
             {
                 text_object[i].SetActive(false);
                 text_object[i].SetActive(true);
+
+                if(count > 0)
+                {
+                    audiosource.Play();
+                }
+
+                else if(count == 0)
+                {
+                    Debug.Log("Finish count: " + count);
+                }
             }
         }
     }

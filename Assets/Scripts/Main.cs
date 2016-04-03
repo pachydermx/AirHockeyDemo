@@ -89,13 +89,13 @@ public class Main : MonoBehaviour {
     {
         if (remaining_time <= 5)
         {
-            timer.ShowText(remaining_time.ToString("#."), true);
+            timer.ShowText(remaining_time.ToString("#."), true, remaining_time);
         } else if (remaining_time == stage_duration)
         {
-            timer.ShowText("START", true);
+            timer.ShowText("START", true, remaining_time);
         } else
         {
-            timer.ShowText("", false);
+            timer.ShowText("", false, 0);
         }
         remaining_time -= 1.0f;
         if (remaining_time < 0)
