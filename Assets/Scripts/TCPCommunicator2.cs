@@ -11,6 +11,16 @@ public class TCPCommunicator2 : MonoBehaviour {
                                     "192.168.1.191",
                                     "192.168.1.192",
                                     "192.168.1.193"};
+
+    /*
+    string[] host = new String[4]
+    {
+        "localhost",
+        "localhost",
+        "localhost",
+        "localhost"
+    };
+    */
     int port = 10001;
     static TcpClient[] tcp = new TcpClient[4];
     static NetworkStream[] str = new NetworkStream[4];
@@ -25,6 +35,10 @@ public class TCPCommunicator2 : MonoBehaviour {
     private int i = 0;
     private int counter = 0;
 
+    private Thread tid;
+    private string tmessage = "";
+    private Exception tException;
+
     // Use this for initialization
     void Start () {
         
@@ -37,28 +51,45 @@ public class TCPCommunicator2 : MonoBehaviour {
         {
             if (counter % 100 == 0)
             {
-                //if (i < 4)
-                if(i == 2)
+                tid = new Thread(new ThreadStart(init_connection));
+                tid.Start();
+            }
+        counter++;
+        }
+
+        if (tmessage.Length > 0)
+        {
+            Debug.Log(tmessage);
+            tmessage = "";
+        }
+        if (tException != null)
+        {
+            Debug.LogException(tException);
+        }
+	}
+
+    public void init_connection()
+    {
+                if (i < 4)
                 {
-                    
+                    int tport = port + i;
+                    tmessage = "Connecting Peer " + i + "(" + host[i] + ", " + tport + ")";
                     try
                     {
                         tcp[i] = new TcpClient(host[i], port+i);
                         tcp[i].Client.ReceiveTimeout = 100;
-                        tcp[i].Connect(host[i], port+i);
+                        tcp[i].Connect(host[i], tport);
                         str[i] = tcp[i].GetStream();
-                        Debug.Log("connect:" + host[i]);
+                        tmessage += "... OK";
                     } catch (Exception e)
                     {
-                        Debug.LogException(e);
+                        tmessage += "... ERROR";
+                        tException = e;
                     }
                 }
                 i++;
-
-            }
-        }
-        counter++;
-	}
+        
+    }
 
     public void controlSpray(int dir, int id) // yama 0321
     {

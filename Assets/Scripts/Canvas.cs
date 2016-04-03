@@ -5,7 +5,15 @@ using UnityEngine.UI;
 public class Canvas : MonoBehaviour {
 	public GameObject p1_wall;
 	public GameObject p2_wall;
+    public GameObject wall;
     public GameObject manager;
+
+    public AudioClip split_sound;
+    public float split_sound_volume = 1.0f;
+    public AudioClip spray_sound;
+    public float spray_sound_volume = 0.3f;
+    public AudioClip explode_sound;
+    public float explode_sound_volume = 1.0f;
 
     // textures
 	public RawImage image;
@@ -14,7 +22,7 @@ public class Canvas : MonoBehaviour {
     private Texture2D normal_texture;
 
 	private Color[] paint_color;
-    private Color[] colors;
+    public Color[] colors;
 	private int[] ball_x;
 	private int[] ball_y;
     private int n_ball;
@@ -53,17 +61,27 @@ public class Canvas : MonoBehaviour {
     private float angle = 150;
 
     // settings
-    private bool kick_off_when_start = true;
+    public bool kick_off_when_start = true;
+
+    // debug
+    public int counter = 10;
+
+    // paint
+    private Vector3[] last_paint_position;
 
 	// Use this for initialization
 	void Start () {
-
+        // init variables
+        last_paint_position = new Vector3[3];
 		// init texture
 		texture = image.texture as Texture2D;
         normal_texture = normal.texture as Texture2D;
 
-        //ResetStage();
         RefreshCanvas();
+        ResetStage();
+
+        // debug
+        //Debug.Log(Vector3.Angle(new Vector3(1, 0, 0), new Vector3(-1, 1, 0)));
 	}
 
 	// Update is called once per frame
@@ -89,10 +107,10 @@ public class Canvas : MonoBehaviour {
 		}else if(range > default_range)
         {
             itemcount++;
-            if(itemcount >= 50)
+            if(itemcount >= 100)
             {
                 DoBig(default_range);
-                GameObject box = GameObject.Find("ItemBox1");
+                GameObject box = GameObject.Find("ItemBox");
                 ItemBoX s = box.GetComponent<ItemBoX>();
                 //ball[0].transform.localScale = new Vector3(ball[0].transform.localScale.x / 1.5f, ball[0].transform.localScale.y / 1.5f, 1);
                 ball[0].transform.localScale = new Vector3(s.p_scale.x , s.p_scale.y, 1);
@@ -224,7 +242,7 @@ public class Canvas : MonoBehaviour {
         if (n_ball == 0) // yama 0325 初期パックの設定
         {
             ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
-            GameObject box = GameObject.Find("ItemBox1");
+            GameObject box = GameObject.Find("ItemBox");
             box.SendMessage("setBallOriginal", ball[n_ball]);
 
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
@@ -256,7 +274,19 @@ public class Canvas : MonoBehaviour {
         ball[n_ball].gameObject.name = "Ball_" + n_ball;
         manager.SendMessage("AddNewBall", ball[n_ball]);
 
+        // kick off
+        if (kick_off_when_start)
+        {
+            float power = 150;
+            float direction = Random.value * 2 * Mathf.PI;
+            Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
+            ball[n_ball].GetComponent<Rigidbody2D>().AddForce(kick_off);
+        }
+
         n_ball++;
+
+        // sound effect
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(split_sound, split_sound_volume);
     }
 
 
@@ -488,14 +518,8 @@ public class Canvas : MonoBehaviour {
         texture.Apply(false);
     }
 
-    public void DoSpray(float[] posnid)
+    public void DoSpray(Vector3 position, int id) // yama 0318 Spray Gimmick
     {
-        DoSprayLegacy(new Vector3(posnid[0], posnid[1], posnid[2]), (int)posnid[3]);
-    }
-
-    public void DoSprayLegacy(Vector3 position, int id) // yama 0318 Spray Gimmick
-    {
-        Debug.Log(id);
         float[] xy0 = { position.x, position.y };
         float rate_x = (float)(xy0[0] / 9.6);
         float rate_y = (float)(xy0[1] / 5.4);
@@ -528,22 +552,62 @@ public class Canvas : MonoBehaviour {
                     texture.SetPixel(x + j - (i * 2 - 1) / 2, y - (2 + i * 3), paint_color[0]);
                 }
             }
-        }    
+        }
 
         //Debug.Log("Color");
+        // sound effect
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(spray_sound, spray_sound_volume);
     }
 
 	void DoExplode () {
 		range = 200;
+        // sound effect
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(explode_sound, explode_sound_volume);
 	}
 
     void DeployWall (Vector2 mouse_position) {
+        int id;
         if (mouse_position.x < 0)
-            Instantiate(p1_wall, mouse_position, Quaternion.identity);
-            
-
-        if (mouse_position.x > 0)
-			Instantiate(p2_wall, mouse_position, Quaternion.identity);
+        {
+            id = 1;
+        } else
+        {
+            id = 2;
+        }
+        // calc
+        Vector3 current_position = new Vector3(mouse_position.x, mouse_position.y, -1);
+        Vector3 size;
+        Quaternion point_to;
+        Vector3 delta = last_paint_position[id] - current_position;
+        //Debug.Log(delta);
+        if (delta.magnitude < 1)
+        {
+            // orthant iii, iv
+            if (delta.y > 0) {
+                point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta.normalized, new Vector3(1, 0, 0))));
+            } else if (delta.x < 0)
+            // orthant i
+            {
+                point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta, new Vector3(0, 1, 0)) + 90));
+            } else
+            // orthant ii
+            {
+                point_to = Quaternion.Euler(new Vector3(0, 0, 90 - Vector3.Angle(delta, new Vector3(0, 1, 0)) + 0));
+            }
+            size = new Vector3(delta.magnitude * 10, 1, 1);
+        } else
+        {
+            size = new Vector3(1, 1, 1);
+            point_to = Quaternion.identity;
+        }
+        // deploy
+        GameObject nw = (GameObject)Instantiate(wall, current_position, point_to);
+        nw.transform.localScale = size;
+        GameObject nwp = nw.transform.GetChild(0).gameObject;
+        nwp.GetComponent<SpriteRenderer>().color = colors[id];
+        nw.GetComponent<ColliderMessenager>().player_id = id;
+        // log
+        last_paint_position[id] = current_position;
 	}
 
     void DoBig(int size)
@@ -561,10 +625,11 @@ public class Canvas : MonoBehaviour {
         scores[0] = 0;
         scores[1] = 0;
         Color[] canvas_colors = texture.GetPixels(0, 0, width, height);
+        Color[] paint_color = manager.GetComponent<Main>().colors;
         for (int i = 0; i < width * height; ++i) {
             if (!canvas_colors[i].Equals(Color.clear))
             {
-                if (canvas_colors[i].r <= 0.5) {
+                if (CompareColors(canvas_colors[i], paint_color[1])) {
                     scores[0]++;
                 } else { 
                     scores[1]++;
@@ -575,11 +640,27 @@ public class Canvas : MonoBehaviour {
         Debug.Log("Score " + scores[0] + " : " + scores[1]);
     }
 
+    bool CompareColors(Color color1, Color color2)
+    {
+        float delta_r = Mathf.Abs(color1.r - color2.r);
+        float delta_g = Mathf.Abs(color1.g - color2.g);
+        float delta_b = Mathf.Abs(color1.b - color2.b);
+        float delta_a = Mathf.Abs(color1.a - color2.a);
+        float delta = delta_r + delta_g + delta_b + delta_a;
+        if (delta < 0.1)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
     void StartScoreShow()
     {
         GetScore();
 
-        ClearStage();
+        ClearStage(false);
 
         int sum = scores[0] + scores[1];
         float rate_1 = (float)scores[0] / sum;
@@ -612,7 +693,7 @@ public class Canvas : MonoBehaviour {
 
     }
 
-    void ClearStage()
+    void ClearStage(bool will_set_timer)
     {
         // init variables
         int length = 8;
@@ -636,17 +717,16 @@ public class Canvas : MonoBehaviour {
         {
             Destroy(ball[i]);
         }
-        manager.SendMessage("ResetStage");
-
-        // reset display
-        animateCounter = 0;
-        P1Display.transform.localScale = new Vector3(1, 110, 1);
-        P2Display.transform.localScale = new Vector3(1, 110, 1);
+        manager.SendMessage("ResetStage", will_set_timer);
     }
 
     void ResetStage()
     {
-        ClearStage();
+        ClearStage(true);
+        // reset score animation
+        P1Display.transform.localScale = new Vector3(1, 110, 1);
+        P2Display.transform.localScale = new Vector3(1, 110, 1);
+        animateCounter = 0;
         // start game
         int length = 8;
         ball = new GameObject[length];

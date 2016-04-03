@@ -11,7 +11,7 @@ public class Ball : MonoBehaviour {
 
     public int id;
 
-    private Color[] player_color;
+    public Color[] player_color;
 
     public int paint_id;
 
@@ -31,14 +31,6 @@ public class Ball : MonoBehaviour {
         default_ball = this.gameObject.GetComponent<SpriteRenderer>();
         p1_ball = this.gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         p2_ball = this.gameObject.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
-
-        player_color = new Color[3];
-        player_color[0] = Color.clear;
-        player_color[1] = new Color(.453125F, .796875F, 1.0F, 0.5F);
-        player_color[2] = new Color(1.0F, .5859375F, .89453125F, 0.5F);
-
-        // tell manager color
-        //manager.SendMessage("SetColors", player_color);
 
         Player(default_pid);
     }
