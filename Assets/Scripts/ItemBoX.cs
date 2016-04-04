@@ -33,6 +33,8 @@ public class ItemBoX : MonoBehaviour {
     public Sprite DoubleIcon;
     public Sprite BombIcon;
 
+    public AudioClip effect_sound;
+
 	// Use this for initialization
 	void Start () {
         MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>(); //0328 tanaka icon
@@ -114,6 +116,7 @@ public class ItemBoX : MonoBehaviour {
         {
             bomb_flag = 1;
         }
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(effect_sound);
     }
 
     void flag_reset()
