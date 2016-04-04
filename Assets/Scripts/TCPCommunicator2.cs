@@ -39,9 +39,13 @@ public class TCPCommunicator2 : MonoBehaviour {
     private string tmessage = "";
     private Exception tException;
 
+    private int[] wait = new int[2];
+
     // Use this for initialization
-    void Start () {
-        
+    void Start ()
+    {
+        wait[0] = 0;
+        wait[1] = 0;
 
     }
 
@@ -72,11 +76,27 @@ public class TCPCommunicator2 : MonoBehaviour {
         {
             controlSpray(1, 1);
         }
+        if (wait[0] > 0)
+        {
+            wait[0]--;
+        }
+        if (wait[1] > 0)
+        {
+            wait[1]--;
+        }
+        if (wait[0] == 1)
+        {
+            controlSpray(1, 1);
+        }
+        if (wait[1] == 1)
+        {
+            controlSpray(1, 2);
+        }
 	}
 
     public void init_connection()
     {
-            if (i < 4)
+            if (false)
             {
                 int tport = port + i;
                 tmessage = "Connecting Peer " + i + " (" + host[i] + ", " + tport + ")";
@@ -99,26 +119,18 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     public void controlSpray(int dir, int id) // yama 0321
     {
-        String mes = dir.ToString();
-        Debug.Log(", " + dir + ", " + mes);
-        byte[] umsg = Encoding.UTF8.GetBytes(mes + "\n");
-        //byte[] umsg = Encoding.UTF8.GetBytes("1");
-        tcp[id - 1].Client.Send(umsg);
-        //tcp.
-        /*
-        if (str[id - 1] != null)
+        if (tcp[id - 1] != null)
         {
-            str[id - 1].Write(umsg, 0, umsg.Length);
-            Debug.Log("id = " + id + ", dir = " + mes);
+            if (dir == 0)
+            {
+                wait[id - 1] = 100;
+            }
+            String mes = dir.ToString();
+            Debug.Log(", " + dir + ", " + mes);
+            byte[] umsg = Encoding.UTF8.GetBytes(mes + "\n");
+            //byte[] umsg = Encoding.UTF8.GetBytes("1");
+            tcp[id - 1].Client.Send(umsg);
         }
-        else
-        {
-            Debug.Log(str[id]);
-        }
-        */
-        
-        //str[1].Write(umsg, 0, umsg.Length);
-        //Debug.Log("dir = " + mes);
     }
 
     void controlBaketsu(int id)

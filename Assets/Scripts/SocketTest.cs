@@ -38,7 +38,8 @@ public class SocketTest : MonoBehaviour {
     public GameObject Spray1; // yama 0328
     public GameObject Spray2; // yama 0328
     public GameObject manager; // yama 0321
-    public GameObject Itembox; // yama 0323
+    public GameObject Itembox1; // yama 0323
+    public GameObject Itembox2; // yama 0323
 
     // calibration
     protected Vector3[] calibrationPoints = new Vector3[4];
@@ -66,7 +67,7 @@ public class SocketTest : MonoBehaviour {
 
     // settings
     public bool enabled;
-    public float spray_reverse_point = 7.5f;
+    public float spray_reverse_point = 7.0f;
     private int[] reverse_counter = new int[2];
     private int[] spray_direction = new int[2];
 
@@ -110,7 +111,7 @@ public class SocketTest : MonoBehaviour {
     {
         if (enabled)
         {
-            c.clock = 1000;
+            c.clock = 5000;
 
             // split dtext
             rawInputs = dtext.Split('&');
@@ -224,21 +225,25 @@ public class SocketTest : MonoBehaviour {
                 {
                     moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
                 }
-                Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
-                Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
+                //Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
+                //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
                 //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
-                Spray1.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
-                Spray2.transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
+                Vector2 spary1_pos = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
+                Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328
+                Spray1.transform.position = new Vector3(spary1_pos.x, -5.2f, 0);
+                Spray2.transform.position = new Vector3(spary2_pos.x, 5.2f, 0);
+                Itembox1.transform.position = getRealCoordinate(points["Item1:Item1"]);
+                //Itembox2.transform.position = getRealCoordinate(points["Item2:Item2"]);
 
                 // check spray
                 if (Mathf.Abs(Spray1.transform.position.x) > spray_reverse_point && reverse_counter[0] < 1)
                 {
-                    SprayReverse(1);
+                    SprayReverse(2);
                     reverse_counter[0] = 100;
                 }
                 if (Mathf.Abs(Spray2.transform.position.x) > spray_reverse_point && reverse_counter[1] < 1)
                 {
-                    SprayReverse(2);
+                    SprayReverse(1);
                     reverse_counter[1] = 100;
                 }
                 if (reverse_counter[0] > 0)
@@ -254,6 +259,7 @@ public class SocketTest : MonoBehaviour {
             {
                 if(points["Pen3:Pen3"].z < touchLevel)
                 {
+                    Debug.Log("TOUCHED");
                     deployWall(getRealCoordinate(points["Pen3:Pen3"]));
                 }
                 if(points["Pen4:Pen4"].z < touchLevel)
@@ -347,7 +353,7 @@ public class SocketTest : MonoBehaviour {
     {
         if (calibrationPointSet < 2)
         {
-            calibrationPoints[calibrationPointSet] = points["Smasher1:Smasher1"];
+            calibrationPoints[calibrationPointSet] = points["Pen3:Pen3"];
             // prepare for next calibration
             calibrationPointSet += 1;
             moveCursor(calibrationDefaults[calibrationPointSet]);
@@ -357,7 +363,7 @@ public class SocketTest : MonoBehaviour {
             calibrationComplete = true;
             Cursor.SetActive(false);
 
-            Smasher.SetActive(true);
+            //Smasher.SetActive(true);
         }
         for (int i = 0; i < 2; i++) 
             Debug.Log(calibrationPoints[i]); 
@@ -367,6 +373,7 @@ public class SocketTest : MonoBehaviour {
     {
         touchLevel = points["Pen3:Pen3"].z;
         levelSet = true;
+        Debug.Log("Pen Level Set to " + touchLevel);
     }
 
     void saveSetting()
@@ -408,7 +415,7 @@ public class SocketTest : MonoBehaviour {
             levelSet = true;
 
             // config objects
-            Smasher.SetActive(true);
+            //Smasher.SetActive(true);
 
             Debug.Log("Calibration Loaded."); 
         } else
@@ -433,12 +440,14 @@ public class SocketTest : MonoBehaviour {
             Spray1.SendMessage("stopFlag", 1);
             Canvas.GetComponent<Canvas>().DoSpray(Spray1.transform.position, 1);
             //Canvas.SendMessage("DoSpray", [Spray1.transform.position.x, Spray1.transform.position.x, Spray1.transform.position.x, 1.0f]);
+            tcpc.controlSpray(0, 2);
         }
         else if (name.Contains("Spray2"))
         {
             Spray2.SendMessage("stopFlag", 1);
             Canvas.GetComponent<Canvas>().DoSpray(Spray2.transform.position, 2);
             //Canvas.SendMessage("DoSpray", Spray2.transform.position);
+            tcpc.controlSpray(0, 1);
         }
         else if (name.Contains("Baketsu1"))
         {
@@ -449,9 +458,13 @@ public class SocketTest : MonoBehaviour {
             Canvas.SendMessage("DoSprinkle", Baketsu2.transform.position);
             manager.SendMessage("controlBaketsu", 3);
         }
-        else if (name.Contains("ItemBox"))
+        else if (name.Contains("ItemBox1"))
         {
-            Itembox.SendMessage("ItemUse");
+            Itembox1.SendMessage("ItemUse");
+        }
+        else if (name.Contains("ItemBox2"))
+        {
+            Itembox2.SendMessage("ItemUse");
         }
     }
 }
@@ -462,7 +475,7 @@ public class Communicator
     Socket client;
     bool receiving = false;
 
-    public int clock = 1000;
+    public int clock = 5000;
 
     public SocketTest st;
 
