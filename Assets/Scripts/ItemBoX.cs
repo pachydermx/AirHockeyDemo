@@ -7,8 +7,6 @@ public class ItemBoX : MonoBehaviour {
     public GameObject Pack; // yama 0323
     public GameObject canvas;
 
-    public GameObject DefaultBall;
-
     public Vector2 p_scale;
     private Rigidbody2D p_rb;
 
@@ -40,7 +38,6 @@ public class ItemBoX : MonoBehaviour {
         MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>(); //0328 tanaka icon
 
         canvas = GameObject.Find("Canvas");
-        DefaultBall = GameObject.Find("ball");
 
         time = 0;
         bomb_flag = 0;

@@ -41,7 +41,8 @@ public class SprayController : MonoBehaviour {
                 direction++;
                 direction %= 2;
                 //Debug.Log("time;"+s_time+", dir;"+direction);
-                manager.GetComponent<TCPCommunicator2>().controlSpray(direction, id); // yama 0328 
+                //manager.GetComponent<TCPCommunicator2>().controlSpray(direction, id); // yama 0328 
+                //manager.SendMessage("controlSpray", direction);
                 //manager.SendMessage("controlSpray", direction);
             }
         }
@@ -65,7 +66,8 @@ public class SprayController : MonoBehaviour {
         Debug.Log("Stop");
         flag = stop;
         //manager.SendMessage("controlSpray", 2);
-        manager.GetComponent<TCPCommunicator2>().controlSpray(2, id); // yama 0328
+        //manager.GetComponent<TCPCommunicator2>().controlSpray(2, id); // yama 0328
+        //manager.SendMessage("controlSpray", 2);
         //Invoke("Update", 1);
     }
 

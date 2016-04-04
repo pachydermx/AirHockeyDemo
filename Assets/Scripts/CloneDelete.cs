@@ -7,7 +7,7 @@ public class CloneDelete : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        box = GameObject.Find("ItemBox");
+        box = GameObject.Find("ItemBox1");
         
        
         StartCoroutine(Delete());

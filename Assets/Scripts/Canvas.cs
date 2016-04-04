@@ -62,6 +62,7 @@ public class Canvas : MonoBehaviour {
 
     // settings
     public bool kick_off_when_start = true;
+    private float ink_ratio = 0.8f;
 
     // debug
     public int counter = 10;
@@ -320,12 +321,40 @@ public class Canvas : MonoBehaviour {
         for (int x = -radius; x < radius; x++)
         {
             int height = (int)Mathf.Sqrt(radius * radius - x * x);
+            int inside_height = -1;
+            if (Mathf.Abs(x)/(float)radius < ink_ratio)
+            {
+                inside_height = (int) Mathf.Sqrt(radius*radius*ink_ratio*ink_ratio - x*x);
+            }
 
             for (int y = -height; y < height; y++)
             {
-                // color
-				texture.SetPixel( pos_x + x, pos_y + y, paint_color[id] );
+                Color origColor = texture.GetPixel(pos_x + x, pos_y + y);
+                if (!CompareColors(origColor, paint_color[id]))
+                {
+                    if (Mathf.Abs(y) < inside_height)
+                    {
+                        // color
+                        texture.SetPixel(pos_x + x, pos_y + y, paint_color[id]);
+                    }
+                    else
+                    {
+                        texture.SetPixel(pos_x + x, pos_y + y, new Color(paint_color[id].r, paint_color[id].g, paint_color[id].b, paint_color[id].a * 0.5f));
+                    }
+                } else if (Mathf.Abs(y) < inside_height)
+                {
+                        texture.SetPixel(pos_x + x, pos_y + y, paint_color[id]);
+                    
+                }
+                // random dots
+                /*
+                if (Random.value < 0.01)
+                {
+                    texture.SetPixel( pos_x + x, pos_y + y, new Color(1.0f, 1.0f, 1.0f, 0.5f));
+                }
+                */
                 // normal map
+                /*
                 if (!not_moving && !splash)
                 {
                     normal_texture.SetPixel(pos_x + x, pos_y + y, GetNormalColor(id, pos_x, pos_y, pos_x + x, pos_y + y, radius));
@@ -333,6 +362,7 @@ public class Canvas : MonoBehaviour {
                 {
                     normal_texture.SetPixel( pos_x + x, pos_y + y,  GetNormalColorCentral(pos_x, pos_y, radius, pos_x + x, pos_y + y) );
                 }
+                */
             }
         }
 
@@ -579,17 +609,20 @@ public class Canvas : MonoBehaviour {
         Vector3 size;
         Quaternion point_to;
         Vector3 delta = last_paint_position[id] - current_position;
-        Debug.Log(delta);
+        //Debug.Log(delta);
         if (delta.magnitude < 1)
         {
+            // orthant iii, iv
             if (delta.y > 0) {
                 point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta.normalized, new Vector3(1, 0, 0))));
             } else if (delta.x < 0)
+            // orthant i
             {
                 point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta, new Vector3(0, 1, 0)) + 90));
             } else
+            // orthant ii
             {
-                point_to = Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(delta, new Vector3(0, 1, 0)) + 180));
+                point_to = Quaternion.Euler(new Vector3(0, 0, 90 - Vector3.Angle(delta, new Vector3(0, 1, 0)) + 0));
             }
             size = new Vector3(delta.magnitude * 10, 1, 1);
         } else
@@ -642,8 +675,7 @@ public class Canvas : MonoBehaviour {
         float delta_r = Mathf.Abs(color1.r - color2.r);
         float delta_g = Mathf.Abs(color1.g - color2.g);
         float delta_b = Mathf.Abs(color1.b - color2.b);
-        float delta_a = Mathf.Abs(color1.a - color2.a);
-        float delta = delta_r + delta_g + delta_b + delta_a;
+        float delta = delta_r + delta_g + delta_b;
         if (delta < 0.1)
         {
             return true;

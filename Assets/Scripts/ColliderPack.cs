@@ -9,7 +9,7 @@ public class ColliderPack : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         canvas = GameObject.Find("Canvas");
-        box = GameObject.Find("ItemBox");
+        box = GameObject.Find("ItemBox1");
 	}
 	
 	// Update is called once per frame
