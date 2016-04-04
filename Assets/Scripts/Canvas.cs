@@ -522,35 +522,7 @@ public class Canvas : MonoBehaviour {
         */
 
         
-        while (y <= x)
-        {
-        
-        int i; 
-        
-        for (i = -x + x0; i < x + x0; ++i)
-            {
-                texture.SetPixel(i, y + y0, paint_color[0]);
-                texture.SetPixel(i, -y + y0, paint_color[0]);
-            }
-
-            for (i = -y + x0; i < y + x0; ++i)
-            {
-                texture.SetPixel(i, x + y0, paint_color[0]);
-                texture.SetPixel(i, -x + y0, paint_color[0]);
-            }
-
-            y++;
-            if (decisionOver2 <= 0)
-            {
-                decisionOver2 += 2 * y + 1;
-            }
-            else {
-                x--;
-                decisionOver2 += 2 * (y - x) + 1;
-            }
-        }
-        
-        texture.Apply(false);
+        DrawRoundAt(0, x0, y0, 200, true);
     }
 
     public void DoSpray(Vector3 position, int id) // yama 0318 Spray Gimmick

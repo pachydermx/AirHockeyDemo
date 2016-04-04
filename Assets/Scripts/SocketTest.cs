@@ -61,8 +61,14 @@ public class SocketTest : MonoBehaviour {
 
     protected System.Diagnostics.Process vicon; // yama 0316
 
+    // raspberry connection
+    private TCPCommunicator2 tcpc;
+
     // settings
     public bool enabled;
+    public float spray_reverse_point = 7.5f;
+    private int[] reverse_counter = new int[2];
+    private int[] spray_direction = new int[2];
 
     void Start()
     {
@@ -92,6 +98,10 @@ public class SocketTest : MonoBehaviour {
             //vicon = Process.Start("/ViconClient.exe"); //yama 0316
 
             //Baketsu.SetActive(false); // yama 0325 試験的にコメントアウト
+
+            tcpc = this.gameObject.GetComponent<TCPCommunicator2>();
+            spray_direction[0] = 0;
+            spray_direction[1] = 0;
         }
 
     }
@@ -219,6 +229,26 @@ public class SocketTest : MonoBehaviour {
                 //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
                 Spray1.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
                 Spray2.transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
+
+                // check spray
+                if (Mathf.Abs(Spray1.transform.position.x) > spray_reverse_point && reverse_counter[0] < 1)
+                {
+                    SprayReverse(1);
+                    reverse_counter[0] = 100;
+                }
+                if (Mathf.Abs(Spray2.transform.position.x) > spray_reverse_point && reverse_counter[1] < 1)
+                {
+                    SprayReverse(2);
+                    reverse_counter[1] = 100;
+                }
+                if (reverse_counter[0] > 0)
+                {
+                    reverse_counter[0]--;
+                }
+                if (reverse_counter[1] > 0)
+                {
+                    reverse_counter[1]--;
+                }
             }
             if (levelSet)
             {
@@ -238,6 +268,29 @@ public class SocketTest : MonoBehaviour {
             }
 
         }
+    }
+
+    void SprayReverse(int id)
+    {
+        int next_direction;
+        switch (spray_direction[id - 1])
+        {
+            case 0:
+                next_direction = 1;
+                break;
+            case 1:
+                next_direction = 2;
+                break;
+            case 2:
+                next_direction = 1;
+                break;
+            default:
+                next_direction = 0;
+                break;
+        }
+        tcpc.controlSpray(next_direction, id);
+        spray_direction[id - 1] = next_direction;
+        Debug.Log("Reverse " + id + ", " + next_direction + ", " + id);
     }
 
     void deployWall(Vector3 position)
