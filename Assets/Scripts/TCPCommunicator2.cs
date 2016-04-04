@@ -7,13 +7,12 @@ using System.Threading;
 using System.Text;
 
 public class TCPCommunicator2 : MonoBehaviour {
-    /*
     string[] host = new String[4] { "192.168.1.190",
                                     "192.168.1.191",
                                     "192.168.1.192",
                                     "192.168.1.193"};
 
-    */
+    /*
     string[] host = new String[4]
     {
         "localhost",
@@ -21,6 +20,7 @@ public class TCPCommunicator2 : MonoBehaviour {
         "localhost",
         "localhost"
     };
+    */
     int port = 10001;
     static TcpClient[] tcp = new TcpClient[4];
     static NetworkStream[] str = new NetworkStream[4];
@@ -130,7 +130,7 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     void init_connection_async()
     {
-        if (i < 1)
+        if (i < 4)
         {
             int tport = port + i;
             tmessage = "Connecting Peer " + i + " (" + host[i] + ", " + tport + ")";
@@ -179,12 +179,13 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     void controlBaketsu(int id)
     {
-        /*
+        
         String mes = "1";
-        byte[] umsg = Encoding.UTF8.GetBytes(mes);
-        str[id].Write(umsg, 0, umsg.Length);
+        byte[] umsg = Encoding.UTF8.GetBytes(mes + "\n");
+        //str[id].Write(umsg, 0, umsg.Length);
+        tcp[id].Client.Send(umsg);
         Debug.Log("id = " + id);
-        */
+        
     }
 
     void close_connection()
