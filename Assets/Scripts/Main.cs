@@ -86,6 +86,12 @@ public class Main : MonoBehaviour {
             GameObject.Find("P1Display").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = colors[1];
             GameObject.Find("P2Display").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = colors[2];
         }
+
+        // reset cover
+        if (new_stage)
+        {
+            cover.SetActive(true);
+        }
     }
 
     void TimeDecrease()

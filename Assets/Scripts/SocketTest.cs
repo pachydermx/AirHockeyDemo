@@ -100,7 +100,7 @@ public class SocketTest : MonoBehaviour {
     {
         if (enabled)
         {
-            c.clock = 100;
+            c.clock = 1000;
 
             // split dtext
             rawInputs = dtext.Split('&');
@@ -215,20 +215,20 @@ public class SocketTest : MonoBehaviour {
                     moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
                 }
                 Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
-                //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
+                Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
                 //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
                 Spray1.transform.position = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
                 Spray2.transform.position = getRealCoordinate(points["Spray2:Spray2"]); // yama 0328
             }
             if (levelSet)
             {
-                if(points["Pen1:Pen1"].z < touchLevel)
+                if(points["Pen3:Pen3"].z < touchLevel)
                 {
-                    deployWall(getRealCoordinate(points["Pen1:Pen1"]));
+                    deployWall(getRealCoordinate(points["Pen3:Pen3"]));
                 }
-                if(points["Pen2:Pen2"].z < touchLevel)
+                if(points["Pen4:Pen4"].z < touchLevel)
                 {
-                    deployWall(getRealCoordinate(points["Pen2:Pen2"]));
+                    deployWall(getRealCoordinate(points["Pen4:Pen4"]));
                 }
             }
             
@@ -323,7 +323,7 @@ public class SocketTest : MonoBehaviour {
 
     void setlevel()
     {
-        touchLevel = points["Pen1:Pen1"].z;
+        touchLevel = points["Pen3:Pen3"].z;
         levelSet = true;
     }
 
@@ -420,7 +420,7 @@ public class Communicator
     Socket client;
     bool receiving = false;
 
-    public int clock = 100;
+    public int clock = 1000;
 
     public SocketTest st;
 
