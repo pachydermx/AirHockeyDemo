@@ -14,9 +14,11 @@ public class Canvas : MonoBehaviour {
     public float spray_sound_volume = 0.3f;
     public AudioClip explode_sound;
     public float explode_sound_volume = 1.0f;
+    AudioSource bucket_sound;
+    public AudioClip bucketclip;
 
     // textures
-	public RawImage image;
+    public RawImage image;
     public RawImage normal;
 	private Texture2D texture;
     private Texture2D normal_texture;
@@ -525,6 +527,11 @@ public class Canvas : MonoBehaviour {
 
         
         DrawRoundAt(0, x0, y0, 200, true);
+
+        bucket_sound = GetComponent<AudioSource>();
+        bucket_sound.clip = bucketclip;
+        bucket_sound.PlayOneShot(bucketclip);
+
     }
 
     public void DoSpray(Vector3 position, int id) // yama 0318 Spray Gimmick

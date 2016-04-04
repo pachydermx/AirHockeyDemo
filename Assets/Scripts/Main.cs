@@ -112,7 +112,7 @@ public class Main : MonoBehaviour {
         } else
         // normal
         {
-            timer.ShowText("", false, 0);
+            timer.ShowText("", false, remaining_time);
         }
         remaining_time -= 1.0f;
         if (remaining_time < 0)

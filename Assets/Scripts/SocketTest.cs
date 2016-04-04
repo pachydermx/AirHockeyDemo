@@ -230,8 +230,8 @@ public class SocketTest : MonoBehaviour {
                 //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
                 Vector2 spary1_pos = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
                 Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328
-                Spray1.transform.position = new Vector3(spary1_pos.x, -5.2f, 0);
-                Spray2.transform.position = new Vector3(spary2_pos.x, 5.2f, 0);
+                Spray1.transform.position = new Vector3(spary1_pos.x, -5.6f, 0);
+                Spray2.transform.position = new Vector3(spary2_pos.x, 5.6f, 0);
                 Itembox1.transform.position = getRealCoordinate(points["Item1:Item1"]);
                 //Itembox2.transform.position = getRealCoordinate(points["Item2:Item2"]);
 

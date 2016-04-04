@@ -7,8 +7,12 @@ public class Timer : MonoBehaviour {
     private TextMesh[] text_mesh;
     private Animator[] text_animation;
 
-    AudioSource audiosource;
-    public AudioClip audioclip;
+    AudioSource start;
+    public AudioClip startclip;
+    AudioSource countdown;
+    public AudioClip countclip;
+    AudioSource drumroll;
+    public AudioClip drumclip;
 
 	// Use this for initialization
 	void Start () {
@@ -18,8 +22,12 @@ public class Timer : MonoBehaviour {
         text_mesh = new TextMesh[transform.childCount];
         text_animation = new Animator[transform.childCount];
 
-        audiosource = gameObject.GetComponent<AudioSource>();
-        audiosource.clip = audioclip;
+        start = gameObject.GetComponent<AudioSource>();
+        start.clip = startclip;
+	    countdown = gameObject.GetComponent<AudioSource>();
+	    countdown.clip = countclip;
+	    drumroll = gameObject.GetComponent<AudioSource>();
+	    drumroll.clip = drumclip;
 
         for(int i = 0; i < transform.childCount; i++)
         {
@@ -48,14 +56,17 @@ public class Timer : MonoBehaviour {
                 text_object[i].SetActive(false);
                 text_object[i].SetActive(true);
 
-                if(count > 0)
+                if(count == 60)
                 {
-                    audiosource.Play();
+                    start.PlayOneShot(startclip);
                 }
-
+                else if(count > 0 && count <= 5)
+                {
+                     countdown.PlayOneShot(countclip);
+                }
                 else if(count == 0)
                 {
-                    Debug.Log("Finish count: " + count);
+                    drumroll.PlayOneShot(drumclip);
                 }
             }
         }
