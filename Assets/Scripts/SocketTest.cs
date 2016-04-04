@@ -26,8 +26,6 @@ public class SocketTest : MonoBehaviour {
     public GameObject Cursor;
     public GameObject TestCursor;
     public GameObject Canvas;
-    public GameObject p1_wall;
-    public GameObject p2_wall;
     public GameObject wall;
     protected Dictionary<string, GameObject> TestCursorList = new Dictionary<string, GameObject>();
 

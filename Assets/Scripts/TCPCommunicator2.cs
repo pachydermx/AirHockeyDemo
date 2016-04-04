@@ -198,4 +198,9 @@ public class TCPCommunicator2 : MonoBehaviour {
             }
         }
     }
+
+    void OnApplicationQuit()
+    {
+        close_connection();
+    }
 }

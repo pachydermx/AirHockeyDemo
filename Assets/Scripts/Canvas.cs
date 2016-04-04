@@ -3,8 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class Canvas : MonoBehaviour {
-	public GameObject p1_wall;
-	public GameObject p2_wall;
     public GameObject wall;
     public GameObject manager;
 
