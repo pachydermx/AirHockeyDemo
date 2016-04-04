@@ -164,16 +164,6 @@ public class SocketTest : MonoBehaviour {
                                     counter.Add(name, 0);
                                 } // -->
 
-                                /*
-                                // create 
-                                GameObject newCursor = (GameObject)Instantiate(TestCursor, Vector3.zero, Quaternion.identity);
-                                // set parent
-                                newCursor.transform.parent = Canvas.transform;
-                                TestCursorList.Add(name, newCursor);
-
-                                // create counter
-                                counter.Add(name, 0);
-                                */
                             }
                             
                             //counter[name] += 1; // yama 0317
@@ -225,13 +215,25 @@ public class SocketTest : MonoBehaviour {
                     moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
                 }
                 //Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
-                //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
+                if (Baketsu1 != null)
+                {
+                    Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
+                }
                 //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
                 Vector2 spary1_pos = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
                 Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328
-                Spray1.transform.position = new Vector3(spary1_pos.x, -5.2f, 0);
-                Spray2.transform.position = new Vector3(spary2_pos.x, 5.2f, 0);
-                Itembox1.transform.position = getRealCoordinate(points["Item1:Item1"]);
+                if (Spray1 != null)
+                {
+                    Spray1.transform.position = new Vector3(spary1_pos.x, -5.2f, 0);
+                }
+                if (Spray2 != null)
+                {
+                    Spray2.transform.position = new Vector3(spary2_pos.x, 5.2f, 0);
+                }
+                if (Itembox1 != null)
+                {
+                    Itembox1.transform.position = getRealCoordinate(points["Item1:Item1"]);
+                }
                 //Itembox2.transform.position = getRealCoordinate(points["Item2:Item2"]);
 
                 // check spray
