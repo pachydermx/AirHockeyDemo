@@ -65,7 +65,7 @@ public class SocketTest : MonoBehaviour {
 
     // settings
     public bool enabled;
-    public float spray_reverse_point = 7.0f;
+    public float spray_reverse_point = 6.0f;
     private int[] reverse_counter = new int[2];
     private int[] spray_direction = new int[2];
 
@@ -104,6 +104,11 @@ public class SocketTest : MonoBehaviour {
         spray_direction[0] = 0;
         spray_direction[1] = 0;
 
+        // yama 0405
+        /*
+        reverse_counter[0] = 100;
+        reverse_counter[1] = 100;
+        */
     }
 
     void Update()
@@ -225,33 +230,37 @@ public class SocketTest : MonoBehaviour {
                     moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
                 }
                 //Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
-                //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
+                Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
                 //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
                 Vector2 spary1_pos = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
                 Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328
-                Spray1.transform.position = new Vector3(spary1_pos.x, -5.2f, 0);
-                Spray2.transform.position = new Vector3(spary2_pos.x, 5.2f, 0);
+                Spray1.transform.position = new Vector3(spary1_pos.x, -5.6f, 0);
+                Spray2.transform.position = new Vector3(spary2_pos.x, 5.6f, 0);
                 Itembox1.transform.position = getRealCoordinate(points["Item1:Item1"]);
                 //Itembox2.transform.position = getRealCoordinate(points["Item2:Item2"]);
 
                 // check spray
                 if (Mathf.Abs(Spray1.transform.position.x) > spray_reverse_point && reverse_counter[0] < 1)
                 {
+                    Debug.Log("stop");
                     SprayReverse(2);
                     reverse_counter[0] = 100;
                 }
                 if (Mathf.Abs(Spray2.transform.position.x) > spray_reverse_point && reverse_counter[1] < 1)
                 {
+                    Debug.Log("stop");
                     SprayReverse(1);
                     reverse_counter[1] = 100;
                 }
                 if (reverse_counter[0] > 0)
                 {
                     reverse_counter[0]--;
+                    Debug.Log("Reverse_counter = "+ reverse_counter[0]);
                 }
                 if (reverse_counter[1] > 0)
                 {
                     reverse_counter[1]--;
+                    Debug.Log("Reverse_counter = " + reverse_counter[0]);
                 }
             }
             if (levelSet)
