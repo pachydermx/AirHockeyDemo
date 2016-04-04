@@ -27,7 +27,7 @@ public class Main : MonoBehaviour {
         new Color(0.0941176470588f, 1.0f, 0.0f, 0.5f),
         new Color(0.211764705882f, 0.0f, 1.0f, 0.5f),
         new Color(0.988235294118f, 0.0f, 1.0f, 0.5f),
-        new Color(.453125F, .796875F, 1.0F, 0.5F),
+        new Color(0.3984375f, 0.0f, 0.3984375f, 0.5F),
         new Color(1.0F, .5859375F, .89453125F, 0.5F)
     };
 

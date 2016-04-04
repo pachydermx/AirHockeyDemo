@@ -139,7 +139,7 @@ public class SocketTest : MonoBehaviour {
                             {
                                 if (name.Contains("baketsu1")) // 0317 yama <--
                                 {
-                                    //Debug.Log("OK");
+                                    Debug.Log("OK TYA1");
                                     Baketsu1.SetActive(true);
                                 }else if (name.Contains("baketsu2"))
                                 {
@@ -226,7 +226,7 @@ public class SocketTest : MonoBehaviour {
                     moveTestCursor(entry.Key, getRealCoordinate(entry.Value));
                 }
                 //Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
-                //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
+                Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0328
                 //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
                 Vector2 spary1_pos = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
                 Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328

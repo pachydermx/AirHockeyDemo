@@ -96,7 +96,7 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     public void init_connection()
     {
-            if (false)
+            if (true)
             {
                 int tport = port + i;
                 tmessage = "Connecting Peer " + i + " (" + host[i] + ", " + tport + ")";
@@ -135,11 +135,10 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     void controlBaketsu(int id)
     {
-        /*
         String mes = "1";
-        byte[] umsg = Encoding.UTF8.GetBytes(mes);
-        str[id].Write(umsg, 0, umsg.Length);
+        byte[] umsg = Encoding.UTF8.GetBytes(mes + "\n");
+        tcp[id].Client.Send(umsg);
+        //str[id].Write(umsg, 0, umsg.Length);
         Debug.Log("id = " + id);
-        */
     }
 }
