@@ -242,18 +242,7 @@ public class SocketTest : MonoBehaviour {
 
     void deployWall(Vector3 position)
     {
-        if(position.x > 0)
-        {
-            GameObject nw = (GameObject)Instantiate(wall, Vector3.zero, Quaternion.identity);
-            nw.transform.parent = Canvas.transform;
-            nw.transform.position = position;
-
-        } else
-        {
-            GameObject nw = (GameObject)Instantiate(wall, Vector3.zero, Quaternion.identity);
-            nw.transform.parent = Canvas.transform;
-            nw.transform.position = position;
-        }
+        Canvas.SendMessage("DeployWall", new Vector2(position.x, position.y));
     }
 
     void moveCursor(Vector3 newPosition)
