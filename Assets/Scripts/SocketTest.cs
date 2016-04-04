@@ -390,7 +390,7 @@ public class SocketTest : MonoBehaviour {
             //Debug.Log("Gimmick name:"+Spray1.name);
             Spray1.SendMessage("stopFlag", 1);
             Canvas.GetComponent<Canvas>().DoSpray(Spray1.transform.position, 1);
-            //Canvas.SendMessage("DoSpray", Spray1.transform.position);
+            //Canvas.SendMessage("DoSpray", [Spray1.transform.position.x, Spray1.transform.position.x, Spray1.transform.position.x, 1.0f]);
         }
         else if (name.Contains("Spray2"))
         {

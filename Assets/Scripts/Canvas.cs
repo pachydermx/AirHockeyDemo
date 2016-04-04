@@ -278,16 +278,21 @@ public class Canvas : MonoBehaviour {
         // kick off
         if (kick_off_when_start)
         {
-            float power = 150;
-            float direction = Random.value * 2 * Mathf.PI;
-            Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
-            ball[n_ball].GetComponent<Rigidbody2D>().AddForce(kick_off);
+            KickOff();
         }
 
         n_ball++;
 
         // sound effect
         this.gameObject.GetComponent<AudioSource>().PlayOneShot(split_sound, split_sound_volume);
+    }
+
+    void KickOff()
+    {
+        float power = 150;
+        float direction = Random.value * 2 * Mathf.PI;
+        Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
+        ball[n_ball - 1].GetComponent<Rigidbody2D>().AddForce(kick_off);
     }
 
 
@@ -550,6 +555,7 @@ public class Canvas : MonoBehaviour {
 
     public void DoSpray(Vector3 position, int id) // yama 0318 Spray Gimmick
     {
+        // paint_color id not working for second ball
         float[] xy0 = { position.x, position.y };
         float rate_x = (float)(xy0[0] / 9.6);
         float rate_y = (float)(xy0[1] / 5.4);

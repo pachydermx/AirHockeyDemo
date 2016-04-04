@@ -14,6 +14,7 @@ public class Main : MonoBehaviour {
 
     // timer
     public float stage_duration = 30;
+    public float set_duration = 10;
     private float remaining_time;
 
     // for smasher debugging
@@ -32,6 +33,8 @@ public class Main : MonoBehaviour {
 
     // timer
     private Timer timer;
+
+    public GameObject cover;
 
 	// Use this for initialization
 	void Start () {
@@ -73,7 +76,7 @@ public class Main : MonoBehaviour {
         if (new_stage)
         {
             // reset timer
-            remaining_time = stage_duration;
+            remaining_time = set_duration + stage_duration;
             CancelInvoke("TimeDecrease");
             InvokeRepeating("TimeDecrease", 0.0f, 1.0f);
             // pick colors
@@ -87,13 +90,21 @@ public class Main : MonoBehaviour {
 
     void TimeDecrease()
     {
+        // count down
         if (remaining_time <= 5)
         {
             timer.ShowText(remaining_time.ToString("#."), true, remaining_time);
-        } else if (remaining_time == stage_duration)
+        } else if (Mathf.Abs(remaining_time - stage_duration) < 1)
+        // game start
         {
             timer.ShowText("START", true, remaining_time);
+            cover.SetActive(false);
+            canvas.SendMessage("KickOff");
+        } else if (remaining_time == stage_duration + set_duration) { 
+        // set
+            timer.ShowText("SET", true, remaining_time);
         } else
+        // normal
         {
             timer.ShowText("", false, 0);
         }
