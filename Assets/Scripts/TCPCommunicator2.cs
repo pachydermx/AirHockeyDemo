@@ -150,7 +150,8 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     public void connect_callback(IAsyncResult ar)
     {
-        if (ar.IsCompleted)
+        TcpClient client = (TcpClient)ar.AsyncState;
+        if (ar.IsCompleted && client.Connected)
         {
             tmessage += "... OK";
         }
