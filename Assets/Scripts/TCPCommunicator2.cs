@@ -7,12 +7,13 @@ using System.Threading;
 using System.Text;
 
 public class TCPCommunicator2 : MonoBehaviour {
+    /*
     string[] host = new String[4] { "192.168.1.190",
                                     "192.168.1.191",
                                     "192.168.1.192",
                                     "192.168.1.193"};
 
-    /*
+    */
     string[] host = new String[4]
     {
         "localhost",
@@ -20,7 +21,6 @@ public class TCPCommunicator2 : MonoBehaviour {
         "localhost",
         "localhost"
     };
-    */
     int port = 10001;
     static TcpClient[] tcp = new TcpClient[4];
     static NetworkStream[] str = new NetworkStream[4];
@@ -41,6 +41,9 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     private int[] wait = new int[2];
 
+    // setting
+    public bool connect_async = true;
+
     // Use this for initialization
     void Start ()
     {
@@ -55,8 +58,15 @@ public class TCPCommunicator2 : MonoBehaviour {
         {
             if (counter % 100 == 0)
             {
-                tid = new Thread(new ThreadStart(init_connection));
-                tid.Start();
+                if (connect_async)
+                {
+                    init_connection_async();
+                }
+                else
+                {
+                    tid = new Thread(new ThreadStart(init_connection));
+                    tid.Start();
+                }
             }
             counter++;
         }
@@ -74,8 +84,9 @@ public class TCPCommunicator2 : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.F10))
         {
-            controlSpray(1, 1);
+            close_connection();
         }
+
         if (wait[0] > 0)
         {
             wait[0]--;
@@ -92,11 +103,12 @@ public class TCPCommunicator2 : MonoBehaviour {
         {
             controlSpray(1, 2);
         }
+
 	}
 
     public void init_connection()
     {
-            if (false)
+            if (i < 1)
             {
                 int tport = port + i;
                 tmessage = "Connecting Peer " + i + " (" + host[i] + ", " + tport + ")";
@@ -105,7 +117,6 @@ public class TCPCommunicator2 : MonoBehaviour {
                     tcp[i] = new TcpClient();
                     tcp[i].Client.ReceiveTimeout = 100;
                     tcp[i].Connect(host[i], tport);
-                    //str[i] = tcp[i].GetStream();
                     tmessage += "... OK";
                 } catch (Exception e)
                 {
@@ -117,6 +128,38 @@ public class TCPCommunicator2 : MonoBehaviour {
         
     }
 
+    void init_connection_async()
+    {
+        if (i < 1)
+        {
+            int tport = port + i;
+            tmessage = "Connecting Peer " + i + " (" + host[i] + ", " + tport + ")";
+            try
+            {
+                tcp[i] = new TcpClient(AddressFamily.InterNetwork);
+                tcp[i].Client.ReceiveTimeout = 100;
+                tcp[i].BeginConnect(host[i], tport, connect_callback, tcp[i]);
+            } catch (Exception e)
+            {
+                tmessage += "... NOT ABLE TO ESTABLISH";
+                tException = e;
+            }
+        }
+        i++;
+    }
+
+    public void connect_callback(IAsyncResult ar)
+    {
+        if (ar.IsCompleted)
+        {
+            tmessage += "... OK";
+        }
+        else
+        {
+            tmessage += "... ERROR";
+        }
+    }
+
     public void controlSpray(int dir, int id) // yama 0321
     {
         if (tcp[id - 1] != null)
@@ -125,11 +168,12 @@ public class TCPCommunicator2 : MonoBehaviour {
             {
                 wait[id - 1] = 100;
             }
-            String mes = dir.ToString();
-            Debug.Log(", " + dir + ", " + mes);
-            byte[] umsg = Encoding.UTF8.GetBytes(mes + "\n");
-            //byte[] umsg = Encoding.UTF8.GetBytes("1");
-            tcp[id - 1].Client.Send(umsg);
+            if (tcp[id - 1].Connected)
+            {
+                String mes = dir.ToString();
+                byte[] umsg = Encoding.UTF8.GetBytes(mes + "\n");
+                tcp[id - 1].Client.Send(umsg);
+            }
         }
     }
 
@@ -141,5 +185,17 @@ public class TCPCommunicator2 : MonoBehaviour {
         str[id].Write(umsg, 0, umsg.Length);
         Debug.Log("id = " + id);
         */
+    }
+
+    void close_connection()
+    {
+        for (int i = 0; i < tcp.Length; i++)
+        {
+            if (tcp[i] != null)
+            {
+                Debug.Log("Disconnected with peer " + i);
+                tcp[i].Close();
+            }
+        }
     }
 }

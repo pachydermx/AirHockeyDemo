@@ -100,10 +100,11 @@ public class SocketTest : MonoBehaviour {
 
             //Baketsu.SetActive(false); // yama 0325 試験的にコメントアウト
 
-            tcpc = this.gameObject.GetComponent<TCPCommunicator2>();
-            spray_direction[0] = 0;
-            spray_direction[1] = 0;
         }
+        
+        tcpc = this.gameObject.GetComponent<TCPCommunicator2>();
+        spray_direction[0] = 0;
+        spray_direction[1] = 0;
 
     }
 
@@ -437,14 +438,14 @@ public class SocketTest : MonoBehaviour {
         if (name.Contains("Spray1")) // yama 0321
         {
             //Debug.Log("Gimmick name:"+Spray1.name);
-            Spray1.SendMessage("stopFlag", 1);
+            //Spray1.SendMessage("stopFlag", 1);
             Canvas.GetComponent<Canvas>().DoSpray(Spray1.transform.position, 1);
             //Canvas.SendMessage("DoSpray", [Spray1.transform.position.x, Spray1.transform.position.x, Spray1.transform.position.x, 1.0f]);
             tcpc.controlSpray(0, 2);
         }
         else if (name.Contains("Spray2"))
         {
-            Spray2.SendMessage("stopFlag", 1);
+            //Spray2.SendMessage("stopFlag", 1);
             Canvas.GetComponent<Canvas>().DoSpray(Spray2.transform.position, 2);
             //Canvas.SendMessage("DoSpray", Spray2.transform.position);
             tcpc.controlSpray(0, 1);
