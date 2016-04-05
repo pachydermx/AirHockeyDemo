@@ -12,6 +12,10 @@ public class Canvas : MonoBehaviour {
     public float spray_sound_volume = 0.3f;
     public AudioClip explode_sound;
     public float explode_sound_volume = 1.0f;
+    AudioSource bucket_sound;
+    public AudioClip bucketclip;
+
+
 
     // textures
 	public RawImage image;
@@ -500,6 +504,10 @@ public class Canvas : MonoBehaviour {
 
     void DoSprinkle(Vector3 position) // yama 0317 Baketsu Gimmick
     {
+        bucket_sound = GetComponent<AudioSource>();
+        bucket_sound.clip = bucketclip;
+        bucket_sound.PlayOneShot(bucketclip);
+
         float[] xy0 = { position.x, position.y };
         float rate_x = (float)(xy0[0] / 9.6);
         float rate_y = (float)(xy0[1] / 5.4);

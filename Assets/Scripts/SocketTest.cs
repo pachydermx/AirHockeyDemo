@@ -236,7 +236,7 @@ public class SocketTest : MonoBehaviour {
                 Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328
                 Spray1.transform.position = new Vector3(spary1_pos.x, -5.6f, 0);
                 Spray2.transform.position = new Vector3(spary2_pos.x, 5.6f, 0);
-                Itembox1.transform.position = getRealCoordinate(points["Item1:Item1"]);
+                Itembox1.transform.position = getRealCoordinate(points["Item2:Item2"]); // yama 0405 
                 //Itembox2.transform.position = getRealCoordinate(points["Item2:Item2"]);
 
                 // check spray
