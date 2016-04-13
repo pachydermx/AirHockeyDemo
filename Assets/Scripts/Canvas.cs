@@ -47,7 +47,7 @@ public class Canvas : MonoBehaviour {
     public GameObject P1Display;
     public GameObject P2Display;
     public GameObject ref_ball;
-    private GameObject[] ball;
+    public GameObject[] ball;
     protected bool animationPlaying = false;
     protected float animateCounter = 0;
     protected float P1DisplayTargetScaleX;
@@ -74,7 +74,9 @@ public class Canvas : MonoBehaviour {
     private Vector3[] last_paint_position;
 
     private GameObject box = GameObject.Find("ItemBox1");
-    private ItemBoX s;
+    //private ItemBoX s;
+
+    private Vector2 original_size;
 
     // Use this for initialization
     void Start () {
@@ -89,7 +91,7 @@ public class Canvas : MonoBehaviour {
 
         // debug
         //Debug.Log(Vector3.Angle(new Vector3(1, 0, 0), new Vector3(-1, 1, 0)));
-        s = box.GetComponent<ItemBoX>();
+        //s = box.GetComponent<ItemBoX>();
     }
 
 	// Update is called once per frame
@@ -118,11 +120,24 @@ public class Canvas : MonoBehaviour {
             if(itemcount >= 100)
             {
                 DoBig(default_range);
-                
+
 
                 //ball[0].transform.localScale = new Vector3(ball[0].transform.localScale.x / 1.5f, ball[0].transform.localScale.y / 1.5f, 1);
-                ball[0].transform.localScale = new Vector3(s.p_scale.x , s.p_scale.y, 1);
-                
+
+                //ball[0].transform.localScale = new Vector3(s.p_scale.x , s.p_scale.y, 1);
+
+
+                /*
+                if (ball[0])
+                {
+                    Debug.Log("OK");
+                    box.SendMessage("reverse_size", ball[0]);
+                }
+                */
+
+                ball[0].transform.localScale = original_size;
+              
+
                 itemcount = 0;
             }
         }
@@ -251,9 +266,14 @@ public class Canvas : MonoBehaviour {
         if (n_ball == 0) // yama 0325 初期パックの設定
         {
             ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
+            
+            original_size = ball[n_ball].transform.localScale;
+            Debug.Log(ball[0].transform.localScale.x);
+            
+            // yama 0413
             GameObject box = GameObject.Find("ItemBox1");
             box.SendMessage("setBallOriginal", ball[n_ball]);
-
+            
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
         }
         else // yama 0325 複製パックの設定
@@ -633,6 +653,7 @@ public class Canvas : MonoBehaviour {
 
     void DoBig(int size)
     {
+        Debug.Log("DoBig");
         range = size;
     }
 

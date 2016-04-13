@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class ItemBoX : MonoBehaviour {
@@ -33,6 +34,9 @@ public class ItemBoX : MonoBehaviour {
     public Sprite DoubleIcon;
     public Sprite BombIcon;
 
+    private int get_scale = 0;
+
+
 	// Use this for initialization
 	void Start () {
         MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>(); //0328 tanaka icon
@@ -48,7 +52,13 @@ public class ItemBoX : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+
+	    if (get_scale == 0)
+	    {
+	        get_scale++;
+            p_scale = new Vector2(Pack.transform.localScale.x, Pack.transform.lossyScale.y); // yama 0413 元サイズ取得
+        }
+
         time += Time.deltaTime;
         if(time >= 5.0)
         {
@@ -102,7 +112,7 @@ public class ItemBoX : MonoBehaviour {
         if (g_flag == 0) // yama 0323 巨大化
         {
             canvas.SendMessage("DoBig", 95);
-            p_scale = new Vector2(Pack.transform.localScale.x, Pack.transform.lossyScale.y);
+            Debug.Log("PackBig");
             Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
         }
         else if (g_flag == 1) // yama 0323 分身
@@ -151,5 +161,21 @@ public class ItemBoX : MonoBehaviour {
             default:
                 break;
         } 
+    }
+
+    
+    void reverse_size(GameObject pack)
+    {
+        pack.transform.localScale = p_scale;
+    }
+ 
+
+    void reset()
+    {
+        get_scale = 0;
+        g_flag = 0;
+        t_flag = 0;
+        bomb_flag = 0;
+        clone_flag = 0;
     }
 }

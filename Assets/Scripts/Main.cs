@@ -72,6 +72,8 @@ public class Main : MonoBehaviour {
 
         itembox.SetActive(true);
 
+        itembox.SendMessage("reset");
+
         // reset timer
         if (new_stage)
         {
