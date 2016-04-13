@@ -16,6 +16,7 @@ public class Canvas : MonoBehaviour {
     public AudioClip bucketclip;
 
 
+    public float wall_width = 2.0f;
 
     // textures
 	public RawImage image;
@@ -72,8 +73,11 @@ public class Canvas : MonoBehaviour {
     // paint
     private Vector3[] last_paint_position;
 
-	// Use this for initialization
-	void Start () {
+    private GameObject box = GameObject.Find("ItemBox1");
+    private ItemBoX s;
+
+    // Use this for initialization
+    void Start () {
         // init variables
         last_paint_position = new Vector3[3];
 		// init texture
@@ -85,7 +89,8 @@ public class Canvas : MonoBehaviour {
 
         // debug
         //Debug.Log(Vector3.Angle(new Vector3(1, 0, 0), new Vector3(-1, 1, 0)));
-	}
+        s = box.GetComponent<ItemBoX>();
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -113,12 +118,11 @@ public class Canvas : MonoBehaviour {
             if(itemcount >= 100)
             {
                 DoBig(default_range);
-                /*
-                GameObject box = GameObject.Find("ItemBox1");
-                ItemBoX s = box.GetComponent<ItemBoX>();
+                
+
                 //ball[0].transform.localScale = new Vector3(ball[0].transform.localScale.x / 1.5f, ball[0].transform.localScale.y / 1.5f, 1);
                 ball[0].transform.localScale = new Vector3(s.p_scale.x , s.p_scale.y, 1);
-                */
+                
                 itemcount = 0;
             }
         }
@@ -610,17 +614,18 @@ public class Canvas : MonoBehaviour {
             {
                 point_to = Quaternion.Euler(new Vector3(0, 0, 90 - Vector3.Angle(delta, new Vector3(0, 1, 0)) + 0));
             }
-            size = new Vector3(delta.magnitude * 10, 1, 1);
+            size = new Vector3(delta.magnitude * 10, wall_width, 1);
         } else
         {
-            size = new Vector3(1, 1, 1);
+            size = new Vector3(1, wall_width, 1);
             point_to = Quaternion.identity;
         }
         // deploy
         GameObject nw = (GameObject)Instantiate(wall, current_position, point_to);
         nw.transform.localScale = size;
         GameObject nwp = nw.transform.GetChild(0).gameObject;
-        nwp.GetComponent<SpriteRenderer>().color = colors[id];
+        Color stroke_color = new Color(colors[id].r*0.5f, colors[id].g*0.5f, colors[id].b*0.5f, colors[id].a);
+        nwp.GetComponent<SpriteRenderer>().color = stroke_color;
         nw.GetComponent<ColliderMessenager>().player_id = id;
         // log
         last_paint_position[id] = current_position;

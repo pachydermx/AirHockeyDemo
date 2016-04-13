@@ -102,6 +102,7 @@ public class ItemBoX : MonoBehaviour {
         if (g_flag == 0) // yama 0323 巨大化
         {
             canvas.SendMessage("DoBig", 95);
+            p_scale = new Vector2(Pack.transform.localScale.x, Pack.transform.lossyScale.y);
             Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
         }
         else if (g_flag == 1) // yama 0323 分身
