@@ -6,6 +6,7 @@ using System.Collections;
 public class ColliderGimmick : MonoBehaviour {
     public GameObject Gimmick;
     private GameObject manager;
+    public GameObject current_collider;
 
     // Use this for initialization
     void Start () {
@@ -20,12 +21,14 @@ public class ColliderGimmick : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D collision)
     {
         manager.SendMessage("sendPosition", Gimmick.name);
+        current_collider = collision.gameObject;
 
     }
 
     void OnCollisionStay2D(Collision2D collision)
     {
         manager.SendMessage("sendPosition", Gimmick.name);
+        current_collider = collision.gameObject;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -36,7 +39,9 @@ public class ColliderGimmick : MonoBehaviour {
             
             manager.SendMessage("sendPosition", Gimmick.name);
         //}
+        current_collider = other.gameObject;
     }
+
     /*
     void OnTriggerStay2D(Collider2D other)
     {

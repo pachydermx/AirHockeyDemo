@@ -36,6 +36,7 @@ public class ItemBoX : MonoBehaviour {
 
     private int get_scale = 0;
 
+    private GameObject current_gameobject;
 
 	// Use this for initialization
 	void Start () {
@@ -86,8 +87,11 @@ public class ItemBoX : MonoBehaviour {
 
         if(bomb_flag == 1)
         {
+            current_gameobject = this.gameObject.GetComponent<ColliderGimmick>().current_collider;
+            Pack.SendMessage("getReadyFlag", current_gameobject);
             Pack.SendMessage("setFlag", bomb_flag);
             //DefaultBall.SendMessage("changePack");
+            bomb_flag = 0;
         }
 
         //0328 tanaka icon

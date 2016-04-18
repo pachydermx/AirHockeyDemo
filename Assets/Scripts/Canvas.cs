@@ -54,6 +54,9 @@ public class Canvas : MonoBehaviour {
     protected float P2DisplayTargetScaleX;
     protected float maximumBar = 192;
 
+    private bool bomb_flag = false;
+    private int bomb_range = 200;
+
     // 線の補間に使用
     private float temp_x;   // yama 0316
     private float temp_y;   // yama 0316
@@ -103,11 +106,14 @@ public class Canvas : MonoBehaviour {
                 DrawRound(i, range);
             }
         }
+        if (bomb_flag)
+        {
+            DrawRound(0, bomb_range);
+            bomb_flag = false;
+        }
         // apply texture
         texture.Apply(false);
         normal_texture.Apply(false);
-        //Debug.Log("range:" + range);
-		//DrawRound(range);
 
         // tanaka 0324
 		if (range >= 200)
@@ -120,24 +126,7 @@ public class Canvas : MonoBehaviour {
             if(itemcount >= 100)
             {
                 DoBig(default_range);
-
-
-                //ball[0].transform.localScale = new Vector3(ball[0].transform.localScale.x / 1.5f, ball[0].transform.localScale.y / 1.5f, 1);
-
-                //ball[0].transform.localScale = new Vector3(s.p_scale.x , s.p_scale.y, 1);
-
-
-                /*
-                if (ball[0])
-                {
-                    Debug.Log("OK");
-                    box.SendMessage("reverse_size", ball[0]);
-                }
-                */
-
                 ball[0].transform.localScale = original_size;
-              
-
                 itemcount = 0;
             }
         }
@@ -200,66 +189,6 @@ public class Canvas : MonoBehaviour {
             }
         }
 	}
-
-    /*
-    void AddNewBall()
-    {   
-        // instantiate
-        ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
-        // config
-        ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
-        paint_color[n_ball] = Color.clear;
-        ball[n_ball].gameObject.name = "Ball_" + n_ball;
-        manager.SendMessage("AddNewBall", ball[n_ball]);
-
-        if (n_ball > 0)
-        {
-            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true;
-
-        }
-        
-        if (n_ball == 0) // yama 0325 初期パックの設定
-        {
-            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
-            GameObject box = GameObject.Find("ItemBox");
-            box.SendMessage("setBallOriginal", ball[n_ball]);
-
-            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
-        }
-        else // yama 0325 複製パックの設定
-        {
-            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
-
-            ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
-            ball[n_ball].gameObject.GetComponent<CloneDelete>().enabled = true; // yama 0325 複製削除
-
-            float s_x = ball[0].GetComponent<Rigidbody2D>().velocity.x;
-            float s_y = ball[0].GetComponent<Rigidbody2D>().velocity.y;
-
-            ball[0].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) + s_y * Mathf.Cos(angle));
-            ball[n_ball].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
-
-            // yama 0325 パックの色付け（できてません）
-            //Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
-            //int id = ball[0].GetComponent<Ball>().paint_id;  
-            //ball[n_ball].SendMessage("Player", id);
-            //ball[n_ball].SendMessage("Player", 1);
-            //paint_color[n_ball] = paint_color[0];
-        }
-
-
-        // kick off
-        if (kick_off_when_start)
-        {
-            float power = 150;
-            float direction = Random.value * 2 * Mathf.PI;
-            Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
-            ball[n_ball].GetComponent<Rigidbody2D>().AddForce(kick_off);
-        }
-
-        n_ball++;
-    }
-    */
 
     void AddNewBall()
     {
@@ -379,23 +308,6 @@ public class Canvas : MonoBehaviour {
                         texture.SetPixel(pos_x + x, pos_y + y, paint_color[id]);
                     
                 }
-                // random dots
-                /*
-                if (Random.value < 0.01)
-                {
-                    texture.SetPixel( pos_x + x, pos_y + y, new Color(1.0f, 1.0f, 1.0f, 0.5f));
-                }
-                */
-                // normal map
-                /*
-                if (!not_moving && !splash)
-                {
-                    normal_texture.SetPixel(pos_x + x, pos_y + y, GetNormalColor(id, pos_x, pos_y, pos_x + x, pos_y + y, radius));
-                } else if (splash)
-                {
-                    normal_texture.SetPixel( pos_x + x, pos_y + y,  GetNormalColorCentral(pos_x, pos_y, radius, pos_x + x, pos_y + y) );
-                }
-                */
             }
         }
 
@@ -600,7 +512,7 @@ public class Canvas : MonoBehaviour {
     }
 
 	void DoExplode () {
-		range = 200;
+	    bomb_flag = true;
         // sound effect
         this.gameObject.GetComponent<AudioSource>().PlayOneShot(explode_sound, explode_sound_volume);
 	}

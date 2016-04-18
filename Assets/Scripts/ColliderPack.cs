@@ -5,6 +5,7 @@ public class ColliderPack : MonoBehaviour {
     public GameObject canvas;
     private GameObject box;
     private int bomb_flag;
+    private bool ready = false;
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +40,20 @@ public class ColliderPack : MonoBehaviour {
 
     void setFlag(int flag)
     {
-        bomb_flag = flag;
+        if (ready)
+        {
+            bomb_flag = flag;
+            ready = false;
+        }
+    }
+
+    void getReadyFlag(GameObject obj)
+    {
+        if (obj == this.gameObject)
+        {
+            Debug.Log(obj);
+            Debug.Log(this.gameObject);
+            ready = true;
+        }
     }
 }
