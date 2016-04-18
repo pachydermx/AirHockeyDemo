@@ -69,6 +69,8 @@ public class SocketTest : MonoBehaviour {
     private int[] reverse_counter = new int[2];
     private int[] spray_direction = new int[2];
 
+    public float item_position_range_x = 4.1f;
+
     void Start()
     {
         if (enabled)
@@ -232,12 +234,12 @@ public class SocketTest : MonoBehaviour {
                 //Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
                 //Baketsu1.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0413
                 //Baketsu2.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
-                Vector2 spary1_pos = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
-                Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328
-                Spray1.transform.position = new Vector3(spary1_pos.x, -5.6f, 0);
-                Spray2.transform.position = new Vector3(spary2_pos.x, 5.6f, 0);
-                Itembox1.transform.position = getRealCoordinate(points["Item2:Item2"]); // yama 0405 
-                //Itembox2.transform.position = getRealCoordinate(points["Item2:Item2"]);
+                //Vector2 spary1_pos = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
+                //Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328
+                //Spray1.transform.position = new Vector3(spary1_pos.x, -5.6f, 0);
+                //Spray2.transform.position = new Vector3(spary2_pos.x, 5.6f, 0);
+                Itembox1.transform.position = gimmickPositionFilter(getRealCoordinate(points["Item2:Item2"])); // yama 0405 
+                Itembox2.transform.position = gimmickPositionFilter(getRealCoordinate(points["Item1:Item1"])); // yama 0405 
 
                 // check spray
                 if (Mathf.Abs(Spray1.transform.position.x) > spray_reverse_point && reverse_counter[0] < 1)
@@ -355,6 +357,23 @@ public class SocketTest : MonoBehaviour {
 
         Vector3 output = new Vector3(x_cur, y_cur, 0);
         return output;
+    }
+
+    Vector3 gimmickPositionFilter(Vector3 raw)
+    {
+        if (raw.x >= -item_position_range_x && raw.x <= item_position_range_x)
+        {
+            return raw;
+        } else if (raw.x < -item_position_range_x)
+        {
+            // left
+            return new Vector3(-item_position_range_x, raw.y, raw.z);
+        }
+        else
+        {
+            // right
+            return new Vector3(item_position_range_x, raw.y, raw.z);
+        }
     }
 
     void setCalibrationPoint()

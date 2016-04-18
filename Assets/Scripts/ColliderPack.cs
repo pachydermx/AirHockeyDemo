@@ -23,7 +23,7 @@ public class ColliderPack : MonoBehaviour {
         if (collision.gameObject.name == "Canvas" && bomb_flag == 1)
         {
             canvas.SendMessage("DoExplode");
-            Debug.Log("bomb");
+            //Debug.Log("bomb");
             box.GetComponent<ItemBoX>().bomb_flag = 0;
             bomb_flag = 0;
         }
@@ -51,8 +51,6 @@ public class ColliderPack : MonoBehaviour {
     {
         if (obj == this.gameObject)
         {
-            Debug.Log(obj);
-            Debug.Log(this.gameObject);
             ready = true;
         }
     }

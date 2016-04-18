@@ -197,7 +197,7 @@ public class Canvas : MonoBehaviour {
             ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
             
             original_size = ball[n_ball].transform.localScale;
-            Debug.Log(ball[0].transform.localScale.x);
+            //Debug.Log(ball[0].transform.localScale.x);
             
             // yama 0413
             GameObject box = GameObject.Find("ItemBox1");
@@ -219,7 +219,7 @@ public class Canvas : MonoBehaviour {
             ball[n_ball].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
 
             // yama 0325 パックの色付け（できてません）
-            Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
+            //Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
             int id = ball[0].GetComponent<Ball>().paint_id;  
             //ball[n_ball].SendMessage("Player", id);
             //paint_color[n_ball] = paint_color[0];
