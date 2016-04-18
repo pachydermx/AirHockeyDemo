@@ -88,6 +88,7 @@ public class ItemBoX : MonoBehaviour {
         if(bomb_flag == 1)
         {
             current_gameobject = this.gameObject.GetComponent<ColliderGimmick>().current_collider;
+            Debug.Log(Pack);
             Pack.SendMessage("getReadyFlag", current_gameobject);
             Pack.SendMessage("setFlag", bomb_flag);
             //DefaultBall.SendMessage("changePack");

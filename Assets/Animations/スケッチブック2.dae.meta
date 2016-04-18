@@ -1,31 +1,28 @@
 fileFormatVersion: 2
-guid: ea03175965def0c4a8aa65104ba42381
-timeCreated: 1459508546
+guid: a729e743a684ac54ebfe7cc0884c28b4
+timeCreated: 1460962689
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: BooK1
-    100002: Mesh1
-    100004: Mesh2
-    100006: Mesh3
-    100008: SKetch1
-    100010: //RootNode
-    400000: BooK1
-    400002: Mesh1
-    400004: Mesh2
-    400006: Mesh3
-    400008: SKetch1
-    400010: //RootNode
-    2300000: Mesh1
-    2300002: Mesh2
-    2300004: Mesh3
-    3300000: Mesh1
-    3300002: Mesh2
-    3300004: Mesh3
-    4300000: Mesh1
-    4300002: Mesh2
-    4300004: Mesh3
+    100000: image_0
+    100002: image_1
+    100004: skp_camera_Last_Saved_SketchUp_View
+    100006: //RootNode
+    400000: image_0
+    400002: image_1
+    400004: skp_camera_Last_Saved_SketchUp_View
+    400006: //RootNode
+    2300000: image_0
+    2300002: image_1
+    2300004: //RootNode
+    3300000: image_0
+    3300002: image_1
+    3300004: //RootNode
+    4300000: SketchUp
+    4300002: image_0
+    4300004: image_1
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -84,7 +81,7 @@ ModelImporter:
     rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

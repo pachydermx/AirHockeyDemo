@@ -34,7 +34,13 @@ public class Main : MonoBehaviour {
     // timer
     private Timer timer;
 
-    public GameObject cover;
+    private GameObject npa1;
+    private GameObject npa2;
+
+    private Animation npanim1;
+    private Animation npanim2;
+
+    //public GameObject cover;
 
 	// Use this for initialization
 	void Start () {
@@ -46,6 +52,10 @@ public class Main : MonoBehaviour {
         */
         // get objects
         timer = GameObject.Find("Timer").GetComponent<Timer>();
+
+        //tanaka 0418
+	    npa1 = GameObject.Find("SketchBook1");
+	    npa2 = GameObject.Find("SketchBook2");
 
         // set framerate
         Application.targetFrameRate = 120;
@@ -92,7 +102,7 @@ public class Main : MonoBehaviour {
         // reset cover
         if (new_stage)
         {
-            cover.SetActive(true);
+            //cover.SetActive(true);
         }
     }
 
@@ -106,12 +116,19 @@ public class Main : MonoBehaviour {
         // game start
         {
             timer.ShowText("START", true, remaining_time);
-            cover.SetActive(false);
+            //cover.SetActive(false);
             canvas.SendMessage("KickOff");
+            npa1.SetActive(false); 
+            npa2.SetActive(false);//tanaka 0418
         } else if (remaining_time == stage_duration + set_duration) { 
         // set
             timer.ShowText("SET", true, remaining_time);
-        } else
+        }
+        else if (remaining_time == stage_duration + 2)
+        {
+            Debug.Log("newpage");
+        }
+        else
         // normal
         {
             timer.ShowText("", false, remaining_time);
