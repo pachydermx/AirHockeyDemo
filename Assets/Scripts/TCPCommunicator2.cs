@@ -43,6 +43,7 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     // setting
     public bool connect_async = true;
+    public bool enabled = false;
 
     // Use this for initialization
     void Start ()
@@ -54,54 +55,58 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-	    if(counter < 1000)
+        if (enabled)
         {
-            if (counter % 100 == 0)
+            if(counter < 1000)
             {
-                if (connect_async)
+                if (counter % 100 == 0)
                 {
-                    init_connection_async();
+                    if (connect_async)
+                    {
+                        init_connection_async();
+                    }
+                    else
+                    {
+                        tid = new Thread(new ThreadStart(init_connection));
+                        tid.Start();
+                    }
                 }
-                else
-                {
-                    tid = new Thread(new ThreadStart(init_connection));
-                    tid.Start();
-                }
+                counter++;
             }
-            counter++;
-        }
 
-        if (tmessage.Length > 0)
-        {
-            Debug.Log(tmessage);
-            tmessage = "";
-        }
-        if (tException != null)
-        {
-            Debug.LogException(tException);
-            tException = null;
-        }
+            if (tmessage.Length > 0)
+            {
+                Debug.Log(tmessage);
+                tmessage = "";
+            }
+            if (tException != null)
+            {
+                Debug.LogException(tException);
+                tException = null;
+            }
 
-        if (Input.GetKeyDown(KeyCode.F10))
-        {
-            close_connection();
-        }
+            if (Input.GetKeyDown(KeyCode.F10))
+            {
+                close_connection();
+            }
 
-        if (wait[0] > 0)
-        {
-            wait[0]--;
-        }
-        if (wait[1] > 0)
-        {
-            wait[1]--;
-        }
-        if (wait[0] == 1)
-        {
-            controlSpray(1, 1);
-        }
-        if (wait[1] == 1)
-        {
-            controlSpray(1, 2);
+            if (wait[0] > 0)
+            {
+                wait[0]--;
+            }
+            if (wait[1] > 0)
+            {
+                wait[1]--;
+            }
+            if (wait[0] == 1)
+            {
+                controlSpray(1, 1);
+            }
+            if (wait[1] == 1)
+            {
+                controlSpray(1, 2);
+            }
+            
         }
 
 	}

@@ -57,6 +57,9 @@ public class Canvas : MonoBehaviour {
     private bool bomb_flag = false;
     private int bomb_range = 200;
 
+    private bool big_flag = false;
+    private int big_range;
+
     // 線の補間に使用
     private float temp_x;   // yama 0316
     private float temp_y;   // yama 0316
@@ -69,6 +72,8 @@ public class Canvas : MonoBehaviour {
     // settings
     public bool kick_off_when_start = true;
     private float ink_ratio = 0.8f;
+
+    public int big_duration = 150;
 
     // debug
     public int counter = 10;
@@ -111,23 +116,23 @@ public class Canvas : MonoBehaviour {
             DrawRound(0, bomb_range);
             bomb_flag = false;
         }
+	    if (big_flag)
+	    {
+	        DrawRound(0, big_range);
+	    }
         // apply texture
         texture.Apply(false);
         normal_texture.Apply(false);
 
         // tanaka 0324
-		if (range >= 200)
-        {
-            //range -= 5;
-            range = default_range;
-		}else if(range > default_range)
+        if (big_flag)
         {
             itemcount++;
-            if(itemcount >= 100)
+            if(itemcount >= big_duration)
             {
-                DoBig(default_range);
                 ball[0].transform.localScale = original_size;
                 itemcount = 0;
+                bomb_flag = false;
             }
         }
         
@@ -576,8 +581,9 @@ public class Canvas : MonoBehaviour {
 
     void DoBig(int size)
     {
-        Debug.Log("DoBig");
-        range = size;
+        //Debug.Log("DoBig");
+        big_range = size;
+        big_flag = true;
     }
 
     void SetColors(Color[] received_colors)
