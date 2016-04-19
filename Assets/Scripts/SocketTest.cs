@@ -468,6 +468,7 @@ public class SocketTest : MonoBehaviour {
             Canvas.GetComponent<Canvas>().DoSpray(Spray1.transform.position, 1);
             //Canvas.SendMessage("DoSpray", [Spray1.transform.position.x, Spray1.transform.position.x, Spray1.transform.position.x, 1.0f]);
             tcpc.controlSpray(0, 2);
+            Spray1.SendMessage("create_particle");
         }
         else if (name.Contains("Spray2"))
         {
@@ -475,6 +476,7 @@ public class SocketTest : MonoBehaviour {
             Canvas.GetComponent<Canvas>().DoSpray(Spray2.transform.position, 2);
             //Canvas.SendMessage("DoSpray", Spray2.transform.position);
             tcpc.controlSpray(0, 1);
+            Spray2.SendMessage("create_particle");
         }
         else if (name.Contains("Baketsu1"))
         {

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class SprayController : MonoBehaviour {
@@ -9,8 +10,14 @@ public class SprayController : MonoBehaviour {
     public int flag;
 
     private GameObject manager;
+    private ColliderGimmick collider_gimmick;
 
     public int id;
+
+    public GameObject particle_system;
+    public float particle_angle;
+
+    private float particle_duration;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +26,37 @@ public class SprayController : MonoBehaviour {
         flag = 0;
         manager = GameObject.Find("Manager");
         //manager.SendMessage("controlSpray", direction);
+	    particle_duration = particle_system.GetComponent<ParticleSystem>().duration;
+
+	    collider_gimmick = this.gameObject.GetComponent<ColliderGimmick>();
+	}
+
+    void create_particle()
+    {
+        // create subobject
+        GameObject particle_object = (GameObject)Instantiate(particle_system, this.transform.position, Quaternion.Euler(0, 0, particle_angle));
+        // configure
+        particle_object.transform.parent = this.transform;
+        particle_object.transform.localScale = new Vector3(1, 1, 1);
+        ParticleSystem ps = particle_object.GetComponent<ParticleSystem>();
+        try
+        {
+            ps.startColor = collider_gimmick.current_collider.GetComponent<Ball>().GetColor();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning(e.Message);
+        }
+        // play
+        ps.Play();
+        // assign to destory the object
+        StartCoroutine(destory_particle(particle_object));
+    }
+
+    private IEnumerator destory_particle(GameObject obj)
+    {
+        yield return new WaitForSeconds(particle_duration);
+        Destroy(obj);
     }
 	
 	// Update is called once per frame

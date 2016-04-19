@@ -56,10 +56,11 @@ public class Ball : MonoBehaviour {
 	void Player (int pid) {
         //Debug.Log("Player switched to " + id);
 		// switch apperance of ball
-		default_ball.enabled = false;
-		p1_ball.enabled = false;
-		p2_ball.enabled = false;
+		//default_ball.enabled = false;
+		//p1_ball.enabled = false;
+		//p2_ball.enabled = false;
 
+        /*
 		switch(pid) {
 		case 1:
 			p1_ball.enabled = true;
@@ -71,12 +72,18 @@ public class Ball : MonoBehaviour {
 			default_ball.enabled = true;
 			break;
 		}
+        */
 
 
-            paint_id = pid;
+        paint_id = pid;
 
 		// switch paint color
 		canvas.SendMessage("SetColor", new float[] { player_color[pid].r, player_color[pid].g, player_color[pid].b, player_color[pid].a, id});
 	}
+
+    public Color GetColor()
+    {
+        return player_color[paint_id];
+    }
 
 }

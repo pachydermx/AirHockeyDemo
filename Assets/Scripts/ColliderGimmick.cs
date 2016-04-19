@@ -20,26 +20,25 @@ public class ColliderGimmick : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        manager.SendMessage("sendPosition", Gimmick.name);
         current_collider = collision.gameObject;
-
+        manager.SendMessage("sendPosition", Gimmick.name);
     }
 
     void OnCollisionStay2D(Collision2D collision)
     {
-        manager.SendMessage("sendPosition", Gimmick.name);
         current_collider = collision.gameObject;
+        manager.SendMessage("sendPosition", Gimmick.name);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        current_collider = other.gameObject;
         //if (other.tag == "Pack")
         //{
             //Debug.Log("Trigger"+ other.name);
             
             manager.SendMessage("sendPosition", Gimmick.name);
         //}
-        current_collider = other.gameObject;
     }
 
     /*
