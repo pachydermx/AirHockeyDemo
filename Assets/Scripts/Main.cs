@@ -124,9 +124,10 @@ public class Main : MonoBehaviour {
         // set
             timer.ShowText("SET", true, remaining_time);
         }
-        else if (remaining_time == stage_duration + 2)
+        else if (remaining_time == stage_duration + 3)
         {
-            Debug.Log("newpage");
+            npa1.SendMessage("NewPage");
+            npa2.SendMessage("NewPage");
         }
         else
         // normal
