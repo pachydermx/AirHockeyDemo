@@ -247,7 +247,18 @@ public class Canvas : MonoBehaviour {
     void KickOff()
     {
         float power = 150;
-        float direction = Random.value * 2 * Mathf.PI;
+        float direction;
+        // yama 0419 発射方向範囲指定 ->
+        if (Random.Range(0, 2) == 0) 
+        {
+            direction = Random.Range(-45, 46)*Mathf.PI/180;
+        }
+        else
+        {
+            direction = Random.Range(135, 226) * Mathf.PI / 180;
+        }
+        // <- ここまで
+        //float direction = Random.value * 2 * Mathf.PI;
         Vector2 kick_off = new Vector2(power * Mathf.Cos(direction), power * Mathf.Sin(direction));
         ball[n_ball - 1].GetComponent<Rigidbody2D>().AddForce(kick_off);
     }
