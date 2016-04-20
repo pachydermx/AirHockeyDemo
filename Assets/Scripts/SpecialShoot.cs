@@ -19,6 +19,8 @@ public class SpecialShoot : MonoBehaviour {
     int zig_angle = 315;
     int first_flag = 0;
 
+    private int check = 1;
+
     // Use this for initialization
     void Start () {
         rb = this.gameObject.GetComponent<Rigidbody2D>();
@@ -39,26 +41,34 @@ public class SpecialShoot : MonoBehaviour {
 
     void Set_Flag(int flag)
     {
-        
-        if (flag == 1)
+        if (shoot == 0)
         {
-            shoot = flag;
-            rb_original = rb;
-            x = rb.velocity.x;
-            y = rb.velocity.y;
-            Debug.Log("rb.velocity.x = " + rb.velocity.x + ", rb.velocity.y = " + rb.velocity.y);
-            pos_original = new Vector2(t.transform.position.x, t.transform.position.y);
-            canvas.SendMessage("ChangeRange", 25);
+
+            if (flag == 1)
+            {
+                shoot = flag;
+                rb_original = rb;
+                x = rb.velocity.x;
+                y = rb.velocity.y;
+                Debug.Log("CircleShoot");
+                pos_original = new Vector2(t.transform.position.x, t.transform.position.y);
+                canvas.SendMessage("ChangeRange", 25);
+            }
+            else if (flag == 2)
+            {
+                shoot = flag;
+                rb_original = rb;
+                x = rb.velocity.x;
+                y = rb.velocity.y;
+                dir = new Vector3(x*Mathf.Cos(zig_angle) - y*Mathf.Sin(zig_angle),
+                    x*Mathf.Sin(zig_angle) + y*Mathf.Cos(zig_angle), 0);
+                canvas.SendMessage("ChangeRange", 30);
+                Debug.Log("ZigShoot");
+            }
+
+            //check = 1;
         }
-        else if(flag == 2)
-        {
-            shoot = flag;
-            rb_original = rb;
-            x = rb.velocity.x;
-            y = rb.velocity.y;
-            dir = new Vector3(x * Mathf.Cos(zig_angle) - y * Mathf.Sin(zig_angle), x * Mathf.Sin(zig_angle) + y * Mathf.Cos(zig_angle), 0);
-            canvas.SendMessage("ChangeRange", 30);
-        }
+
     }
 
     void CircleShoot()
@@ -120,32 +130,46 @@ public class SpecialShoot : MonoBehaviour {
         count += zig;
     }
 
+    void ToucCheck(int c)
+    {
+        if (shoot != 0)
+        {
+            check = c;
+        }
+    }
+
     
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!collision.gameObject.name.Contains("StrokeOffset"))
+        if (!collision.gameObject.name.Contains("StrokeOffset") || check == 1)
         {
             if (shoot != 0)
             {
                 shoot = 0;
                 angle = 0;
                 count = 0;
+                check = 0;
                 canvas.SendMessage("ChangeRange", 50);
+
+                Debug.Log("release");
             }
-        }
+        } 
     }
 
     void OnCollisionStay2D(Collision2D collision)
     {
-        if (!collision.gameObject.name.Contains("StrokeOffset"))
+        if (!collision.gameObject.name.Contains("StrokeOffset") || check == 1)
         {
             if (shoot != 0)
             {
                 shoot = 0;
                 angle = 0;
                 count = 0;
+                check = 0;
                 canvas.SendMessage("ChangeRange", 50);
-            }
+
+                Debug.Log("release");
+            }            
         }
     }
     

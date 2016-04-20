@@ -13,7 +13,7 @@ public class TriggerSpecial : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    flag = Random.Range(1, 5);
+	    flag = Random.Range(1, 2); // yama 0419 発動確率
 	}
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -23,20 +23,17 @@ public class TriggerSpecial : MonoBehaviour
             Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
             if (rb.velocity.magnitude > 30)
             {
-                /*
                 if (flag == 1)
                 {
                     collision.gameObject.SendMessage("Set_Flag", 1);
                 }
                 else if (flag == 2)
                 {
-                    collision.gameObject.SendMessage("Set_Flag", 1);
+                    collision.gameObject.SendMessage("Set_Flag", 2);
                 }
-                */
-
                 //if (Mathf.Abs(rb.velocity.x) >= 25 && Mathf.Abs(rb.velocity.y) <= 5)
                 
-                    collision.gameObject.SendMessage("Set_Flag", 1);
+                    //collision.gameObject.SendMessage("Set_Flag", 1);
                 
             }
         }
@@ -44,27 +41,37 @@ public class TriggerSpecial : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D collision)
     {
-        Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
-        if (rb.velocity.magnitude > 30)
+        if (collision.gameObject.name.Contains("Ball"))
         {
-            /*
-            if (collision.gameObject.name.Contains("Ball"))
+            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+            if (rb.velocity.magnitude > 30)
             {
-                if (flag == 1)
-                {
-                    collision.gameObject.SendMessage("Set_Flag", 1);
-                }
-                else if (flag == 2)
-                {
-                    collision.gameObject.SendMessage("Set_Flag", 1);
-                }
-            }
-            */
 
-            //if (Mathf.Abs(rb.velocity.x) >= 25 && Mathf.Abs(rb.velocity.y) <= 5)
-            
-                collision.gameObject.SendMessage("Set_Flag", 1);
-            
+                if (collision.gameObject.name.Contains("Ball"))
+                {
+                    if (flag == 1)
+                    {
+                        collision.gameObject.SendMessage("Set_Flag", 1);
+                    }
+                    else if (flag == 2)
+                    {
+                        collision.gameObject.SendMessage("Set_Flag", 2);
+                    }
+                }
+
+                //if (Mathf.Abs(rb.velocity.x) >= 25 && Mathf.Abs(rb.velocity.y) <= 5)
+
+                //collision.gameObject.SendMessage("Set_Flag", 1);
+
+            }
+        }
+    }
+
+    void OnCollisionExit2D(Collision collision)
+    {
+        if (collision.gameObject.name.Contains("Ball"))
+        {
+            collision.gameObject.SendMessage("TouchCheck", 1);
         }
     }
 }
