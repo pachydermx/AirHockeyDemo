@@ -604,6 +604,11 @@ public class Canvas : MonoBehaviour {
         big_flag = true;
     }
 
+    void ChangeRange(int size)
+    {
+        range = size;
+    }
+
     void SetColors(Color[] received_colors)
     {
         colors = received_colors;

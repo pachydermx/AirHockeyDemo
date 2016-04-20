@@ -48,7 +48,7 @@ public class SpecialShoot : MonoBehaviour {
             y = rb.velocity.y;
             Debug.Log("rb.velocity.x = " + rb.velocity.x + ", rb.velocity.y = " + rb.velocity.y);
             pos_original = new Vector2(t.transform.position.x, t.transform.position.y);
-            canvas.SendMessage("DoBig", 25);
+            canvas.SendMessage("ChangeRange", 25);
         }
         else if(flag == 2)
         {
@@ -57,7 +57,7 @@ public class SpecialShoot : MonoBehaviour {
             x = rb.velocity.x;
             y = rb.velocity.y;
             dir = new Vector3(x * Mathf.Cos(zig_angle) - y * Mathf.Sin(zig_angle), x * Mathf.Sin(zig_angle) + y * Mathf.Cos(zig_angle), 0);
-            canvas.SendMessage("DoBig", 30);
+            canvas.SendMessage("ChangeRange", 30);
         }
     }
 
@@ -123,28 +123,30 @@ public class SpecialShoot : MonoBehaviour {
     
     void OnCollisionEnter2D(Collision2D collision)
     {
-        
-        if (shoot != 0)
+        if (!collision.gameObject.name.Contains("StrokeOffset"))
         {
-            shoot = 0;
-            angle = 0;
-            count = 0;
-            canvas.SendMessage("DoBig", 50);
+            if (shoot != 0)
+            {
+                shoot = 0;
+                angle = 0;
+                count = 0;
+                canvas.SendMessage("ChangeRange", 50);
+            }
         }
-        
     }
 
     void OnCollisionStay2D(Collision2D collision)
     {
-        
-        if (shoot != 0)
+        if (!collision.gameObject.name.Contains("StrokeOffset"))
         {
-            shoot = 0;
-            angle = 0;
-            count = 0;
-            canvas.SendMessage("DoBig", 50);
+            if (shoot != 0)
+            {
+                shoot = 0;
+                angle = 0;
+                count = 0;
+                canvas.SendMessage("ChangeRange", 50);
+            }
         }
-        
     }
     
 }
