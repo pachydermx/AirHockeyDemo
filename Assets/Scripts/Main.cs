@@ -118,11 +118,20 @@ public class Main : MonoBehaviour {
             timer.ShowText("START", true, remaining_time);
             //cover.SetActive(false);
             canvas.SendMessage("KickOff");
+
+            //tanaka 0418
             npa1.SetActive(false); 
-            npa2.SetActive(false);//tanaka 0418
+            npa2.SetActive(false);
         } else if (remaining_time == stage_duration + set_duration) { 
         // set
             timer.ShowText("SET", true, remaining_time);
+
+            //tanaka 0420
+            npa1.SetActive(true);
+            npa2.SetActive(true);
+
+            npa1.SendMessage("ResetNewPage");
+            npa2.SendMessage("ResetNewPage");
         }
         else if (remaining_time == stage_duration + 3)
         {
@@ -188,11 +197,17 @@ public class Main : MonoBehaviour {
 		// ball sw
 		if (Input.GetKeyDown(KeyCode.Alpha1)){
             for(int i = 0; i < n_ball; i++)
-                ball[i].SendMessage("Player", 1);
+                if (ball[i] != null)
+                {
+                    ball[i].SendMessage("Player", 1);
+                }
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha2)){
             for(int i = 0; i < n_ball; i++)
-                ball[i].SendMessage("Player", 2);
+                if (ball[i] != null)
+                {
+                    ball[i].SendMessage("Player", 2);
+                }
 		}
 
 		// test draw
@@ -217,6 +232,11 @@ public class Main : MonoBehaviour {
         {
             smasher.SetActive(true);
             smasher_controlled_by_mouse = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            ball[0].SendMessage("Set_Flag", 1);
         }
 
         if (smasher_controlled_by_mouse)

@@ -31,4 +31,11 @@ public class NPAnimation : MonoBehaviour
         GetComponent<Animator>().SetBool("NPA1", true);
         GetComponent<Animator>().SetBool("NPA2", true);
     }
+
+
+    void ResetNewPage()
+    {
+        GetComponent<Animator>().SetBool("NPA1", false);
+        GetComponent<Animator>().SetBool("NPA2", false);
+    }
 }

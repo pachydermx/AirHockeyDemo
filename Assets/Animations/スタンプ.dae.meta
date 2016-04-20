@@ -1,0 +1,407 @@
+fileFormatVersion: 2
+guid: 65eb5a2d9da20c9498c30c782b824ffa
+timeCreated: 1461139325
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Graffiti_Hockey
+    100002: Graffiti_Hockey 1
+    100004: ID103
+    100006: ID103 1
+    100008: ID109
+    100010: ID109 1
+    100012: ID124
+    100014: ID13
+    100016: ID13 1
+    100018: ID130
+    100020: ID138
+    100022: ID146
+    100024: ID159
+    100026: ID167
+    100028: ID173
+    100030: ID179
+    100032: ID185
+    100034: ID19
+    100036: ID19 1
+    100038: ID193
+    100040: ID201
+    100042: ID209
+    100044: ID217
+    100046: ID225
+    100048: ID231
+    100050: ID239
+    100052: ID245
+    100054: ID25
+    100056: ID25 1
+    100058: ID253
+    100060: ID259
+    100062: ID265
+    100064: ID273
+    100066: ID281
+    100068: ID287
+    100070: ID295
+    100072: ID303
+    100074: ID309
+    100076: ID31
+    100078: ID31 1
+    100080: ID317
+    100082: ID323
+    100084: ID329
+    100086: ID335
+    100088: ID341
+    100090: ID347
+    100092: ID351
+    100094: ID355
+    100096: ID359
+    100098: ID363
+    100100: ID37
+    100102: ID37 1
+    100104: ID43
+    100106: ID43 1
+    100108: ID49
+    100110: ID49 1
+    100112: ID55
+    100114: ID55 1
+    100116: ID61
+    100118: ID61 1
+    100120: ID67
+    100122: ID67 1
+    100124: ID73
+    100126: ID73 1
+    100128: ID79
+    100130: ID79 1
+    100132: ID85
+    100134: ID85 1
+    100136: ID91
+    100138: ID91 1
+    100140: ID97
+    100142: ID97 1
+    100144: instance_0
+    100146: instance_1
+    100148: skp_camera_Last_Saved_SketchUp_View
+    100150: //RootNode
+    400000: Graffiti_Hockey
+    400002: Graffiti_Hockey 1
+    400004: ID103
+    400006: ID103 1
+    400008: ID109
+    400010: ID109 1
+    400012: ID124
+    400014: ID13
+    400016: ID13 1
+    400018: ID130
+    400020: ID138
+    400022: ID146
+    400024: ID159
+    400026: ID167
+    400028: ID173
+    400030: ID179
+    400032: ID185
+    400034: ID19
+    400036: ID19 1
+    400038: ID193
+    400040: ID201
+    400042: ID209
+    400044: ID217
+    400046: ID225
+    400048: ID231
+    400050: ID239
+    400052: ID245
+    400054: ID25
+    400056: ID25 1
+    400058: ID253
+    400060: ID259
+    400062: ID265
+    400064: ID273
+    400066: ID281
+    400068: ID287
+    400070: ID295
+    400072: ID303
+    400074: ID309
+    400076: ID31
+    400078: ID31 1
+    400080: ID317
+    400082: ID323
+    400084: ID329
+    400086: ID335
+    400088: ID341
+    400090: ID347
+    400092: ID351
+    400094: ID355
+    400096: ID359
+    400098: ID363
+    400100: ID37
+    400102: ID37 1
+    400104: ID43
+    400106: ID43 1
+    400108: ID49
+    400110: ID49 1
+    400112: ID55
+    400114: ID55 1
+    400116: ID61
+    400118: ID61 1
+    400120: ID67
+    400122: ID67 1
+    400124: ID73
+    400126: ID73 1
+    400128: ID79
+    400130: ID79 1
+    400132: ID85
+    400134: ID85 1
+    400136: ID91
+    400138: ID91 1
+    400140: ID97
+    400142: ID97 1
+    400144: instance_0
+    400146: instance_1
+    400148: skp_camera_Last_Saved_SketchUp_View
+    400150: //RootNode
+    2300000: Graffiti_Hockey
+    2300002: Graffiti_Hockey 1
+    2300004: ID103
+    2300006: ID103 1
+    2300008: ID109
+    2300010: ID109 1
+    2300012: ID124
+    2300014: ID13
+    2300016: ID13 1
+    2300018: ID130
+    2300020: ID138
+    2300022: ID146
+    2300024: ID159
+    2300026: ID167
+    2300028: ID173
+    2300030: ID179
+    2300032: ID185
+    2300034: ID19
+    2300036: ID19 1
+    2300038: ID193
+    2300040: ID201
+    2300042: ID209
+    2300044: ID217
+    2300046: ID225
+    2300048: ID231
+    2300050: ID239
+    2300052: ID245
+    2300054: ID25
+    2300056: ID25 1
+    2300058: ID253
+    2300060: ID259
+    2300062: ID265
+    2300064: ID273
+    2300066: ID281
+    2300068: ID287
+    2300070: ID295
+    2300072: ID303
+    2300074: ID309
+    2300076: ID31
+    2300078: ID31 1
+    2300080: ID317
+    2300082: ID323
+    2300084: ID329
+    2300086: ID335
+    2300088: ID37
+    2300090: ID37 1
+    2300092: ID43
+    2300094: ID43 1
+    2300096: ID49
+    2300098: ID49 1
+    2300100: ID55
+    2300102: ID55 1
+    2300104: ID61
+    2300106: ID61 1
+    2300108: ID67
+    2300110: ID67 1
+    2300112: ID73
+    2300114: ID73 1
+    2300116: ID79
+    2300118: ID79 1
+    2300120: ID85
+    2300122: ID85 1
+    2300124: ID91
+    2300126: ID91 1
+    2300128: ID97
+    2300130: ID97 1
+    2300132: //RootNode
+    3300000: Graffiti_Hockey
+    3300002: Graffiti_Hockey 1
+    3300004: ID103
+    3300006: ID103 1
+    3300008: ID109
+    3300010: ID109 1
+    3300012: ID124
+    3300014: ID13
+    3300016: ID13 1
+    3300018: ID130
+    3300020: ID138
+    3300022: ID146
+    3300024: ID159
+    3300026: ID167
+    3300028: ID173
+    3300030: ID179
+    3300032: ID185
+    3300034: ID19
+    3300036: ID19 1
+    3300038: ID193
+    3300040: ID201
+    3300042: ID209
+    3300044: ID217
+    3300046: ID225
+    3300048: ID231
+    3300050: ID239
+    3300052: ID245
+    3300054: ID25
+    3300056: ID25 1
+    3300058: ID253
+    3300060: ID259
+    3300062: ID265
+    3300064: ID273
+    3300066: ID281
+    3300068: ID287
+    3300070: ID295
+    3300072: ID303
+    3300074: ID309
+    3300076: ID31
+    3300078: ID31 1
+    3300080: ID317
+    3300082: ID323
+    3300084: ID329
+    3300086: ID335
+    3300088: ID37
+    3300090: ID37 1
+    3300092: ID43
+    3300094: ID43 1
+    3300096: ID49
+    3300098: ID49 1
+    3300100: ID55
+    3300102: ID55 1
+    3300104: ID61
+    3300106: ID61 1
+    3300108: ID67
+    3300110: ID67 1
+    3300112: ID73
+    3300114: ID73 1
+    3300116: ID79
+    3300118: ID79 1
+    3300120: ID85
+    3300122: ID85 1
+    3300124: ID91
+    3300126: ID91 1
+    3300128: ID97
+    3300130: ID97 1
+    3300132: //RootNode
+    4300000: SketchUp
+    4300002: ID124
+    4300004: ID130
+    4300006: ID138
+    4300008: ID146
+    4300010: ID159
+    4300012: ID167
+    4300014: ID173
+    4300016: ID179
+    4300018: ID185
+    4300020: ID193
+    4300022: ID201
+    4300024: ID209
+    4300026: ID217
+    4300028: ID225
+    4300030: ID231
+    4300032: ID239
+    4300034: ID245
+    4300036: ID253
+    4300038: ID259
+    4300040: ID265
+    4300042: ID273
+    4300044: ID281
+    4300046: ID287
+    4300048: ID295
+    4300050: ID303
+    4300052: ID309
+    4300054: ID317
+    4300056: ID323
+    4300058: ID329
+    4300060: ID335
+    4300062: Graffiti_Hockey
+    4300064: ID13
+    4300066: ID19
+    4300068: ID25
+    4300070: ID31
+    4300072: ID37
+    4300074: ID43
+    4300076: ID49
+    4300078: ID55
+    4300080: ID61
+    4300082: ID67
+    4300084: ID73
+    4300086: ID79
+    4300088: ID85
+    4300090: ID91
+    4300092: ID97
+    4300094: ID103
+    4300096: ID109
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

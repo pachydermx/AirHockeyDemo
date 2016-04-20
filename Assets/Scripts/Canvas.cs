@@ -83,6 +83,13 @@ public class Canvas : MonoBehaviour {
 
     private GameObject box = GameObject.Find("ItemBox1");
     //private ItemBoX s;
+    
+    //tanaka 0420
+    public GameObject l_stamp = GameObject.Find("LeftStamp");
+    public GameObject r_stamp = GameObject.Find("RightStamp");
+
+    private Stamp l_stp;
+    private RightStamp r_stp;
 
     private Vector2 original_size;
 
@@ -100,6 +107,10 @@ public class Canvas : MonoBehaviour {
         // debug
         //Debug.Log(Vector3.Angle(new Vector3(1, 0, 0), new Vector3(-1, 1, 0)));
         //s = box.GetComponent<ItemBoX>();
+
+        //tanaka 0420
+        l_stp = l_stamp.GetComponent<Stamp>();
+        r_stp = r_stamp.GetComponent<RightStamp>();
     }
 
 	// Update is called once per frame
@@ -130,9 +141,12 @@ public class Canvas : MonoBehaviour {
             itemcount++;
             if(itemcount >= big_duration)
             {
-                ball[0].transform.localScale = original_size;
+                if (ball[0] != null)
+                {
+                    ball[0].transform.localScale = original_size;
+                }
                 itemcount = 0;
-                bomb_flag = false;
+                big_flag = false;
             }
         }
         
@@ -156,6 +170,10 @@ public class Canvas : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F6))
         {
             ResetStage();
+
+            //tanaka 0420
+            l_stp.SendMessage("ResetStamp");
+            r_stp.SendMessage("ResetStamp");
         }
         /*else  // yama 0318 未完成
         {
@@ -609,6 +627,24 @@ public class Canvas : MonoBehaviour {
             }
         }
         Debug.Log("Score " + scores[0] + " : " + scores[1]);
+
+        //tanaka 0420
+        if (scores[0] > scores[1])
+        {
+            l_stamp.SendMessage("StampDown", 1);
+            r_stamp.SendMessage("StampDown", 1);
+        }
+
+        else if (scores[0] < scores[1])
+        {
+            l_stamp.SendMessage("StampDown", 2);
+            r_stamp.SendMessage("StampDown", 2);
+        }
+
+        else
+        {
+            Debug.Log("DROW");
+        }
     }
 
     bool CompareColors(Color color1, Color color2)
