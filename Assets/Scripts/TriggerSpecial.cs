@@ -13,7 +13,7 @@ public class TriggerSpecial : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    flag = Random.Range(1, 2); // yama 0419 発動確率
+	    flag = Random.Range(1, 5); // yama 0419 発動確率
 	}
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -67,7 +67,7 @@ public class TriggerSpecial : MonoBehaviour
         }
     }
 
-    void OnCollisionExit2D(Collision collision)
+    void OnCollisionExit2D(Collision collision)  // yama 0419 線からパックが離れたか判定
     {
         if (collision.gameObject.name.Contains("Ball"))
         {

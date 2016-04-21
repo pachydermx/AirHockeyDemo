@@ -130,7 +130,8 @@ public class SpecialShoot : MonoBehaviour {
         count += zig;
     }
 
-    void ToucCheck(int c)
+    // yama 0419 パックが線から離れているか判定
+    void ToucCheck(int c) 
     {
         if (shoot != 0)
         {
@@ -141,6 +142,7 @@ public class SpecialShoot : MonoBehaviour {
     
     void OnCollisionEnter2D(Collision2D collision)
     {
+        //yama 0419 線に触れた瞬間ているかもしくは線から離れているか判定
         if (!collision.gameObject.name.Contains("StrokeOffset") || check == 1)
         {
             if (shoot != 0)
@@ -158,6 +160,7 @@ public class SpecialShoot : MonoBehaviour {
 
     void OnCollisionStay2D(Collision2D collision)
     {
+        //yama 0419 線に触れた瞬間ているかもしくは線から離れているか判定
         if (!collision.gameObject.name.Contains("StrokeOffset") || check == 1)
         {
             if (shoot != 0)
