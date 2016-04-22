@@ -25,6 +25,7 @@ public class ColliderPack : MonoBehaviour {
             canvas.SendMessage("DoExplode");
             //Debug.Log("bomb");
             box.GetComponent<ItemBoX>().bomb_flag = 0;
+            this.gameObject.transform.FindChild("bombpack").gameObject.SetActive(false);
             bomb_flag = 0;
         }
 
@@ -43,6 +44,7 @@ public class ColliderPack : MonoBehaviour {
         if (ready)
         {
             bomb_flag = flag;
+            this.gameObject.transform.FindChild("bombpack").gameObject.SetActive(true);
             ready = false;
         }
     }

@@ -47,6 +47,7 @@ public class Canvas : MonoBehaviour {
     public GameObject P1Display;
     public GameObject P2Display;
     public GameObject ref_ball;
+    public GameObject another_ball;  // yama 0419 分身用
     public GameObject[] ball;
     protected bool animationPlaying = false;
     protected float animateCounter = 0;
@@ -230,7 +231,7 @@ public class Canvas : MonoBehaviour {
         }
         else // yama 0325 複製パックの設定
         {
-            ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
+            ball[n_ball] = (GameObject)GameObject.Instantiate(another_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
 
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
             ball[n_ball].gameObject.GetComponent<CloneDelete>().enabled = true; // yama 0325 複製削除

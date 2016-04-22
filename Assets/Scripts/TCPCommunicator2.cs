@@ -32,7 +32,7 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     static int max = 4;
 
-    private int i = 0;
+    private int i = -1;
     private int counter = 0;
 
     private Thread tid;
@@ -67,6 +67,7 @@ public class TCPCommunicator2 : MonoBehaviour {
                     }
                     else
                     {
+                        i++;
                         tid = new Thread(new ThreadStart(init_connection));
                         tid.Start();
                     }
@@ -129,7 +130,6 @@ public class TCPCommunicator2 : MonoBehaviour {
                     tException = e;
                 }
             }
-            i++;
         
     }
 
