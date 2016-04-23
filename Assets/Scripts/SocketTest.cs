@@ -237,12 +237,12 @@ public class SocketTest : MonoBehaviour {
                     //Smasher.SendMessage("Move", getRealCoordinate(points["Smasher1:Smasher1"]));
                     //Baketsu2.transform.position = getRealCoordinate(points["baketsu1:baketsu1"]); // yama 0413
                     //Baketsu1.transform.position = getRealCoordinate(points["baketsu2:baketsu2"]); // yama 0328
-                    //Vector2 spary1_pos = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
-                    //Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328
-                    //Spray1.transform.position = new Vector3(spary1_pos.x, -5.6f, 0);
-                    //Spray2.transform.position = new Vector3(spary2_pos.x, 5.6f, 0);
-                    Itembox1.transform.position = gimmickPositionFilter(getRealCoordinate(points["Item2:Item2"])); // yama 0405 
-                    Itembox2.transform.position = gimmickPositionFilter(getRealCoordinate(points["Item1:Item1"])); // yama 0405 
+                    Vector2 spary1_pos = getRealCoordinate(points["Spray1:Spray1"]); // yama 0318 // yama 0328
+                    Vector2 spary2_pos = getRealCoordinate(points["Spray2:Spray2"]); // yama 0318 // yama 0328
+                    Spray1.transform.position = new Vector3(spary1_pos.x, -5.6f, 0);
+                    Spray2.transform.position = new Vector3(spary2_pos.x, 5.6f, 0);
+                    //Itembox1.transform.position = gimmickPositionFilter(getRealCoordinate(points["Item2:Item2"])); // yama 0405 
+                    //Itembox2.transform.position = gimmickPositionFilter(getRealCoordinate(points["Item1:Item1"])); // yama 0405 
                 }
                 catch (Exception e)
                 {
@@ -265,12 +265,12 @@ public class SocketTest : MonoBehaviour {
                 if (reverse_counter[0] > 0)
                 {
                     reverse_counter[0]--;
-                    Debug.Log("Reverse_counter = "+ reverse_counter[0]);
+                    //Debug.Log("Reverse_counter = "+ reverse_counter[0]);
                 }
                 if (reverse_counter[1] > 0)
                 {
                     reverse_counter[1]--;
-                    Debug.Log("Reverse_counter = " + reverse_counter[0]);
+                    //Debug.Log("Reverse_counter = " + reverse_counter[0]);
                 }
             }
             if (levelSet)

@@ -84,6 +84,7 @@ public class Main : MonoBehaviour {
 
         itembox.SendMessage("reset");
 
+
         // reset timer
         if (new_stage)
         {
@@ -237,6 +238,7 @@ public class Main : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.A))
         {
             ball[0].SendMessage("Set_Flag", 1);
+            ball[0].SendMessage("ToucCheck", 1);
         }
 
         if (smasher_controlled_by_mouse)

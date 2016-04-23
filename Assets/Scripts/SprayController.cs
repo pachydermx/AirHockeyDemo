@@ -41,7 +41,8 @@ public class SprayController : MonoBehaviour {
         ParticleSystem ps = particle_object.GetComponent<ParticleSystem>();
         try
         {
-            ps.startColor = collider_gimmick.current_collider.GetComponent<Ball>().GetColor();
+            Color temp_color =  collider_gimmick.current_collider.GetComponent<Ball>().GetColor();
+            ps.startColor = new Color(temp_color.r + 0.3f, temp_color.g + 0.3f, temp_color.b + 0.3f, 1.0f);
         }
         catch (Exception e)
         {

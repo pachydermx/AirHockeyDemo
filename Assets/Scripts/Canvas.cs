@@ -517,7 +517,7 @@ public class Canvas : MonoBehaviour {
         if (id == 1)
         {
             int y = (int)(rate_y * height / 2 + (height / 2)) + 50;
-            for (int i = 1; i < 100; i++)
+            for (int i = 1; i < 150; i++)
             {
                 for (int j = 0; j < (i * 2 - 1); j++)
                 {
@@ -530,7 +530,7 @@ public class Canvas : MonoBehaviour {
         else if(id == 2)
         {
             int y = (int)(rate_y * height / 2 + (height / 2)) - 50;
-            for (int i = 1; i < 100; i++)
+            for (int i = 1; i < 150; i++)
             {
                 for (int j = 0; j < (i * 2 - 1); j++)
                 {

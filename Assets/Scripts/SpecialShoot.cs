@@ -19,7 +19,7 @@ public class SpecialShoot : MonoBehaviour {
     int zig_angle = 315;
     int first_flag = 0;
 
-    private int check = 1;
+    private int check = 0;
 
     // Use this for initialization
     void Start () {
@@ -58,8 +58,8 @@ public class SpecialShoot : MonoBehaviour {
             {
                 shoot = flag;
                 rb_original = rb;
-                x = rb.velocity.x;
-                y = rb.velocity.y;
+                x = rb.velocity.x * 0.8f;
+                y = rb.velocity.y * 0.8f;
                 dir = new Vector3(x*Mathf.Cos(zig_angle) - y*Mathf.Sin(zig_angle),
                     x*Mathf.Sin(zig_angle) + y*Mathf.Cos(zig_angle), 0);
                 canvas.SendMessage("ChangeRange", 30);
@@ -74,11 +74,11 @@ public class SpecialShoot : MonoBehaviour {
     void CircleShoot()
     {
         // yama 0419 直線方向のみ
-        float x = Mathf.Sin(angle) * 1.0f + (rb_original.velocity.x / 40) * angle;//0.35f * angle;
+        
+        float x = Mathf.Sin(angle) * 1.0f + (rb_original.velocity.x / 40) * angle;
         float y = Mathf.Cos(angle) * 1.0f + (rb_original.velocity.y / 40) * angle;
         transform.position = new Vector3(pos_original.x + x, pos_original.y + y, t.transform.position.z);
-        angle += 0.2f;
-        
+        angle += 0.2f;             
 
         // yama 0419 velocityバージョン
         /*
@@ -147,12 +147,21 @@ public class SpecialShoot : MonoBehaviour {
         {
             if (shoot != 0)
             {
-                shoot = 0;
+                
                 angle = 0;
                 count = 0;
                 check = 0;
+                if (shoot == 1)
+                {
+                    rb.velocity = rb_original.velocity;
+                    t.transform.position = this.gameObject.transform.position;
+                }
+                if (shoot == 2)
+                {
+                    rb.velocity = rb_original.velocity*1.25f;
+                }
                 canvas.SendMessage("ChangeRange", 50);
-
+                shoot = 0;
                 Debug.Log("release");
             }
         } 
@@ -165,12 +174,16 @@ public class SpecialShoot : MonoBehaviour {
         {
             if (shoot != 0)
             {
-                shoot = 0;
+                
                 angle = 0;
                 count = 0;
                 check = 0;
+                if (shoot == 2)
+                {
+                    rb.velocity = rb_original.velocity * 1.25f;
+                }
                 canvas.SendMessage("ChangeRange", 50);
-
+                shoot = 0;
                 Debug.Log("release");
             }            
         }
