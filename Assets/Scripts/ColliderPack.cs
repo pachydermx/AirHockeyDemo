@@ -25,6 +25,7 @@ public class ColliderPack : MonoBehaviour {
             canvas.SendMessage("DoExplode");
             //Debug.Log("bomb");
             box.GetComponent<ItemBoX>().bomb_flag = 0;
+            // yama 0425 爆発したらボム状態解除 
             this.gameObject.transform.FindChild("bombpack").gameObject.SetActive(false);
             bomb_flag = 0;
         }

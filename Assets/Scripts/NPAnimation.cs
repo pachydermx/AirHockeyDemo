@@ -41,14 +41,14 @@ public class NPAnimation : MonoBehaviour
 
         else if (gimmickset%3 == 1)
         {
-            itemimage.SetActive(true);
+            itemimage.SetActive(false);
             bucketimage.SetActive(false);
         }
 
         else if (gimmickset%3 == 2)
         {
             itemimage.SetActive(false);
-            bucketimage.SetActive(true);
+            bucketimage.SetActive(false);
         }
 
         GetComponent<Animator>().SetBool("NPA1", true);

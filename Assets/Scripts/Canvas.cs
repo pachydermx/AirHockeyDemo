@@ -94,6 +94,29 @@ public class Canvas : MonoBehaviour {
 
     private Vector2 original_size;
 
+    //tanaka 0425
+    private SpriteRenderer MainSpriteRenderer;
+    public Sprite Plane;
+    public Sprite Item;
+    public Sprite Bucket;
+
+    public GameObject bucket1 = GameObject.Find("Baketsu1");
+    public GameObject bucket2 = GameObject.Find("Baketsu2");
+
+    private float b1_x;
+    private float b1_y;
+    private float b2_x;
+    private float b2_y;
+
+    public GameObject item1 = GameObject.Find("ItemBox1");
+    public GameObject item2 = GameObject.Find("ItemBox1");
+
+    private float item1_x;
+    private float item1_y;
+    private float item2_x;
+    private float item2_y;
+
+
     // Use this for initialization
     void Start () {
         // init variables
@@ -112,6 +135,9 @@ public class Canvas : MonoBehaviour {
         //tanaka 0420
         l_stp = l_stamp.GetComponent<Stamp>();
         r_stp = r_stamp.GetComponent<RightStamp>();
+
+        //tanaka 0425
+        MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
 	// Update is called once per frame
@@ -211,6 +237,36 @@ public class Canvas : MonoBehaviour {
             {
                 animationPlaying = false;
             }
+        }
+
+        //tanaka 0425
+	    b1_x = bucket1.transform.position.x;
+        b1_y = bucket1.transform.position.y;
+        b2_x = bucket2.transform.position.x;
+        b2_y = bucket2.transform.position.y;
+
+	    item1_x = item1.transform.position.x;
+        item1_y = item1.transform.position.y;
+        item2_x = item2.transform.position.x;
+        item2_y = item2.transform.position.y;
+
+	    if ((-10 <= b1_x && b1_x <= 10) && (-6 <= b1_y && b1_y <= 6) ||
+	        (-10 <= b2_x && b2_x <= 10) && (-6 <= b2_y && b2_y <= 6))
+	    {
+            //Debug.Log("bucket in");
+	        MainSpriteRenderer.sprite = Bucket;
+	    }
+
+        else if ((-10 <= item1_x && item1_x <= 10) && (-6 <= item1_y && item1_y <= 6) ||
+                 (-10 <= item2_x && item2_x <= 10) && (-6 <= item2_y && item2_y <= 6))
+        {
+            //Debug.Log("item in");
+            MainSpriteRenderer.sprite = Item;
+        }
+
+        else
+        {
+            MainSpriteRenderer.sprite = Plane;
         }
 	}
 
