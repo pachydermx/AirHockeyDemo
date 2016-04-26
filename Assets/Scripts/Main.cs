@@ -10,7 +10,14 @@ public class Main : MonoBehaviour {
     public GameObject start_scene;
 
 	public GameObject canvas;
-    public GameObject itembox;
+    public GameObject itembox1;
+    public GameObject itembox2;
+
+    //tanaka 0426
+    public GameObject bucket1;
+    public GameObject bucket2;
+    public GameObject spray1;
+    public GameObject spray2;
 
     // timer
     public float stage_duration = 30;
@@ -67,6 +74,8 @@ public class Main : MonoBehaviour {
             Display.displays[1].Activate();
         }
 
+        //tanaka 0426
+        ball[0].SetActive(false);
 	}
 
     void ResetStage(bool new_stage)
@@ -80,9 +89,9 @@ public class Main : MonoBehaviour {
         // switch scene
         start_scene.SetActive(false);
 
-        itembox.SetActive(true);
+        itembox1.SetActive(true);
 
-        itembox.SendMessage("reset");
+        itembox1.SendMessage("reset");
 
 
         // reset timer
@@ -120,6 +129,9 @@ public class Main : MonoBehaviour {
             //cover.SetActive(false);
             canvas.SendMessage("KickOff");
 
+            //tanaka 0426
+            ball[0].SetActive(true);
+
             //tanaka 0418
             npa1.SetActive(false); 
             npa2.SetActive(false);
@@ -133,6 +145,14 @@ public class Main : MonoBehaviour {
 
             npa1.SendMessage("ResetNewPage");
             npa2.SendMessage("ResetNewPage");
+
+            //tanaka 0426
+            itembox1.SetActive(true);
+            itembox2.SetActive(true);
+            bucket1.SetActive(true);
+            bucket2.SetActive(true);
+            spray1.SetActive(true);
+            spray2.SetActive(true);
         }
         else if (remaining_time == stage_duration + 3)
         {
@@ -149,6 +169,14 @@ public class Main : MonoBehaviour {
         {
             CancelInvoke("TimeDecrease");
             canvas.SendMessage("StartScoreShow");
+
+            //tanaka 0426
+            itembox1.SetActive(false);
+            itembox2.SetActive(false);
+            bucket1.SetActive(false);
+            bucket2.SetActive(false);
+            spray1.SetActive(false);
+            spray2.SetActive(false);
         }
     }
 

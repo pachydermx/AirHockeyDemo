@@ -295,7 +295,7 @@ public class SocketTest : MonoBehaviour {
             {
                 if(points["Pen3:Pen3"].z < touchLevel)
                 {
-                    Debug.Log("TOUCHED");
+                    //Debug.Log("TOUCHED");
             
                     deployWall(getRealCoordinate(points["Pen3:Pen3"]));
                 }
