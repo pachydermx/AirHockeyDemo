@@ -22,7 +22,7 @@ public class Main : MonoBehaviour {
     // timer
     public float stage_duration = 30;
     public float set_duration = 10;
-    private float remaining_time;
+    public float remaining_time;
 
     // for smasher debugging
     public GameObject smasher;

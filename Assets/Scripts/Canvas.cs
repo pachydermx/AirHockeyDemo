@@ -333,7 +333,7 @@ public class Canvas : MonoBehaviour {
 
     void KickOff()
     {
-        float power = 150;
+        float power = 300;
         float direction;
         // yama 0419 発射方向範囲指定 ->
         if (Random.Range(0, 2) == 0) 

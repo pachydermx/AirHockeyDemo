@@ -20,6 +20,9 @@ public class Ball : MonoBehaviour {
     SpriteRenderer MainSpriteRenderer;
     public Sprite BombPack;
 
+    //tanaka 0427
+    private Main main_s;
+
     // Use this for initialization
     void Start() {
         //MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>(); //0328 tanaka icon
@@ -33,6 +36,9 @@ public class Ball : MonoBehaviour {
         p2_ball = this.gameObject.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
 
         Player(default_pid);
+
+        //tanaka 0427
+        main_s = manager.GetComponent<Main>();
     }
 
     // Update is called once per frame
@@ -44,6 +50,17 @@ public class Ball : MonoBehaviour {
         xy[1] = (transform.position.y);
         xy[2] = (float)id;
         canvas.SendMessage("SetCoordinate", xy);
+
+        //tanaka 0427
+        if (main_s.remaining_time >= main_s.stage_duration)
+        {
+            default_ball.enabled = false;
+        }
+
+        else if (main_s.remaining_time < main_s.stage_duration)
+        {
+            default_ball.enabled = true;
+        }
     }
 
 
