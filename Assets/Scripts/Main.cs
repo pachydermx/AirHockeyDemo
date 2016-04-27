@@ -75,7 +75,7 @@ public class Main : MonoBehaviour {
         }
 
         //tanaka 0426
-        ball[0].SetActive(false);
+        //ball[0].SetActive(false);
 	}
 
     void ResetStage(bool new_stage)
@@ -130,7 +130,7 @@ public class Main : MonoBehaviour {
             canvas.SendMessage("KickOff");
 
             //tanaka 0426
-            ball[0].SetActive(true);
+            //ball[0].SetActive(true);
 
             //tanaka 0418
             npa1.SetActive(false); 

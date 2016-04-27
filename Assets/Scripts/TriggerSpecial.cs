@@ -21,7 +21,7 @@ public class TriggerSpecial : MonoBehaviour
         if (collision.gameObject.name.Contains("Ball"))
         {
             Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
-            if (rb.velocity.magnitude > 30)
+            if (rb.velocity.magnitude > 20) // yama 0427 速さの発動条件
             {
                 if (flag == 1)
                 {
@@ -31,10 +31,8 @@ public class TriggerSpecial : MonoBehaviour
                 {
                     collision.gameObject.SendMessage("Set_Flag", 2);
                 }
-                //if (Mathf.Abs(rb.velocity.x) >= 25 && Mathf.Abs(rb.velocity.y) <= 5)
-                
-                    //collision.gameObject.SendMessage("Set_Flag", 1);
-                
+
+                //collision.gameObject.SendMessage("TouchCheck", 1);
             }
         }
     }
@@ -44,7 +42,7 @@ public class TriggerSpecial : MonoBehaviour
         if (collision.gameObject.name.Contains("Ball"))
         {
             Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
-            if (rb.velocity.magnitude > 30)
+            if (rb.velocity.magnitude > 20) // yama 0427 速さの発動条件
             {
 
                 if (collision.gameObject.name.Contains("Ball"))
@@ -59,10 +57,7 @@ public class TriggerSpecial : MonoBehaviour
                     }
                 }
 
-                //if (Mathf.Abs(rb.velocity.x) >= 25 && Mathf.Abs(rb.velocity.y) <= 5)
-
-                //collision.gameObject.SendMessage("Set_Flag", 1);
-
+                //collision.gameObject.SendMessage("TouchCheck", 1);
             }
         }
     }
@@ -72,6 +67,7 @@ public class TriggerSpecial : MonoBehaviour
         if (collision.gameObject.name.Contains("Ball"))
         {
             collision.gameObject.SendMessage("TouchCheck", 1);
+            Debug.Log("Touched Check");
         }
     }
 }

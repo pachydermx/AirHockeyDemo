@@ -131,16 +131,48 @@ public class SpecialShoot : MonoBehaviour {
     }
 
     // yama 0419 パックが線から離れているか判定
-    void ToucCheck(int c) 
+    void TouchCheck(int c) 
     {
         if (shoot != 0)
         {
             check = c;
+            Debug.Log("Check OK");
         }
     }
 
     
     void OnCollisionEnter2D(Collision2D collision)
+    {
+        //yama 0419 線に触れた瞬間ているかもしくは線から離れているか判定
+        if (!collision.gameObject.name.Contains("StrokeOffset") || check == 1)
+        {
+            if (shoot != 0)
+            {
+
+                angle = 0;
+                count = 0;
+                check = 0;
+                if (shoot == 1)
+                {
+                    rb.velocity = rb_original.velocity;
+                    t.transform.position = this.gameObject.transform.position;
+                }
+                if (shoot == 2)
+                {
+                    rb.velocity = rb_original.velocity*1.25f;
+                }
+                canvas.SendMessage("ChangeRange", 50);
+                shoot = 0;
+                Debug.Log("release");
+            }
+        }
+        else
+        {
+            TouchCheck(1);
+        } 
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
     {
         //yama 0419 線に触れた瞬間ているかもしくは線から離れているか判定
         if (!collision.gameObject.name.Contains("StrokeOffset") || check == 1)
@@ -158,34 +190,16 @@ public class SpecialShoot : MonoBehaviour {
                 }
                 if (shoot == 2)
                 {
-                    rb.velocity = rb_original.velocity*1.25f;
-                }
-                canvas.SendMessage("ChangeRange", 50);
-                shoot = 0;
-                Debug.Log("release");
-            }
-        } 
-    }
-
-    void OnCollisionStay2D(Collision2D collision)
-    {
-        //yama 0419 線に触れた瞬間ているかもしくは線から離れているか判定
-        if (!collision.gameObject.name.Contains("StrokeOffset") || check == 1)
-        {
-            if (shoot != 0)
-            {
-                
-                angle = 0;
-                count = 0;
-                check = 0;
-                if (shoot == 2)
-                {
                     rb.velocity = rb_original.velocity * 1.25f;
                 }
                 canvas.SendMessage("ChangeRange", 50);
                 shoot = 0;
                 Debug.Log("release");
             }            
+        }
+        else
+        {
+            TouchCheck(1);
         }
     }
     

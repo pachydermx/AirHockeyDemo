@@ -84,6 +84,8 @@ public class Canvas : MonoBehaviour {
 
     private GameObject box = GameObject.Find("ItemBox1");
     //private ItemBoX s;
+    //private GameObject box2 = GameObject.Find("ItemBox2");
+    //private ItemBox s2;
     
     //tanaka 0420
     public GameObject l_stamp = GameObject.Find("LeftStamp");
@@ -109,7 +111,7 @@ public class Canvas : MonoBehaviour {
     private float b2_y;
 
     public GameObject item1 = GameObject.Find("ItemBox1");
-    public GameObject item2 = GameObject.Find("ItemBox1");
+    public GameObject item2 = GameObject.Find("ItemBox2");
 
     private float item1_x;
     private float item1_y;
@@ -131,6 +133,7 @@ public class Canvas : MonoBehaviour {
         // debug
         //Debug.Log(Vector3.Angle(new Vector3(1, 0, 0), new Vector3(-1, 1, 0)));
         //s = box.GetComponent<ItemBoX>();
+        //s2= box2.GetComponent<ItemBox>();
 
         //tanaka 0420
         l_stp = l_stamp.GetComponent<Stamp>();
@@ -282,7 +285,11 @@ public class Canvas : MonoBehaviour {
             // yama 0413
             GameObject box = GameObject.Find("ItemBox1");
             box.SendMessage("setBallOriginal", ball[n_ball]);
+
+            //GameObject box2 = GameObject.Find("ItemBox2");
+            //box2.SendMessage("setBallOriginal", ball[n_ball]);
             
+             
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
         }
         else // yama 0325 複製パックの設定
