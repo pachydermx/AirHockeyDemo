@@ -94,7 +94,7 @@ public class Canvas : MonoBehaviour {
     private Stamp l_stp;
     private RightStamp r_stp;
 
-    private Vector2 original_size;
+    private Vector3 original_size;
 
     //tanaka 0425
     private SpriteRenderer MainSpriteRenderer;
@@ -278,16 +278,19 @@ public class Canvas : MonoBehaviour {
         if (n_ball == 0) // yama 0325 初期パックの設定
         {
             ball[n_ball] = (GameObject)GameObject.Instantiate(ref_ball, new Vector3(0, 0, -1), Quaternion.identity);
+            ball[n_ball].transform.Rotate(new Vector3(0f, 180f, 0f));
             
             original_size = ball[n_ball].transform.localScale;
             //Debug.Log(ball[0].transform.localScale.x);
             
             // yama 0413
-            GameObject box = GameObject.Find("ItemBox1");
-            box.SendMessage("setBallOriginal", ball[n_ball]);
+            /*
+            item1.SendMessage("setBallOriginal", ball[n_ball]);
 
-            //GameObject box2 = GameObject.Find("ItemBox2");
-            //box2.SendMessage("setBallOriginal", ball[n_ball]);
+            item2.SendMessage("setBallOriginal", ball[n_ball]);
+            */
+            item1.GetComponent<ItemBoX>().setBallOriginal(ball[n_ball]);
+            item2.GetComponent<ItemBoX>().setBallOriginal(ball[n_ball]);
             
              
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
@@ -295,6 +298,7 @@ public class Canvas : MonoBehaviour {
         else // yama 0325 複製パックの設定
         {
             ball[n_ball] = (GameObject)GameObject.Instantiate(another_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
+            ball[n_ball].transform.Rotate(new Vector3(0f, 180f, 0f));
 
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
             ball[n_ball].gameObject.GetComponent<CloneDelete>().enabled = true; // yama 0325 複製削除
@@ -680,8 +684,8 @@ public class Canvas : MonoBehaviour {
 
     void GetScore () {
         scores = new int[2];
-        scores[0] = 0;
-        scores[1] = 0;
+        scores[0] = 1;
+        scores[1] = 1;
         Color[] canvas_colors = texture.GetPixels(0, 0, width, height);
         Color[] paint_color = manager.GetComponent<Main>().colors;
         for (int i = 0; i < width * height; ++i) {

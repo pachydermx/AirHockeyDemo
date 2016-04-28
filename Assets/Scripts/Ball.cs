@@ -2,9 +2,12 @@
 using System.Collections;
 
 public class Ball : MonoBehaviour {
+    // yam  0429 モデル置き換えのため不要？
+    /*
     public SpriteRenderer default_ball;
     public SpriteRenderer p1_ball;
     public SpriteRenderer p2_ball;
+    */
 
     public GameObject canvas;
     public GameObject manager;
@@ -31,9 +34,12 @@ public class Ball : MonoBehaviour {
         canvas = GameObject.Find("Canvas");
         manager = GameObject.Find("Manager");
 
+        // yama 0428 モデル置き換えのため不要？
+        /*
         default_ball = this.gameObject.GetComponent<SpriteRenderer>();
         p1_ball = this.gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         p2_ball = this.gameObject.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
+        */
 
         Player(default_pid);
 
@@ -50,7 +56,9 @@ public class Ball : MonoBehaviour {
         xy[1] = (transform.position.y);
         xy[2] = (float)id;
         canvas.SendMessage("SetCoordinate", xy);
-
+        
+        // yama 0429 モデル置き換えのため不要？
+        /*
         //tanaka 0427
         if (main_s.remaining_time >= main_s.stage_duration)
         {
@@ -61,6 +69,7 @@ public class Ball : MonoBehaviour {
         {
             default_ball.enabled = true;
         }
+        */
     }
 
 

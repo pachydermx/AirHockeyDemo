@@ -223,6 +223,13 @@ public class Main : MonoBehaviour {
                     ball_rb[i].AddForce(new Vector2(force, 0));
 		}
 
+	    if (Input.GetKeyDown(KeyCode.Alpha0))
+	    {
+            for(int i = 0; i < n_ball; i++)
+                if(ball_rb[i] != null)
+                    ball_rb[i].velocity = new Vector2(0, 0);
+	    }
+
 		// ball sw
 		if (Input.GetKeyDown(KeyCode.Alpha1)){
             for(int i = 0; i < n_ball; i++)

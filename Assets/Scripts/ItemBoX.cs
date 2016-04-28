@@ -8,7 +8,7 @@ public class ItemBoX : MonoBehaviour {
     public GameObject Pack; // yama 0323
     public GameObject canvas;
 
-    public Vector2 p_scale;
+    public Vector3 p_scale;
     private Rigidbody2D p_rb;
 
     //private int range;
@@ -57,7 +57,7 @@ public class ItemBoX : MonoBehaviour {
 	    if (get_scale == 0)
 	    {
 	        get_scale++;
-            p_scale = new Vector2(Pack.transform.localScale.x, Pack.transform.lossyScale.y); // yama 0413 元サイズ取得
+            p_scale = new Vector3(Pack.transform.localScale.x, Pack.transform.lossyScale.y, Pack.transform.localScale.z); // yama 0413 元サイズ取得
         }
 
         time += Time.deltaTime;
@@ -88,9 +88,11 @@ public class ItemBoX : MonoBehaviour {
         if(bomb_flag == 1)
         {
             current_gameobject = this.gameObject.GetComponent<ColliderGimmick>().current_collider;
-            Debug.Log(Pack);
-            Pack.SendMessage("getReadyFlag", current_gameobject);
-            Pack.SendMessage("setFlag", bomb_flag);
+            //Debug.Log(Pack);
+            //Pack.SendMessage("getReadyFlag", current_gameobject);
+            //Pack.SendMessage("setFlag", bomb_flag);
+            current_gameobject.SendMessage("getReadyFlag", current_gameobject);
+            current_gameobject.SendMessage("setFlag", bomb_flag);
             //DefaultBall.SendMessage("changePack");
             bomb_flag = 0;
         }
@@ -117,7 +119,7 @@ public class ItemBoX : MonoBehaviour {
             if (this.gameObject.GetComponent<ColliderGimmick>().current_collider.name.Contains("Ball_0"))
             {
                 canvas.SendMessage("DoBig", 95);
-                Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, 1);
+                Pack.transform.localScale = new Vector3(1.5f * p_scale.x, 1.5f * p_scale.y, p_scale.z);
                 
             }
         }
@@ -139,7 +141,7 @@ public class ItemBoX : MonoBehaviour {
         Debug.Log("flag = " + clone_flag);
     }
 
-    void setBallOriginal(GameObject ball)
+    public void setBallOriginal(GameObject ball)
     {
         Pack = ball;
         p_scale = Pack.transform.localScale;
@@ -172,7 +174,8 @@ public class ItemBoX : MonoBehaviour {
     
     void reverse_size(GameObject pack)
     {
-        pack.transform.localScale = p_scale;
+        //pack.transform.localScale = p_scale;
+        Debug.Log(pack.transform.localScale.z);
     }
  
 

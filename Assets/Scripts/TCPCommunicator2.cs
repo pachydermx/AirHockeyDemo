@@ -168,29 +168,35 @@ public class TCPCommunicator2 : MonoBehaviour {
 
     public void controlSpray(int dir, int id) // yama 0321
     {
-        if (tcp[id - 1] != null)
+        if (enabled)
         {
-            if (dir == 0)
+            if (tcp[id - 1] != null)
             {
-                wait[id - 1] = 100;
-            }
-            if (tcp[id - 1].Connected)
-            {
-                String mes = dir.ToString();
-                byte[] umsg = Encoding.UTF8.GetBytes(mes + "\n");
-                tcp[id - 1].Client.Send(umsg);
+                if (dir == 0)
+                {
+                    wait[id - 1] = 100;
+                }
+                if (tcp[id - 1].Connected)
+                {
+                    String mes = dir.ToString();
+                    byte[] umsg = Encoding.UTF8.GetBytes(mes + "\n");
+                    tcp[id - 1].Client.Send(umsg);
+                }
             }
         }
     }
 
     void controlBaketsu(int id)
     {
-        
-        String mes = "1";
-        byte[] umsg = Encoding.UTF8.GetBytes(mes);
-        //str[id].Write(umsg, 0, umsg.Length);
-        tcp[id].Client.Send(umsg);
-        Debug.Log("id = " + id);
+
+        if (enabled)
+        {
+            String mes = "1";
+            byte[] umsg = Encoding.UTF8.GetBytes(mes);
+            //str[id].Write(umsg, 0, umsg.Length);
+            tcp[id].Client.Send(umsg);
+            Debug.Log("id = " + id);
+        }
         
     }
 
