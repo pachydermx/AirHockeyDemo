@@ -82,14 +82,9 @@ public class Canvas : MonoBehaviour {
     // paint
     private Vector3[] last_paint_position;
 
-    private GameObject box = GameObject.Find("ItemBox1");
-    //private ItemBoX s;
-    //private GameObject box2 = GameObject.Find("ItemBox2");
-    //private ItemBox s2;
-    
     //tanaka 0420
-    public GameObject l_stamp = GameObject.Find("LeftStamp");
-    public GameObject r_stamp = GameObject.Find("RightStamp");
+    public GameObject l_stamp;
+    public GameObject r_stamp;
 
     private Stamp l_stp;
     private RightStamp r_stp;
@@ -102,16 +97,16 @@ public class Canvas : MonoBehaviour {
     public Sprite Item;
     public Sprite Bucket;
 
-    public GameObject bucket1 = GameObject.Find("Baketsu1");
-    public GameObject bucket2 = GameObject.Find("Baketsu2");
+    public GameObject bucket1;
+    public GameObject bucket2;
 
     private float b1_x;
     private float b1_y;
     private float b2_x;
     private float b2_y;
 
-    public GameObject item1 = GameObject.Find("ItemBox1");
-    public GameObject item2 = GameObject.Find("ItemBox2");
+    public GameObject item1;
+    public GameObject item2;
 
     private float item1_x;
     private float item1_y;
@@ -127,13 +122,18 @@ public class Canvas : MonoBehaviour {
 		texture = image.texture as Texture2D;
         normal_texture = normal.texture as Texture2D;
 
+        // init objects
+        l_stamp = GameObject.Find("LeftStamp");
+        r_stamp = GameObject.Find("RightStamp");
+
+        bucket1 = GameObject.Find("Baketsu1");
+        bucket2 = GameObject.Find("Baketsu2");
+
+        item1 = GameObject.Find("ItemBox1");
+        item2 = GameObject.Find("ItemBox2");
+
         RefreshCanvas();
         ResetStage();
-
-        // debug
-        //Debug.Log(Vector3.Angle(new Vector3(1, 0, 0), new Vector3(-1, 1, 0)));
-        //s = box.GetComponent<ItemBoX>();
-        //s2= box2.GetComponent<ItemBox>();
 
         //tanaka 0420
         l_stp = l_stamp.GetComponent<Stamp>();

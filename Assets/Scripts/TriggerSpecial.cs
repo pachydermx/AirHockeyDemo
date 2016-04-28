@@ -62,7 +62,7 @@ public class TriggerSpecial : MonoBehaviour
         }
     }
 
-    void OnCollisionExit2D(Collision collision)  // yama 0419 線からパックが離れたか判定
+    void OnCollisionExit2D(Collision2D collision)  // yama 0419 線からパックが離れたか判定
     {
         if (collision.gameObject.name.Contains("Ball"))
         {

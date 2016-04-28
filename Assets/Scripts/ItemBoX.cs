@@ -80,7 +80,7 @@ public class ItemBoX : MonoBehaviour {
                 t_flag = 0;
                 clone_flag = 1;
 
-                Debug.Log("OK");
+                //Debug.Log("OK");
                 canvas.SendMessage("AddNewBall");   
             //}
         }
@@ -138,7 +138,7 @@ public class ItemBoX : MonoBehaviour {
     void flag_reset()
     {
         clone_flag = 0;
-        Debug.Log("flag = " + clone_flag);
+        //Debug.Log("flag = " + clone_flag);
     }
 
     public void setBallOriginal(GameObject ball)
