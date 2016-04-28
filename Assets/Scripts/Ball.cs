@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 public class Ball : MonoBehaviour {
     // yam  0429 モデル置き換えのため不要？
@@ -56,20 +57,6 @@ public class Ball : MonoBehaviour {
         xy[1] = (transform.position.y);
         xy[2] = (float)id;
         canvas.SendMessage("SetCoordinate", xy);
-        
-        // yama 0429 モデル置き換えのため不要？
-        /*
-        //tanaka 0427
-        if (main_s.remaining_time >= main_s.stage_duration)
-        {
-            default_ball.enabled = false;
-        }
-
-        else if (main_s.remaining_time < main_s.stage_duration)
-        {
-            default_ball.enabled = true;
-        }
-        */
     }
 
 

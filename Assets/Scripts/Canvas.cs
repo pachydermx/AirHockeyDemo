@@ -294,6 +294,7 @@ public class Canvas : MonoBehaviour {
             
              
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
+
         }
         else // yama 0325 複製パックの設定
         {
@@ -323,9 +324,15 @@ public class Canvas : MonoBehaviour {
         ball[n_ball].gameObject.name = "Ball_" + n_ball;
         manager.SendMessage("AddNewBall", ball[n_ball]);
 
+        if (n_ball == 0)
+        {
+            ball[0].SetActive(false);
+        }
+
         // kick off
         if (kick_off_when_start)
         {
+
             KickOff();
         }
 
@@ -339,6 +346,9 @@ public class Canvas : MonoBehaviour {
     {
         float power = 300;
         float direction;
+
+        ball[0].SetActive(true);
+
         // yama 0419 発射方向範囲指定 ->
         if (Random.Range(0, 2) == 0) 
         {
