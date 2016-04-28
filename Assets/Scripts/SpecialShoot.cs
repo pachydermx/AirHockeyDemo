@@ -52,7 +52,7 @@ public class SpecialShoot : MonoBehaviour {
                 y = rb.velocity.y;
                 Debug.Log("CircleShoot");
                 pos_original = new Vector2(t.transform.position.x, t.transform.position.y);
-                canvas.SendMessage("ChangeRange", 25);
+                canvas.SendMessage("ChangeRange", 40);
             }
             else if (flag == 2)
             {
@@ -62,7 +62,7 @@ public class SpecialShoot : MonoBehaviour {
                 y = rb.velocity.y * 0.8f;
                 dir = new Vector3(x*Mathf.Cos(zig_angle) - y*Mathf.Sin(zig_angle),
                     x*Mathf.Sin(zig_angle) + y*Mathf.Cos(zig_angle), 0);
-                canvas.SendMessage("ChangeRange", 30);
+                canvas.SendMessage("ChangeRange", 40);
                 Debug.Log("ZigShoot");
             }
 
