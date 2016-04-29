@@ -15,6 +15,10 @@ public class SocketTest : MonoBehaviour {
     Communicator c;
     Thread tid;
 
+    private SubMonitorCommunicator sc;
+    private Thread subtid;
+    public string messageBoard = "hello";
+
     // text
     public GameObject DebugText;
     UnityEngine.UI.Text debugText;
@@ -93,6 +97,15 @@ public class SocketTest : MonoBehaviour {
             tid = new Thread(new ThreadStart(c.GetInfo));
             tid.Start();
 
+
+            // configure sub monitor
+            sc = new SubMonitorCommunicator();
+            sc.st = this;
+            sc.initServer();
+
+            subtid = new Thread(new ThreadStart(sc.Tell));
+            subtid.Start();
+
             // execute vicon client
             vicon = System.Diagnostics.Process.Start(Application.dataPath + "/ViconClient.exe");
             //Process vicon; // yama 0316
@@ -118,7 +131,8 @@ public class SocketTest : MonoBehaviour {
         if (enabled)
         {
             c.clock = 5000;
-
+            sc.clock = 20000;
+        
             // split dtext
             rawInputs = dtext.Split('&');
             foreach(string rawInput in rawInputs)
@@ -203,7 +217,7 @@ public class SocketTest : MonoBehaviour {
             }
             */
             // display info
-            debugText.text = dictext;
+            //debugText.text = dictext;
 
             // do calibrate
             if (Input.GetKeyDown(KeyCode.F14))
@@ -530,6 +544,7 @@ public class Communicator
     Socket host;
     Socket client;
     bool receiving = false;
+    private bool connected = false;
 
     public int clock = 5000;
 
@@ -558,18 +573,18 @@ public class Communicator
                     if (host.Poll(0, SelectMode.SelectRead))
                     {
                         client = host.Accept();
-                        Debug.Log("connected");
+                        Debug.Log("ViconClient Connected");
                         client.Send(System.Text.Encoding.UTF8.GetBytes("hello"));
-
+                        connected = true;
                     }
+
+                        
                     byte[] buffer = new byte[1024];
                     int bytesRec = client.Receive(buffer);
                     string recvText = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRec);
-
-
-                    // debug
-                    //Debug.Log(recvText);
                     st.dtext = recvText;
+                        
+
                 } catch (Exception e)
                 {
                     Debug.LogWarning(e.ToString());
@@ -578,13 +593,77 @@ public class Communicator
                 clock--;
                 if(clock < 0)
                 {
+                    //host.Close();
+                    Debug.Log("ViconClient Exit");
                     break;
                 }
 
                 receiving = false;
+
+                Thread.Sleep(1);
             }
 
         }
 	}
 }
 
+
+public class SubMonitorCommunicator
+{
+    Socket host;
+    Socket client;
+    bool receiving = false;
+    private bool connected = false;
+
+    public int clock = 20000;
+
+    public SocketTest st;
+
+	// Use this for initialization
+	public void initServer () {
+        host = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        host.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9000));
+        host.Listen(100);
+	}
+	
+	// Update is called once per frame
+	public void Tell () {
+        while (true)
+        {
+
+            if (!receiving)
+            {
+                receiving = true;
+                try
+                {
+                    if (host.Poll(0, SelectMode.SelectRead))
+                    {
+                        client = host.Accept();
+                        connected = true;
+                        Debug.Log("Sub Monitor Client Connected");
+                    }
+                    if (st.messageBoard.Length > 0)
+                    {
+                        client.Send(System.Text.Encoding.UTF8.GetBytes(st.messageBoard + "\n"));
+                        st.messageBoard = "";
+                    }
+                } catch (Exception e)
+                {
+                    //Debug.LogWarning(e.ToString());
+                }
+
+                clock--;
+                if(clock < 0)
+                {
+                    //host.Close();
+                    Debug.Log("Sub Monitor Client Exit");
+                    break;
+                }
+
+                receiving = false;
+                Thread.Sleep(10);
+            }
+
+        }
+	}
+}

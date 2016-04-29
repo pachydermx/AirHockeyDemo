@@ -29,6 +29,7 @@ public class Canvas : MonoBehaviour {
 	private int[] ball_x;
 	private int[] ball_y;
     private int n_ball;
+    private int n_ball_max = 8;
     private int[] last_ball_x;
     private int[] last_ball_y;
 	private int width = 1920;
@@ -296,9 +297,12 @@ public class Canvas : MonoBehaviour {
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
 
         }
-        else // yama 0325 複製パックの設定
+        else if (n_ball < n_ball_max) // yama 0325 複製パックの設定
         {
-            ball[n_ball] = (GameObject)GameObject.Instantiate(another_ball, new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
+            ball[n_ball] =
+                (GameObject)
+                    GameObject.Instantiate(another_ball,
+                        new Vector3(ball[0].transform.position.x, ball[0].transform.position.y, -1), Quaternion.identity);
             ball[n_ball].transform.Rotate(new Vector3(0f, 180f, 0f));
 
             ball[n_ball].gameObject.GetComponent<ColliderPack>().enabled = true; // yama 0325 爆発使用
@@ -307,16 +311,23 @@ public class Canvas : MonoBehaviour {
             float s_x = ball[0].GetComponent<Rigidbody2D>().velocity.x;
             float s_y = ball[0].GetComponent<Rigidbody2D>().velocity.y;
 
-            ball[0].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(angle) + s_y * Mathf.Sin(angle), s_x * (-Mathf.Sin(angle)) + s_y * Mathf.Cos(angle));
-            ball[n_ball].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x * Mathf.Cos(-angle) + s_y * Mathf.Sin(-angle), s_x * (-Mathf.Sin(-angle)) + s_y * Mathf.Cos(-angle));
+            ball[0].GetComponent<Rigidbody2D>().velocity = new Vector2(s_x*Mathf.Cos(angle) + s_y*Mathf.Sin(angle),
+                s_x*(-Mathf.Sin(angle)) + s_y*Mathf.Cos(angle));
+            ball[n_ball].GetComponent<Rigidbody2D>().velocity =
+                new Vector2(s_x*Mathf.Cos(-angle) + s_y*Mathf.Sin(-angle),
+                    s_x*(-Mathf.Sin(-angle)) + s_y*Mathf.Cos(-angle));
 
             // yama 0325 パックの色付け（できてません）
             //Debug.Log("p_id:"+ ball[0].GetComponent<Ball>().paint_id);
-            int id = ball[0].GetComponent<Ball>().paint_id;  
+            int id = ball[0].GetComponent<Ball>().paint_id;
             //ball[n_ball].SendMessage("Player", id);
             //paint_color[n_ball] = paint_color[0];
 
             ball[n_ball].GetComponent<Ball>().default_pid = id;
+        }
+        else
+        {
+            return;
         }
 
         ball[n_ball].SendMessage("SetID", n_ball, SendMessageOptions.RequireReceiver);
@@ -692,13 +703,16 @@ public class Canvas : MonoBehaviour {
         colors = received_colors;
     }
 
-    void GetScore () {
+    public string GetScore (bool quick)
+    {
+        int delta = quick ? 500 : 1;
+
         scores = new int[2];
         scores[0] = 1;
         scores[1] = 1;
         Color[] canvas_colors = texture.GetPixels(0, 0, width, height);
         Color[] paint_color = manager.GetComponent<Main>().colors;
-        for (int i = 0; i < width * height; ++i) {
+        for (int i = 0; i < width * height; i += delta) {
             if (!canvas_colors[i].Equals(Color.clear))
             {
                 if (CompareColors(canvas_colors[i], paint_color[1])) {
@@ -709,25 +723,36 @@ public class Canvas : MonoBehaviour {
 
             }
         }
-        Debug.Log("Score " + scores[0] + " : " + scores[1]);
-
-        //tanaka 0420
-        if (scores[0] > scores[1])
+        if (!quick)
         {
-            l_stamp.SendMessage("StampDown", 1);
-            r_stamp.SendMessage("StampDown", 1);
+            Debug.Log("Score " + scores[0] + " : " + scores[1]);
         }
-
-        else if (scores[0] < scores[1])
-        {
-            l_stamp.SendMessage("StampDown", 2);
-            r_stamp.SendMessage("StampDown", 2);
-        }
-
         else
         {
-            Debug.Log("DROW");
+            return scores[0].ToString() + "," + scores[1];
         }
+
+        //tanaka 0420
+        if (!quick)
+        {
+            if (scores[0] > scores[1])
+            {
+                l_stamp.SendMessage("StampDown", 1);
+                r_stamp.SendMessage("StampDown", 1);
+            }
+
+            else if (scores[0] < scores[1])
+            {
+                l_stamp.SendMessage("StampDown", 2);
+                r_stamp.SendMessage("StampDown", 2);
+            }
+
+            else
+            {
+                Debug.Log("DROW");
+            }
+        }
+        return "";
     }
 
     bool CompareColors(Color color1, Color color2)
@@ -747,7 +772,7 @@ public class Canvas : MonoBehaviour {
 
     void StartScoreShow()
     {
-        GetScore();
+        GetScore(false);
 
         ClearStage(false);
 
@@ -785,7 +810,7 @@ public class Canvas : MonoBehaviour {
     void ClearStage(bool will_set_timer)
     {
         // init variables
-        int length = 8;
+        int length = n_ball_max;
         ball_x = new int[length];
         ball_y = new int[length];
         last_ball_x = new int[length];
@@ -817,7 +842,7 @@ public class Canvas : MonoBehaviour {
         P2Display.transform.localScale = new Vector3(1, 110, 1);
         animateCounter = 0;
         // start game
-        int length = 8;
+        int length = n_ball_max;
         ball = new GameObject[length];
         n_ball = 0;
         AddNewBall();

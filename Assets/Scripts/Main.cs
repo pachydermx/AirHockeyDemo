@@ -38,6 +38,8 @@ public class Main : MonoBehaviour {
         new Color(1.0F, .5859375F, .89453125F, 0.5F)
     };
 
+    public Color[] current_colors;
+
     // timer
     private Timer timer;
 
@@ -46,6 +48,8 @@ public class Main : MonoBehaviour {
 
     private Animation npanim1;
     private Animation npanim2;
+
+    private SocketTest st;
 
     //public GameObject cover;
 
@@ -59,6 +63,7 @@ public class Main : MonoBehaviour {
         */
         // get objects
         timer = GameObject.Find("Timer").GetComponent<Timer>();
+	    st = this.gameObject.GetComponent<SocketTest>();
 
         //tanaka 0418
 	    npa1 = GameObject.Find("SketchBook1");
@@ -163,8 +168,19 @@ public class Main : MonoBehaviour {
         // normal
         {
             timer.ShowText("", false, remaining_time);
+
+            // sub monitor
+            string msg = ((int) (current_colors[1].r * 255)).ToString() + "," + ((int) (current_colors[1].g * 255)).ToString() + "," +
+                         ((int) (current_colors[1].b * 255)).ToString() + "|"; 
+            msg += ((int) (current_colors[2].r * 255)).ToString() + "," + ((int) (current_colors[2].g * 255)).ToString() + "," +
+                         ((int) (current_colors[2].b * 255)).ToString() + "|"; 
+            msg += canvas.GetComponent<Canvas>().GetScore(true) + "|";
+            msg += remaining_time.ToString();
+            st.messageBoard = msg;
         }
         remaining_time -= 1.0f;
+
+        // game over
         if (remaining_time < 0)
         {
             CancelInvoke("TimeDecrease");
@@ -192,6 +208,8 @@ public class Main : MonoBehaviour {
         result[0] = Color.clear;
         result[1] = available_colors[id1];
         result[2] = available_colors[id2];
+
+        current_colors = result;
 
         return result;
     }
