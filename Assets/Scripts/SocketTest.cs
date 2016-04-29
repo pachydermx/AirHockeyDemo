@@ -173,7 +173,7 @@ public class SocketTest : MonoBehaviour {
                                 {
                                     Spray2.SetActive(true);
                                 }
-                                else
+                                else if(!name.Contains("Item"))
                                 {
                                     // create 
                                     GameObject newCursor = (GameObject)Instantiate(TestCursor, Vector3.zero, Quaternion.identity);
