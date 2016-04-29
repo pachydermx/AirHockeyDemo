@@ -21,6 +21,8 @@ public class SpecialShoot : MonoBehaviour {
 
     private int check = 0;
 
+    public AudioClip invocationclip;
+
     // Use this for initialization
     void Start () {
         rb = this.gameObject.GetComponent<Rigidbody2D>();
@@ -43,6 +45,7 @@ public class SpecialShoot : MonoBehaviour {
     {
         if (shoot == 0)
         {
+            this.gameObject.GetComponent<AudioSource>().PlayOneShot(invocationclip, 1.0f);
 
             if (flag == 1)
             {
@@ -75,8 +78,8 @@ public class SpecialShoot : MonoBehaviour {
     {
         // yama 0419 直線方向のみ
         
-        float x = Mathf.Sin(angle) * 1.0f + (rb_original.velocity.x / 40) * angle;
-        float y = Mathf.Cos(angle) * 1.0f + (rb_original.velocity.y / 40) * angle;
+        float x = Mathf.Sin(angle) * 1.0f + (rb_original.velocity.x / 35) * angle;
+        float y = Mathf.Cos(angle) * 1.0f + (rb_original.velocity.y / 35) * angle;
         transform.position = new Vector3(pos_original.x + x, pos_original.y + y, t.transform.position.z);
         angle += 0.2f;             
 

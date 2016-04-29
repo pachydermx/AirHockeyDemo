@@ -27,6 +27,17 @@ public class SpeedController : MonoBehaviour
 	    {
 	        rb.velocity = rb.velocity.normalized*speed_limit;
 	    }
-        
+
+	    if (rb.velocity.magnitude < 5.0f)
+	    {
+	        if (t.position.x >= 0)
+	        {
+	            rb.velocity = new Vector2(-10, 0);
+	        }
+	        else
+	        {
+                rb.velocity = new Vector2(10, 0);
+            }
+	    }
 	}
 }
